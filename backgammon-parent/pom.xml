@@ -59,10 +59,11 @@
 			<name>Moshe Arad</name>
 			<organization>Moshe Arad Private Organization</organization>
 			<roles>
-				Moshe Arad is the lead developer on this project, and he's the only
-				Java Developer on this private project
+				<role>Lead Developer</role>
+				<role>Java Backend Developer</role>
+				<role>Java web app Developer</role>
 			</roles>
 		</developer>
 	</developers>
-	
+
 </project>

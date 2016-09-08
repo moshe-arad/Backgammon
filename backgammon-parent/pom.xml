@@ -8,6 +8,51 @@
 	<version>1.0.0</version>
 	<packaging>pom</packaging>
 
+	<name>Online Backgammon Game</name>
+
+	<!-- <url>http://maven.apache.org</url> -->
+
+	<description>This project is written to be an exemplary project, The project is an online web backgammon game.
+					users will be able to play against other users online, or play against the machine.
+					This project will be written using Java technologies only 
+	</description>
+
+	<licenses>
+		<license>
+			<name>Linux ubuntu</name>
+			<url>http://www.ubuntu.com/</url>
+			<distribution>16.04 LTS</distribution>
+		</license>
+
+		<license>
+			<name>Apache Maven</name>
+			<url>http://maven.apache.org</url>
+			<distribution>Apache Maven 3.3.9</distribution>
+		</license>
+
+		<license>
+			<name>Apache Tomcat</name>
+			<url>http://tomcat.apache.org/</url>
+			<distribution>Apache Tomcat 8.5.4</distribution>
+		</license>
+
+		<license>
+			<name>MySql DB</name>
+			<url>https://www.mysql.com/</url>
+			<distribution>5.7.13-0ubuntu0.16.04.2</distribution>
+		</license>
+
+		<license>
+			<name>Git</name>
+			<url>https://git-scm.com/</url>
+			<distribution>git version 2.7.4</distribution>
+		</license>
+	</licenses>
+
+	<organization>
+		<name>Moshe Arad Organization</name>
+	</organization>
+
 	<developers>
 		<developer>
 			<email>moshe.arad.mailbox@gmail.com</email>
@@ -19,4 +64,5 @@
 			</roles>
 		</developer>
 	</developers>
+	
 </project>

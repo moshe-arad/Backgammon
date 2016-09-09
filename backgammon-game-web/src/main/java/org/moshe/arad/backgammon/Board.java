@@ -58,20 +58,30 @@ public class Board {
 	}
 
 	public void print(){
-//		int maxPawnsOnColumn = board.stream().max((col1, col2) -> Integer.compare(col1.size(), col2.size())).get().size();
-		
 		Board boardCopy = new Board(this);
 		StringBuilder sb = new StringBuilder();
-		sb.append(" ** The Board ** ").append("\n");
+		sb.append("       ** The Board **").append("\n");
 		
+		sb.append("  ##############################").append("\n");
+		printUpperBoard(boardCopy, sb);
+		
+		sb.append("  #                            #\n");
+		
+		printBottomBoard(boardCopy, sb);
+		sb.append("  ##############################").append("\n");
+		System.out.println(sb.toString());
+	}
+
+	private void printUpperBoard(Board boardCopy, StringBuilder sb) {
 		for(int i=0; i<7; i++){
-			sb.append("   ");
+			sb.append("  #");
 			for(int j=11; j>-1; j--){
 				if(i == 0){
 					int pawnCount = boardCopy.getBoard().get(j).size();
 					String pawnCountStr = Integer.toHexString(pawnCount).toUpperCase();
 					sb.append(" ").append(pawnCountStr);
-					if(j == 6) sb.append("  ");
+					if(j == 6) sb.append("   ");
+					if(j == 0) sb.append(" ");
 				}
 				else if(i == 1){
 					sb.append("-------------  -------------");
@@ -91,13 +101,54 @@ public class Board {
 						}
 					}
 					
-					if(j == 6) sb.append("  ");
+					if(j == 6) sb.append("|  ");
+					if(j == 0) sb.append("|");
 				}
 			}
-			sb.append("\n");
+			sb.append("#\n");
 		}
-		
-		System.out.println(sb.toString());
+	}
+
+	private void printBottomBoard(Board boardCopy, StringBuilder sb) {
+		StringBuilder sbPawns = new StringBuilder();
+		for(int i=0; i<7; i++){
+			sb.append("  #");
+			
+			if(i == 6){
+				sb.append(sbPawns.toString()).append(" #\n");
+				continue;
+			}
+			else if(i == 5){
+				sb.append("-------------  -------------#").append("\n");
+				continue;
+			}
+			
+			for(int j=12; j<24; j++){
+				if(i == 0){
+					int pawnCount = boardCopy.getBoard().get(j).size();
+					String pawnCountStr = Integer.toHexString(pawnCount).toUpperCase();
+					sbPawns.append(" ").append(pawnCountStr);
+					if(j == 17) sbPawns.append("   ");
+				}
+				
+				if(i+1+boardCopy.getBoard().get(j).size() <= 5){
+					sb.append("|*");
+				}
+				else{
+					Pawn p = boardCopy.getBoard().get(j).pop();
+					if(p.equals(Pawn.black)){
+						sb.append("|B");
+					}
+					else{
+						sb.append("|W");
+					}
+				}
+				
+				if(j == 17) sb.append("|  ");
+				if(j == 23) sb.append("|");
+			}
+			sb.append("#\n");
+		}
 	}
 
 	public List<Deque<Pawn>> getBoard() {

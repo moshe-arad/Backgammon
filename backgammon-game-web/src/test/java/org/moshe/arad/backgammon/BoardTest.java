@@ -1,4 +1,4 @@
-package org.moshe.arad;
+package org.moshe.arad.backgammon;
 
 import org.junit.Test;
 import org.moshe.arad.backgammon.Board;

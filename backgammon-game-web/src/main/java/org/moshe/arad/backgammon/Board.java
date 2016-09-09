@@ -21,6 +21,8 @@ public class Board {
 	}
 	
 	public Board(Board b){
+		if(b == null) throw new NullPointerException("Board parameter is null.");
+		
 		for(int i=0; i<LENGTH; i++)
 			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
 		

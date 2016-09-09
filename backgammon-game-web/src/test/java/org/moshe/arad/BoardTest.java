@@ -223,48 +223,48 @@ public class BoardTest {
 	}
 	
 	@Test
-	public void equalBoardTest1(){
+	public void simpleEqualBoardTest(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
-		assertEquals("Boards are not equal test #1", expected, actaul);
+		assertEquals("Boards are not equal test. simple test failed.", expected, actaul);
 	}
 	
 	@Test
-	public void equalBoardTest2(){
+	public void simpleValidBlackPawnEqualBoardTest(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
 		actaul.setPawn(Pawn.black, 0);
 		expected.setPawn(Pawn.black, 0);
 		
-		assertEquals("Boards are not equal test #2", expected, actaul);
+		assertEquals("Boards are not equal test. simple Valid Black Pawn Equal test failed.", expected, actaul);
 	}
 	
 	@Test
-	public void equalBoardTest3(){
+	public void simpleValidWhitePawnEqualBoardTest(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
 		actaul.setPawn(Pawn.white, 1); 
 		expected.setPawn(Pawn.white, 1);
 		
-		assertEquals("Boards are not equal test #3", expected, actaul);
+		assertEquals("Boards are not equal test. simple Valid White Pawn Equal test failed.", expected, actaul);
 	}
 	
 	@Test
-	public void equalBoardTest4(){
+	public void equalBoardNotEqualTest(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
 		actaul.setPawn(Pawn.white, 0);
 		expected.setPawn(Pawn.black, 0);
 		
-		assertNotEquals("Boards are equal test #4", expected, actaul);
+		assertNotEquals("Boards are equal test. not equal test.", expected, actaul);
 	}
 	
 	@Test
-	public void equalBoardTest5(){
+	public void equalBoardDifferentBoardsTest(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
@@ -272,11 +272,11 @@ public class BoardTest {
 		actaul.setPawn(Pawn.white, 0);
 		expected.setPawn(Pawn.black, 0);
 		
-		assertNotEquals("Boards are equal test #5", expected, actaul);
+		assertNotEquals("Boards are equal test. different boards test.", expected, actaul);
 	}
 	
 	@Test
-	public void equalBoardTest6(){
+	public void equalBoardSamePawnDifferentSizeTest6(){
 		Board actaul = new Board();
 		Board expected = new Board();
 		
@@ -284,27 +284,9 @@ public class BoardTest {
 		actaul.setPawn(Pawn.white, 0);
 		expected.setPawn(Pawn.white, 0);
 		
-		assertNotEquals("Boards are equal test #6", expected, actaul);
+		assertNotEquals("Boards are equal test. Same Pawn Different Size test.", expected, actaul);
 	}
 	
-//	@Test
-//	public void equalBoardTest7(){
-//		Board actaul = new Board();
-//		Board expected = new Board();
-//		
-//		actaul.setPawn(Pawn.white, 0);
-//		actaul.getBoard().get(0).push(null);
-//		expected.getBoard().get(0).push(Pawn.white);
-//		
-//		assertNotEquals("Boards are equal test #7", expected, actaul);
-//	}
-	
-	/**********
-	 * 
-	 * 
-	 * 
-	 * should check null as argument
-	 */
 	@Test
 	public void boardConstructorTest(){
 		Board someBoard = new Board();
@@ -318,7 +300,8 @@ public class BoardTest {
 		assertEquals("Board constructor failure.", expected, actual);
 	}
 	
-	public void initBoardTest(){
-		
+	@Test(expected=NullPointerException.class)
+	public void boardConstructorNullTest(){
+		new Board(null);
 	}
 }

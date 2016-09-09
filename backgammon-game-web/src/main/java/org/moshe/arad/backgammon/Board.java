@@ -11,7 +11,6 @@ import java.util.function.ToIntBiFunction;
 public class Board {
 
 	private static final int LENGTH = 24;
-	private static final int DIVIDE_FACTOR = 4;
 	private static final int MAX_COLUMN = 15;
 	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
 	
@@ -25,13 +24,17 @@ public class Board {
 			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
 		
 		for(int i=0; i<LENGTH; i++){
-			Pawn pawn = b.getBoard().get(i).peek();
-			for(int j=0; j<b.getBoard().get(i).size(); j++)
+			Pawn pawn = b.peekAtColumn(i);
+			for(int j=0; j<b.getSizeOfColumn(i); j++)
 				board.get(i).push(pawn);
 		}
 	}
 	
 	public void initBoard(){
+		for(Deque<Pawn> column:board){
+			column.clear();
+		}
+		
 		for(int i=0; i<2; i++)
 			board.get(0).push(Pawn.black);
 		
@@ -94,7 +97,7 @@ public class Board {
 			sb.append("  #");
 			for(int j=11; j>-1; j--){
 				if(i == 0){
-					int pawnCount = boardCopy.getBoard().get(j).size();
+					int pawnCount = boardCopy.getSizeOfColumn(j);
 					String pawnCountStr = Integer.toHexString(pawnCount).toUpperCase();
 					sb.append(" ").append(pawnCountStr);
 					if(j == 6) sb.append("   ");
@@ -105,11 +108,11 @@ public class Board {
 					break;
 				}
 				else{
-					if(boardCopy.getBoard().get(j).isEmpty()){
+					if(boardCopy.isEmptyColumn(j)){
 						sb.append("|*");
 					}
 					else{
-						Pawn p = boardCopy.getBoard().get(j).pop();
+						Pawn p = boardCopy.popAtColumn(j);
 						if(p.equals(Pawn.black)){
 							sb.append("|B");
 						}
@@ -142,17 +145,17 @@ public class Board {
 			
 			for(int j=12; j<24; j++){
 				if(i == 0){
-					int pawnCount = boardCopy.getBoard().get(j).size();
+					int pawnCount = boardCopy.getSizeOfColumn(j);
 					String pawnCountStr = Integer.toHexString(pawnCount).toUpperCase();
 					sbPawns.append(" ").append(pawnCountStr);
 					if(j == 17) sbPawns.append("   ");
 				}
 				
-				if(i+1+boardCopy.getBoard().get(j).size() <= 5){
+				if(i+1+boardCopy.getSizeOfColumn(j) <= 5){
 					sb.append("|*");
 				}
 				else{
-					Pawn p = boardCopy.getBoard().get(j).pop();
+					Pawn p = boardCopy.popAtColumn(j);
 					if(p.equals(Pawn.black)){
 						sb.append("|B");
 					}
@@ -170,18 +173,68 @@ public class Board {
 
 	private boolean checkBoardEquality(Board other){
 		for(int i=0; i<board.size(); i++){
-			if (board.get(i).size() != other.getBoard().get(i).size()) return false;
+			if (board.get(i).size() != other.getSizeOfColumn(i)) return false;
 			else if(board.get(i).size() > 0)
 			{
 				Pawn pawn = board.get(i).peek();
-				Pawn otherPawn = other.getBoard().get(i).peek();
+				Pawn otherPawn = other.peekAtColumn(i);
 				if(!pawn.equals(otherPawn)) return false;
 			}
 		}
 		return true;
 	}
 
-	public List<Deque<Pawn>> getBoard() {
-		return board;
+	public boolean setPawn(Pawn pawn, int index){
+		if(pawn == null) return false;
+		if((index < 0) || (index > LENGTH-1)){
+			System.out.println("Index value out of bounds.");
+			return false;
+		}
+		else{
+			if((board.get(index).peek() != null) && (!board.get(index).peek().equals(pawn))){
+				System.out.println("Can't place diffent kind of pawns on the same column.");
+				return false;
+			}
+			else if(board.get(index).size() == MAX_COLUMN){
+				System.out.println("This column is full.");
+				return false;
+			}
+			else{
+				board.get(index).push(pawn);
+				return true;
+			}
+		}
+	}
+	
+	public Pawn peekAtColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).peek();
+	}
+	
+	public int getSizeOfColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).size();
+	}
+	
+	public boolean isEmptyColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).isEmpty();
+	}
+	
+	public Pawn popAtColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).pop();
 	}
 }

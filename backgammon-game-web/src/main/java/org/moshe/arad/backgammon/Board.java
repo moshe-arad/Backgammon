@@ -13,7 +13,7 @@ public class Board {
 	private static final int LENGTH = 24;
 	private static final int DIVIDE_FACTOR = 4;
 	private static final int MAX_COLUMN = 15;
-	private List<Deque<Pawn>> board = new ArrayList(LENGTH);
+	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
 	
 	public Board() {
 		for(int i=0; i<LENGTH; i++)
@@ -55,6 +55,23 @@ public class Board {
 		
 		for(int i=0; i<2; i++)
 			board.get(23).push(Pawn.white);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Board other = (Board) obj;
+		if (board == null) {
+			if (other.board != null)
+				return false;
+		} else if (!this.checkBoardEquality(other))
+			return false;
+		return true;
 	}
 
 	public void print(){
@@ -149,6 +166,19 @@ public class Board {
 			}
 			sb.append("#\n");
 		}
+	}
+
+	private boolean checkBoardEquality(Board other){
+		for(int i=0; i<board.size(); i++){
+			if (board.get(i).size() != other.getBoard().get(i).size()) return false;
+			else if(board.get(i).size() > 0)
+			{
+				Pawn pawn = board.get(i).peek();
+				Pawn otherPawn = other.getBoard().get(i).peek();
+				if(!pawn.equals(otherPawn)) return false;
+			}
+		}
+		return true;
 	}
 
 	public List<Deque<Pawn>> getBoard() {

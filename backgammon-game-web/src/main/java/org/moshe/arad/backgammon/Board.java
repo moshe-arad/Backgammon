@@ -17,7 +17,18 @@ public class Board {
 	
 	public Board() {
 		for(int i=0; i<LENGTH; i++)
-			board.set(i, new ArrayDeque<Pawn>(MAX_COLUMN));
+			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
+	}
+	
+	public Board(Board b){
+		for(int i=0; i<LENGTH; i++)
+			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
+		
+		for(int i=0; i<LENGTH; i++){
+			Pawn pawn = b.getBoard().get(i).peek();
+			for(int j=0; j<b.getBoard().get(i).size(); j++)
+				board.get(i).push(pawn);
+		}
 	}
 	
 	public void initBoard(){
@@ -45,9 +56,51 @@ public class Board {
 		for(int i=0; i<2; i++)
 			board.get(23).push(Pawn.white);
 	}
-	
+
 	public void print(){
-//		ToIntBiFunction<Deque<Pawn>, Deque<Pawn>> maxCompare = (col1, col2) -> Integer.compare(col1.size(), col2.size());
-		int maxPawnsOnColumn = board.stream().max((col1, col2) -> Integer.compare(col1.size(), col2.size())).get().size();
+//		int maxPawnsOnColumn = board.stream().max((col1, col2) -> Integer.compare(col1.size(), col2.size())).get().size();
+		
+		Board boardCopy = new Board(this);
+		StringBuilder sb = new StringBuilder();
+		sb.append(" ** The Board ** ").append("\n");
+		
+		for(int i=0; i<7; i++){
+			sb.append("   ");
+			for(int j=11; j>-1; j--){
+				if(i == 0){
+					int pawnCount = boardCopy.getBoard().get(j).size();
+					String pawnCountStr = Integer.toHexString(pawnCount).toUpperCase();
+					sb.append(" ").append(pawnCountStr);
+					if(j == 6) sb.append("  ");
+				}
+				else if(i == 1){
+					sb.append("-------------  -------------");
+					break;
+				}
+				else{
+					if(boardCopy.getBoard().get(j).isEmpty()){
+						sb.append("|*");
+					}
+					else{
+						Pawn p = boardCopy.getBoard().get(j).pop();
+						if(p.equals(Pawn.black)){
+							sb.append("|B");
+						}
+						else{
+							sb.append("|W");
+						}
+					}
+					
+					if(j == 6) sb.append("  ");
+				}
+			}
+			sb.append("\n");
+		}
+		
+		System.out.println(sb.toString());
+	}
+
+	public List<Deque<Pawn>> getBoard() {
+		return board;
 	}
 }

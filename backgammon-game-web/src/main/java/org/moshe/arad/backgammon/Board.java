@@ -10,8 +10,8 @@ import java.util.function.ToIntBiFunction;
 
 public class Board {
 
-	private static final int LENGTH = 24;
-	private static final int MAX_COLUMN = 15;
+	public static final int LENGTH = 24;
+	public static final int MAX_COLUMN = 15;
 	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
 	
 	public Board() {
@@ -58,6 +58,60 @@ public class Board {
 		
 		for(int i=0; i<2; i++)
 			board.get(23).push(Pawn.white);
+	}
+	
+	public boolean setPawn(Pawn pawn, int index){
+		if(pawn == null) return false;
+		if((index < 0) || (index > LENGTH-1)){
+			System.out.println("Index value out of bounds.");
+			return false;
+		}
+		else{
+			if((board.get(index).size() > 0) && (board.get(index).peek() != null) && (!board.get(index).peek().equals(pawn))){
+				System.out.println("Can't place diffent kind of pawns on the same column.");
+				return false;
+			}
+			else if(board.get(index).size() == MAX_COLUMN){
+				System.out.println("This column is full.");
+				return false;
+			}
+			else{
+				board.get(index).push(pawn);
+				return true;
+			}
+		}
+	}
+	
+	public Pawn peekAtColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).peek();
+	}
+	
+	public int getSizeOfColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).size();
+	}
+	
+	public boolean isEmptyColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).isEmpty();
+	}
+	
+	public Pawn popAtColumn(int index){
+		if((index < 0) || (index > LENGTH-1)){
+			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
+			throw ex;
+		}
+		return board.get(index).pop();
 	}
 	
 	@Override
@@ -182,59 +236,5 @@ public class Board {
 			}
 		}
 		return true;
-	}
-
-	public boolean setPawn(Pawn pawn, int index){
-		if(pawn == null) return false;
-		if((index < 0) || (index > LENGTH-1)){
-			System.out.println("Index value out of bounds.");
-			return false;
-		}
-		else{
-			if((board.get(index).peek() != null) && (!board.get(index).peek().equals(pawn))){
-				System.out.println("Can't place diffent kind of pawns on the same column.");
-				return false;
-			}
-			else if(board.get(index).size() == MAX_COLUMN){
-				System.out.println("This column is full.");
-				return false;
-			}
-			else{
-				board.get(index).push(pawn);
-				return true;
-			}
-		}
-	}
-	
-	public Pawn peekAtColumn(int index){
-		if((index < 0) || (index > LENGTH-1)){
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
-			throw ex;
-		}
-		return board.get(index).peek();
-	}
-	
-	public int getSizeOfColumn(int index){
-		if((index < 0) || (index > LENGTH-1)){
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
-			throw ex;
-		}
-		return board.get(index).size();
-	}
-	
-	public boolean isEmptyColumn(int index){
-		if((index < 0) || (index > LENGTH-1)){
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
-			throw ex;
-		}
-		return board.get(index).isEmpty();
-	}
-	
-	public Pawn popAtColumn(int index){
-		if((index < 0) || (index > LENGTH-1)){
-			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
-			throw ex;
-		}
-		return board.get(index).pop();
 	}
 }

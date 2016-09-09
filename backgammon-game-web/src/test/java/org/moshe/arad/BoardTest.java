@@ -8,6 +8,95 @@ import static org.junit.Assert.*;
 public class BoardTest {
 
 	@Test
+	public void setNullPawnOnBoardTest(){
+		Board board = new Board();
+		
+		boolean actaul = board.setPawn(null, 0);
+		
+		assertFalse("null pawn test failed.", actaul);
+	}
+	
+	@Test
+	public void setNegativeIndexPawnOnBoardTest(){
+		Board board = new Board();
+		
+		boolean actual = board.setPawn(Pawn.black, -1);
+		
+		assertFalse("negative index pawn test failed.", actual);
+	}
+	
+	@Test
+	public void setIllegalPositiveIndexPawnOnBoardTest(){
+		Board board = new Board();
+		
+		boolean actual = board.setPawn(Pawn.black, 24);
+		
+		assertFalse("positive index pawn test failed.", actual);
+	}
+	
+	@Test
+	public void setPawnOnDifferentKindOfPawnsColumnTest(){
+		Board borad = new Board();
+		
+		boolean firstPawnSetting = borad.setPawn(Pawn.black, 0);
+		
+		assertTrue("Setting first pawn on different kind of pawns column fialed.", firstPawnSetting);
+		
+		boolean actual = borad.setPawn(Pawn.white, 0);
+		
+		assertFalse("Setting second pawn on different kind of pawns column fialed.", actual);
+	}
+	
+	@Test
+	public void setPawnOnFullColumn(){
+		Board board = new Board();
+		
+		for(int i=0; i<Board.MAX_COLUMN; i++)
+			board.setPawn(Pawn.black, 0);
+		
+		boolean actual = board.setPawn(Pawn.black, 0);
+		
+		assertFalse("Set pawn in full column failed.", actual);
+	}
+	
+	@Test
+	public void setPawnValidTest(){
+		Board board = new Board();
+		
+		boolean actual = board.setPawn(Pawn.black, 0);
+		
+		assertTrue("Valid pawn Setting failed.", actual);
+		
+		actual = board.setPawn(Pawn.black, 0);
+		
+		assertTrue("Valid pawn Setting failed.", actual);
+		
+		actual = board.setPawn(Pawn.white, 1);
+		
+		assertTrue("Valid pawn Setting failed.", actual);
+		
+		actual = board.setPawn(Pawn.white, 1);
+		
+		assertTrue("Valid pawn Setting failed.", actual);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void peekAtColumnInvalidPositiveIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.peekAtColumn(Board.LENGTH);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void peekAtColumnInvalidNegativeIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.peekAtColumn(-1);
+	}
+	
+	@Test
 	public void equalBoardTest1(){
 		Board actaul = new Board();
 		Board expected = new Board();

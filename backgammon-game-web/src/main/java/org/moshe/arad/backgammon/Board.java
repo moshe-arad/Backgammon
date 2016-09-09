@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.function.ToIntBiFunction;
 
@@ -111,7 +112,13 @@ public class Board {
 			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
 			throw ex;
 		}
-		return board.get(index).pop();
+		
+		try{
+			return board.get(index).pop();
+		}
+		catch(NoSuchElementException ex){
+			return null;
+		} 
 	}
 	
 	@Override

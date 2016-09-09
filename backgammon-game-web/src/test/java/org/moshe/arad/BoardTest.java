@@ -3,6 +3,8 @@ package org.moshe.arad;
 import org.junit.Test;
 import org.moshe.arad.backgammon.Board;
 import org.moshe.arad.backgammon.Pawn;
+
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class BoardTest {
@@ -94,6 +96,130 @@ public class BoardTest {
 		
 		board.setPawn(Pawn.black, 0);
 		board.peekAtColumn(-1);
+	}
+	
+	@Test
+	public void peekAtColumnTest(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		Pawn actual = board.peekAtColumn(0);
+		
+		assertThat("Peek at column failed.", actual, is(Pawn.black));
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void sizeOfColumnInvalidPositiveIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.getSizeOfColumn(Board.LENGTH);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void sizeOfColumnInvalidNegativeIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.getSizeOfColumn(-1);
+	}
+	
+	@Test
+	public void sizeOfColumnTest(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		int actual = board.getSizeOfColumn(0);
+		
+		assertThat("Size of column failed.", actual, is(3));
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void isEmptyColumnInvalidPositiveIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.isEmptyColumn(Board.LENGTH);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void isEmptyColumnInvalidNegativeIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.isEmptyColumn(-1);
+	}
+	
+	@Test
+	public void isEmptyColumnNotEmptyTest(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		boolean actual = board.isEmptyColumn(0);
+		
+		assertThat("Is empty test with non empty column failed.", actual, is(false));
+	}
+	
+	@Test
+	public void isEmptyColumnEmptyTest(){
+		Board board = new Board();
+		
+		boolean actual = board.isEmptyColumn(0);
+		
+		assertThat("Is empty test with empty column failed.", actual, is(true));
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void popAtColumnInvalidPositiveIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.popAtColumn(Board.LENGTH);
+	}
+	
+	@Test(expected=IndexOutOfBoundsException.class)
+	public void popAtColumnInvalidNegativeIndex(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.popAtColumn(-1);
+	}
+	
+	@Test
+	public void popAtColumnBlackTest(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		board.setPawn(Pawn.black, 0);
+		Pawn actual = board.popAtColumn(0);
+		
+		assertThat("Pop at column, Black, failed.", actual, is(Pawn.black));
+	}
+	
+	@Test
+	public void popAtColumnWhiteTest(){
+		Board board = new Board();
+		
+		board.setPawn(Pawn.white, 0);
+		board.setPawn(Pawn.white, 0);
+		board.setPawn(Pawn.white, 0);
+		Pawn actual = board.popAtColumn(0);
+		
+		assertThat("Pop at column, white, failed.", actual, is(Pawn.white));
+	}
+	
+	@Test
+	public void popAtColumnEmptyTest(){
+		Board board = new Board();
+		
+		Pawn actual = board.popAtColumn(0);
+		
+		assertNull("Pop at column, Null, failed.", actual);
 	}
 	
 	@Test

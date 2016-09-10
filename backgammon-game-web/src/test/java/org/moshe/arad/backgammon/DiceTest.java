@@ -1,30 +1,52 @@
 package org.moshe.arad.backgammon;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-
-//import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.hamcrest.Matcher;
+import org.hamcrest.collection.IsIn;
 import org.junit.Test;
 
 public class DiceTest {
-
-//	@Test
-//	public void diceRolesTest(){
-//		Dice dice = new Dice();
-//		List<Integer> results = new ArrayList<Integer>();
-//		List<Matcher<Integer>> expectedValues = Arrays.asList(is(1), is(2), is(3), is(4), is(5), is(6));
-//		
-//		for(int i=0; i<100; i++){
-//			dice.rollDice();
-//			results.add(dice.getValue());
-//			assertThat("Dice value is not within valid range.", Integer.valueOf(dice.getValue()), contains(1,2,3,4,5,6));
-//		}
-//	}
+	
+	@Test
+	public void diceRolesTest(){
+		Dice dice = new Dice();
+		
+		for(int i=0; i<100; i++){
+			dice.rollDice();
+			assertThat("Dice value is not within valid range.", Integer.valueOf(dice.getValue()), IsIn.isIn(new Integer[]{1,2,3,4,5,6}));
+		}
+	}
+	
+	@Test
+	public void diceRolesNotTheSameValueTest(){
+		Dice dice = new Dice();
+		List<Integer> actualResults = new ArrayList<Integer>();
+		
+		for(int i=0; i<100; i++){
+			dice.rollDice();
+			actualResults.add(dice.getValue());
+		}
+		
+		boolean anyActualMatch = actualResults.stream().anyMatch(item->(!item.equals(actualResults.get(0))));
+		assertTrue(anyActualMatch);
+	}
+	
+	@Test
+	public void diceRolesAllPossibleValuesWereRoledTest(){
+		Dice dice = new Dice();
+		List<Integer> actualResults = new ArrayList<Integer>();
+		
+		for(int i=0; i<100; i++){
+			dice.rollDice();
+			actualResults.add(dice.getValue());
+		}
+		
+		boolean anyActualMatch = actualResults.stream().anyMatch(item->(item<1)||(item>6));
+		assertFalse(anyActualMatch);
+	}
 }

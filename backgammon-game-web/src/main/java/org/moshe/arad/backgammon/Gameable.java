@@ -1,11 +1,10 @@
 package org.moshe.arad.backgammon;
 
 public interface Gameable {
-
-	@Deprecated
+	
 	public boolean isHasWinner();
 	
-	public boolean isHasWinner(Gameable game);
+	public Player howHasTurn();
 	
 	public boolean isWinner(Player player);
 	

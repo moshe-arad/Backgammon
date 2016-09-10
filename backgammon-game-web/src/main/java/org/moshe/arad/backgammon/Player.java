@@ -7,6 +7,8 @@ public class Player {
 	private String lastName;
 	private int age;
 	
+	private Turn turn;
+
 	public Player(String id, String firstName, String lastName, int age) {
 		this.id = id;
 		this.firstName = firstName;
@@ -17,5 +19,9 @@ public class Player {
 	@Override
 	public String toString() {
 		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + "]";
+	}
+	
+	public void setTurn(Turn turn) {
+		this.turn = turn;
 	}
 }

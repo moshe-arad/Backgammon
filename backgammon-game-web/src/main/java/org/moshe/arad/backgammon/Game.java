@@ -4,7 +4,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class Game {
+public abstract class Game implements Gameable{
 
 	@Autowired
 	private Board board;
@@ -16,6 +16,15 @@ public class Game {
 	private Dice firstDice;
 	@Resource
 	private Dice secondDice;
+	
+	private boolean isPlaying = true;
+	
+	public void play(){
+		
+		while(isPlaying){
+			
+		}
+	}
 	
 	public Board getBoard() {
 		return board;

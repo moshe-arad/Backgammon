@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+<context:annotation-config />
+
+<bean class="org.moshe.arad.backgammon.Board"/>
+
+<bean id="firstPlayer" class="org.moshe.arad.backgammon.Player" scope="prototype">
+	<constructor-arg name="id" value="021787221" />
+	<constructor-arg name="firstName" value="Moshe" />
+	<constructor-arg name="lastName" value="Arad" />
+	<constructor-arg name="age" value="33" />
+</bean>
+
+<bean id="secondPlayer" class="org.moshe.arad.backgammon.Player" scope="prototype">
+	<constructor-arg name="id" value="056889933" />
+	<constructor-arg name="firstName" value="James" />
+	<constructor-arg name="lastName" value="Brown" />
+	<constructor-arg name="age" value="67" />
+</bean>
+
+<bean id="firstDice" class="org.moshe.arad.backgammon.Dice" scope="prototype"></bean>
+
+<bean id="secondDice" class="org.moshe.arad.backgammon.Dice" scope="prototype"></bean>
+
+<bean class="org.moshe.arad.backgammon.Game"/>
+
+</beans>

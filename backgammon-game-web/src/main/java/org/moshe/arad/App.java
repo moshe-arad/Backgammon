@@ -1,9 +1,7 @@
 package org.moshe.arad;
 
-import org.moshe.arad.backgammon.Board;
 import org.moshe.arad.backgammon.Dice;
 import org.moshe.arad.backgammon.Game;
-import org.moshe.arad.backgammon.Player;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -32,7 +30,7 @@ public class App
     	d2.rollDice();
     	System.out.println("First dice roll - " + d1.getValue());
     	System.out.println("Second dice roll - " + d2.getValue());
-    
+    	
         ((ClassPathXmlApplicationContext)context).close();
     }
 }

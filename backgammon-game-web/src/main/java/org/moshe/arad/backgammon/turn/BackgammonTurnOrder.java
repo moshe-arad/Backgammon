@@ -11,9 +11,9 @@ import org.moshe.arad.backgammon.player.Player;
  *
  * However is first in Deque will has turn, and should have Turn object.
  */
-public class BackgammonTurnOrderManager extends TurnOrderManager{
+public class BackgammonTurnOrder extends TurnOrder{
 
-	public BackgammonTurnOrderManager(Player firstPlayer, Player secondPlayer) {
+	public BackgammonTurnOrder(Player firstPlayer, Player secondPlayer) {
 		LinkedList<Player> order = new LinkedList<>();
 		order.add(firstPlayer);
 		order.add(secondPlayer);

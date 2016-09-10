@@ -4,6 +4,10 @@ public class Turn {
 
 	private static Turn instance;
 	
+	private Turn(){
+		
+	}
+	
 	public static Turn getInstance(){
 		
 		if(instance == null){

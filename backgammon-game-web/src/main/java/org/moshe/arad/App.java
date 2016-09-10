@@ -1,7 +1,7 @@
 package org.moshe.arad;
 
-import org.moshe.arad.backgammon.Dice;
-import org.moshe.arad.backgammon.Game;
+import org.moshe.arad.backgammon.game.Game;
+import org.moshe.arad.backgammon.instrument.Dice;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

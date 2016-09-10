@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.turn;
 
 public class Turn {
 

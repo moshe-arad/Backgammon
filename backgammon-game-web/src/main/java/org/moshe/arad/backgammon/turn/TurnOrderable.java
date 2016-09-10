@@ -1,4 +1,6 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.turn;
+
+import org.moshe.arad.backgammon.player.Player;
 
 public interface TurnOrderable {
 

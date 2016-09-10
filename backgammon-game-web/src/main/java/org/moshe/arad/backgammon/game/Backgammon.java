@@ -1,6 +1,10 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.game;
 
-public class Backgammon extends Game{
+import org.moshe.arad.backgammon.instrument.Board;
+import org.moshe.arad.backgammon.instrument.Dice;
+import org.moshe.arad.backgammon.player.Player;
+
+public class Backgammon extends Game {
 
 	@Override
 	public boolean isHasWinner() {
@@ -9,9 +13,9 @@ public class Backgammon extends Game{
 	}
 
 	@Override
-	public boolean isHasWinner() {
+	public Player howHasTurn() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
@@ -23,7 +27,7 @@ public class Backgammon extends Game{
 	@Override
 	public void rollDices(Dice[] dices) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -65,13 +69,13 @@ public class Backgammon extends Game{
 	@Override
 	public void passTurn() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void passTurnTo(Player player) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

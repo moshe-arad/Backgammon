@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.hamcrest.collection.IsIn;
 import org.junit.Test;
+import org.moshe.arad.backgammon.instrument.Dice;
 
 public class DiceTest {
 	

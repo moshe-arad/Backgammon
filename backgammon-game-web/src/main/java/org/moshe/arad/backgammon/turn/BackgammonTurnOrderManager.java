@@ -1,7 +1,9 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.turn;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import org.moshe.arad.backgammon.player.Player;
 
 /**
  * 

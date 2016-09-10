@@ -1,7 +1,10 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.game;
 
 import javax.annotation.Resource;
 
+import org.moshe.arad.backgammon.instrument.Board;
+import org.moshe.arad.backgammon.instrument.Dice;
+import org.moshe.arad.backgammon.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class Game implements Gameable{

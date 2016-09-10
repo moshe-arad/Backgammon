@@ -1,11 +1,17 @@
 package org.moshe.arad.backgammon;
 
-import org.junit.Test;
-import org.moshe.arad.backgammon.Board;
-import org.moshe.arad.backgammon.Pawn;
-
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+import org.moshe.arad.backgammon.instrument.Board;
+import org.moshe.arad.backgammon.instrument.Pawn;
 
 public class BoardTest {
 

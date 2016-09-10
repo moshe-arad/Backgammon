@@ -1,4 +1,6 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.backgammon.player;
+
+import org.moshe.arad.backgammon.turn.Turn;
 
 public class Player {
 

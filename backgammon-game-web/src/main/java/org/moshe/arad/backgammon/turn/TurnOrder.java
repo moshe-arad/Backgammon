@@ -9,8 +9,4 @@ public abstract class TurnOrder implements TurnOrderable {
 
 	public TurnOrder() {
 	}
-
-	public TurnOrder(LinkedList<Player> order) {
-		this.order = order;
-	}
 }

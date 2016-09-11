@@ -6,7 +6,7 @@ public interface TurnOrderable {
 
 	public Player howHasTurn();
 	
-	public boolean passTurn(Player from, Player to);
+	public boolean passTurn();
 	
 	public Player howIsNextInTurn();
 }

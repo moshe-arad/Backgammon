@@ -13,9 +13,10 @@ import org.moshe.arad.backgammon.player.Player;
  */
 public class BackgammonTurnOrder extends TurnOrder{
 
-	public BackgammonTurnOrder(Player firstPlayer, Player secondPlayer) {
-		if((firstPlayer == null) || (secondPlayer == null)) throw new NullPointerException();
+	public BackgammonTurnOrder(Player firstPlayer, Player secondPlayer, Turn turn) {
+		if((firstPlayer == null) || (secondPlayer == null) || (turn == null)) throw new NullPointerException();
 		LinkedList<Player> order = new LinkedList<>();
+		firstPlayer.setTurn(turn);
 		order.add(firstPlayer);
 		order.add(secondPlayer);
 		super.order = order;
@@ -27,12 +28,12 @@ public class BackgammonTurnOrder extends TurnOrder{
 	}
 
 	@Override
-	public boolean passTurn(Player from, Player to) {
+	public boolean passTurn() {
 		if(order.peek().getTurn() != null){
 			Player played = order.pop();
 			order.peek().setTurn(played.getTurn());
 			played.setTurn(null);
-			order.push(played);
+			order.addLast(played);
 			return true;
 		}
 		else return false;
@@ -40,6 +41,6 @@ public class BackgammonTurnOrder extends TurnOrder{
 
 	@Override
 	public Player howIsNextInTurn() {
-		return (order.peek().getTurn() != null) ? order.peek() : null;
+		return (order.peek().getTurn() != null) ? order.peekLast() : null;
 	}
 }

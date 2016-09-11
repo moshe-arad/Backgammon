@@ -12,7 +12,6 @@
 	<constructor-arg name="firstName" value="Moshe-test" />
 	<constructor-arg name="lastName" value="Arad-test" />
 	<constructor-arg name="age" value="13" />
-	<property name="turn" ref="turn"/>
 </bean>
 
 <bean id="secondPlayer" class="org.moshe.arad.backgammon.player.Player" >

@@ -10,6 +10,7 @@
 <bean class="org.moshe.arad.backgammon.instrument.Board"/>
 
 <bean id="firstPlayer" class="org.moshe.arad.backgammon.player.Player" >
+	<qualifier value="firstPlayer" />
 	<constructor-arg name="id" value="021787221" />
 	<constructor-arg name="firstName" value="Moshe" />
 	<constructor-arg name="lastName" value="Arad" />
@@ -17,6 +18,7 @@
 </bean>
 
 <bean id="secondPlayer" class="org.moshe.arad.backgammon.player.Player" >
+	<qualifier value="secondPlayer" />
 	<constructor-arg name="id" value="056889933" />
 	<constructor-arg name="firstName" value="James" />
 	<constructor-arg name="lastName" value="Brown" />
@@ -27,6 +29,10 @@
 
 <bean id="secondDice" class="org.moshe.arad.backgammon.instrument.Dice" ></bean>
 
-<bean class="org.moshe.arad.backgammon.game.Game"/>
+<bean class="org.moshe.arad.backgammon.game.Backgammon"/>
+
+<bean class="org.moshe.arad.backgammon.turn.BackgammonTurnOrder" />
+
+<bean class="org.moshe.arad.backgammon.turn.Turn" factory-method="getInstance"/>
 
 </beans>

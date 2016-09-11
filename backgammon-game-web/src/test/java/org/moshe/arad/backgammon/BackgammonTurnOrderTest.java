@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonTurnOrderTest {
 
+	@Autowired
 	TurnOrderable backgammonTurnOrder;
 	@Resource
 	Player firstPlayer;
@@ -29,12 +30,7 @@ public class BackgammonTurnOrderTest {
 	Player secondPlayer;
 	@Autowired
 	Turn turn;
-	
-	@Before
-	public void init(){
-		backgammonTurnOrder = new BackgammonTurnOrder(firstPlayer, secondPlayer, turn);
-	}
-	
+		
 	@Test(expected=NullPointerException.class)
 	public void constructorWithNullFirstPlayerTest(){
 		TurnOrderable actual = new BackgammonTurnOrder(null, secondPlayer, turn);

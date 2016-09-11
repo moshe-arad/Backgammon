@@ -8,6 +8,7 @@
 <context:annotation-config />
 
 <bean id="firstPlayer" class="org.moshe.arad.backgammon.player.Player" >
+	<qualifier value="firstPlayer" />
 	<constructor-arg name="id" value="021777777" />
 	<constructor-arg name="firstName" value="Moshe-test" />
 	<constructor-arg name="lastName" value="Arad-test" />
@@ -15,6 +16,7 @@
 </bean>
 
 <bean id="secondPlayer" class="org.moshe.arad.backgammon.player.Player" >
+	<qualifier value="secondPlayer" />
 	<constructor-arg name="id" value="056666663" />
 	<constructor-arg name="firstName" value="James-test" />
 	<constructor-arg name="lastName" value="Brown-test" />
@@ -22,4 +24,7 @@
 </bean>
 
 <bean id="turn" class="org.moshe.arad.backgammon.turn.Turn" factory-method="getInstance" />
+
+<bean class="org.moshe.arad.backgammon.turn.BackgammonTurnOrder" />
+
 </beans>

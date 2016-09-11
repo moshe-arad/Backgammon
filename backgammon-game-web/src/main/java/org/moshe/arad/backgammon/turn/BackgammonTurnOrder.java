@@ -3,7 +3,11 @@ package org.moshe.arad.backgammon.turn;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.moshe.arad.backgammon.player.Player;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * 
@@ -13,7 +17,8 @@ import org.moshe.arad.backgammon.player.Player;
  */
 public class BackgammonTurnOrder extends TurnOrder{
 
-	public BackgammonTurnOrder(Player firstPlayer, Player secondPlayer, Turn turn) {
+	@Autowired
+	public BackgammonTurnOrder(@Qualifier("firstPlayer") Player firstPlayer, @Qualifier("secondPlayer") Player secondPlayer, Turn turn) {
 		if((firstPlayer == null) || (secondPlayer == null) || (turn == null)) throw new NullPointerException();
 		LinkedList<Player> order = new LinkedList<>();
 		firstPlayer.setTurn(turn);

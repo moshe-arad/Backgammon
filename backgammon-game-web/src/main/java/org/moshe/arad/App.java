@@ -1,6 +1,6 @@
 package org.moshe.arad;
 
-import org.moshe.arad.backgammon.game.Game;
+import org.moshe.arad.backgammon.game.Backgammon;
 import org.moshe.arad.backgammon.instrument.Dice;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -14,8 +14,8 @@ public class App
     public static void main( String[] args )
     {
     	ApplicationContext context = new ClassPathXmlApplicationContext("backgammon-context.xml");
-    	Game game = context.getBean(Game.class);
-        
+    	Backgammon game = context.getBean(Backgammon.class);
+       
     	System.out.println("First player - " + game.getFirstPlayer());
     	System.out.println("Second player - " + game.getSecondPlayer());
     	

@@ -1,8 +1,9 @@
-package org.moshe.arad.backgammon.game;
+package org.moshe.arad.game.classic_board.backgammon;
 
-import org.moshe.arad.backgammon.instrument.Board;
-import org.moshe.arad.backgammon.instrument.Dice;
-import org.moshe.arad.backgammon.player.Player;
+import org.moshe.arad.game.classic_board.ClassicBoardGame;
+import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.Dice;
+import org.moshe.arad.game.player.Player;
 
 public class Backgammon extends ClassicBoardGame {
 

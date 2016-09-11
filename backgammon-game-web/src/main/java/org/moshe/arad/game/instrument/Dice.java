@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon.instrument;
+package org.moshe.arad.game.instrument;
 
 import java.util.Random;
 

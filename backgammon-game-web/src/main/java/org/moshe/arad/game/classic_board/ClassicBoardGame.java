@@ -1,11 +1,11 @@
-package org.moshe.arad.backgammon.game;
+package org.moshe.arad.game.classic_board;
 
 import javax.annotation.Resource;
 
-import org.moshe.arad.backgammon.instrument.Board;
-import org.moshe.arad.backgammon.instrument.Dice;
-import org.moshe.arad.backgammon.player.Player;
-import org.moshe.arad.backgammon.turn.TurnOrder;
+import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.Dice;
+import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.TurnOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements ClassicBoardGameable{

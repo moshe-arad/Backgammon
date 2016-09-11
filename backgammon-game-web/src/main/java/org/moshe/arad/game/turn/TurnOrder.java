@@ -1,7 +1,8 @@
-package org.moshe.arad.backgammon.turn;
+package org.moshe.arad.game.turn;
 
 import java.util.LinkedList;
-import org.moshe.arad.backgammon.player.Player;
+
+import org.moshe.arad.game.player.Player;
 
 public abstract class TurnOrder implements TurnOrderable {
 

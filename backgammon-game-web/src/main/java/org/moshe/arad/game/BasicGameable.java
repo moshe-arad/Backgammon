@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon.game;
+package org.moshe.arad.game;
 
 public interface BasicGameable {
 

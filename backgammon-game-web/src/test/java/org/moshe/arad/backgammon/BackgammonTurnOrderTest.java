@@ -7,13 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Resource;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.backgammon.player.Player;
-import org.moshe.arad.backgammon.turn.BackgammonTurnOrder;
-import org.moshe.arad.backgammon.turn.Turn;
-import org.moshe.arad.backgammon.turn.TurnOrderable;
+import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.BackgammonTurnOrder;
+import org.moshe.arad.game.turn.Turn;
+import org.moshe.arad.game.turn.TurnOrderable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;

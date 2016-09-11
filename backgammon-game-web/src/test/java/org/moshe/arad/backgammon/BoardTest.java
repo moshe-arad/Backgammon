@@ -10,8 +10,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.moshe.arad.backgammon.instrument.Board;
-import org.moshe.arad.backgammon.instrument.Pawn;
+import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.Pawn;
+
 
 public class BoardTest {
 

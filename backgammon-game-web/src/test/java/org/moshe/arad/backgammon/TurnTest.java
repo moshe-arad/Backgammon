@@ -3,7 +3,8 @@ package org.moshe.arad.backgammon;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
-import org.moshe.arad.backgammon.turn.Turn;
+import org.moshe.arad.game.turn.Turn;
+
 
 public class TurnTest {
 

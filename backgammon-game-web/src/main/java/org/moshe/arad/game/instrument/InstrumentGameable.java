@@ -1,7 +1,4 @@
-package org.moshe.arad.backgammon.game;
-
-import org.moshe.arad.backgammon.instrument.Board;
-import org.moshe.arad.backgammon.instrument.Dice;
+package org.moshe.arad.game.instrument;
 
 public interface InstrumentGameable {
 

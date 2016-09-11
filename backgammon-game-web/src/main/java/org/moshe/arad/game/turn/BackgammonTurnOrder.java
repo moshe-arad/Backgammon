@@ -1,11 +1,8 @@
-package org.moshe.arad.backgammon.turn;
+package org.moshe.arad.game.turn;
 
 import java.util.LinkedList;
-import java.util.List;
 
-import javax.annotation.Resource;
-
-import org.moshe.arad.backgammon.player.Player;
+import org.moshe.arad.game.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

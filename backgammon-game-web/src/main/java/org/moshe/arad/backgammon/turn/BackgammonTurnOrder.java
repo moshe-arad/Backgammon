@@ -14,10 +14,11 @@ import org.moshe.arad.backgammon.player.Player;
 public class BackgammonTurnOrder extends TurnOrder{
 
 	public BackgammonTurnOrder(Player firstPlayer, Player secondPlayer) {
+		if((firstPlayer == null) || (secondPlayer == null)) throw new NullPointerException();
 		LinkedList<Player> order = new LinkedList<>();
 		order.add(firstPlayer);
 		order.add(secondPlayer);
-		setOrder(order);
+		super.order = order;
 	}
 
 	@Override

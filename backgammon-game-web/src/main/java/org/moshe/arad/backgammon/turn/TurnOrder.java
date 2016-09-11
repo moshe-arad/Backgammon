@@ -13,8 +13,4 @@ public abstract class TurnOrder implements TurnOrderable {
 	public TurnOrder(LinkedList<Player> order) {
 		this.order = order;
 	}
-
-	protected void setOrder(LinkedList<Player> order) {
-		this.order = order;
-	}
 }

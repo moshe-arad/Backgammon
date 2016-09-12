@@ -6,5 +6,5 @@ public interface InstrumentGameable {
 	
 	public boolean makeMove(Board board);
 	
-	public boolean validateMove(Board board);
+	public boolean validMove(Board board);
 }

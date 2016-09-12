@@ -38,7 +38,7 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean validateMove(Board board) {
+	public boolean validMove(Board board) {
 		// TODO Auto-generated method stub
 		return false;
 	}

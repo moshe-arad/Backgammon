@@ -43,6 +43,9 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	public void playGameTurn(Player player) {
 		rollDices(new Dice[]{Turn.getInstance().getFirstDice(),
 				Turn.getInstance().getSecondDice()});
+		while(isHasMoreMoves(player)){
+			
+		}
 	}
 
 	public void doWinnerActions() {

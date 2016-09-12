@@ -24,8 +24,8 @@ public class App
     	
     	game.getBoard().print();
     	
-    	Dice d1 = game.getFirstDice();
-    	Dice d2 = game.getSecondDice();
+    	Dice d1 = game.howHasTurn().getTurn().getFirstDice();
+    	Dice d2 = game.howHasTurn().getTurn().getSecondDice();
     	
     	d1.rollDice();
     	d2.rollDice();

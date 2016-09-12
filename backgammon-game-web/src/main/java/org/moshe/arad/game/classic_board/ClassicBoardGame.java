@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements ClassicBoardGameable{
@@ -17,10 +18,10 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	private Player firstPlayer;
 	@Resource
 	private Player secondPlayer;
-	@Resource
-	private Dice firstDice;
-	@Resource
-	private Dice secondDice;
+//	@Resource
+//	private Dice firstDice;
+//	@Resource
+//	private Dice secondDice;
 	@Resource
 	private LinkedList<Player> order;
 	
@@ -40,7 +41,8 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	}
 
 	public void playGameTurn(Player player) {
-		rollDices(new Dice[]{firstDice, secondDice});
+		rollDices(new Dice[]{Turn.getInstance().getFirstDice(),
+				Turn.getInstance().getSecondDice()});
 	}
 
 	public void doWinnerActions() {
@@ -78,11 +80,5 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	}
 	public Player getSecondPlayer() {
 		return secondPlayer;
-	}
-	public Dice getFirstDice() {
-		return firstDice;
-	}
-	public Dice getSecondDice() {
-		return secondDice;
 	}
 }

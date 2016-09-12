@@ -12,6 +12,7 @@ import org.moshe.arad.game.move.Move;
  *  2.if this player is a winner.
  *  3.if this player has more moves to play.
  *  4.to a player: "enter your move".
+ *  5.to a player about invalid move he made.
  */
 public interface PlayerGameable {
 
@@ -22,4 +23,6 @@ public interface PlayerGameable {
 	public boolean isHasMoreMoves(Player player);
 	
 	public Move enterNextMove(Player player);
+	
+	public void notifyOnInvalidMove(Player player, Move move);
 }

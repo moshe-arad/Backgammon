@@ -11,4 +11,10 @@ public class Move {
 	public void setTo(int to) {
 		this.to = to;
 	}
+	public int getFrom() {
+		return from;
+	}
+	public int getTo() {
+		return to;
+	}
 }

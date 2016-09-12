@@ -13,57 +13,57 @@ public class Board {
 
 	public static final int LENGTH = 24;
 	public static final int MAX_COLUMN = 15;
-	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
+	private List<Deque<Color>> board = new ArrayList<Deque<Color>>(LENGTH);
 	
 	public Board() {
 		for(int i=0; i<LENGTH; i++)
-			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
+			board.add(new ArrayDeque<Color>(MAX_COLUMN));
 	}
 	
 	public Board(Board b){
 		if(b == null) throw new NullPointerException("Board parameter is null.");
 		
 		for(int i=0; i<LENGTH; i++)
-			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
+			board.add(new ArrayDeque<Color>(MAX_COLUMN));
 		
 		for(int i=0; i<LENGTH; i++){
-			Pawn pawn = b.peekAtColumn(i);
+			Color pawn = b.peekAtColumn(i);
 			for(int j=0; j<b.getSizeOfColumn(i); j++)
 				board.get(i).push(pawn);
 		}
 	}
 	
 	public void initBoard(){
-		for(Deque<Pawn> column:board){
+		for(Deque<Color> column:board){
 			column.clear();
 		}
 		
 		for(int i=0; i<2; i++)
-			board.get(0).push(Pawn.black);
+			board.get(0).push(Color.black);
 		
 		for(int i=0; i<5; i++)
-			board.get(5).push(Pawn.white);
+			board.get(5).push(Color.white);
 		
 		for(int i=0; i<3; i++)
-			board.get(7).push(Pawn.white);
+			board.get(7).push(Color.white);
 		
 		for(int i=0; i<5; i++)
-			board.get(11).push(Pawn.black);
+			board.get(11).push(Color.black);
 		
 		for(int i=0; i<5; i++)
-			board.get(12).push(Pawn.white);
+			board.get(12).push(Color.white);
 		
 		for(int i=0; i<3; i++)
-			board.get(16).push(Pawn.black);
+			board.get(16).push(Color.black);
 		
 		for(int i=0; i<5; i++)
-			board.get(18).push(Pawn.black);
+			board.get(18).push(Color.black);
 		
 		for(int i=0; i<2; i++)
-			board.get(23).push(Pawn.white);
+			board.get(23).push(Color.white);
 	}
 	
-	public boolean setPawn(Pawn pawn, int index){
+	public boolean setPawn(Color pawn, int index){
 		if(pawn == null) return false;
 		if((index < 0) || (index > LENGTH-1)){
 			System.out.println("Index value out of bounds.");
@@ -85,7 +85,12 @@ public class Board {
 		}
 	}
 	
-	public Pawn peekAtColumn(int index){
+	/**
+	 * 
+	 * @param index
+	 * @return will return null if empty.
+	 */
+	public Color peekAtColumn(int index){
 		if((index < 0) || (index > LENGTH-1)){
 			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
 			throw ex;
@@ -109,7 +114,7 @@ public class Board {
 		return board.get(index).isEmpty();
 	}
 	
-	public Pawn popAtColumn(int index){
+	public Color popAtColumn(int index){
 		if((index < 0) || (index > LENGTH-1)){
 			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
 			throw ex;
@@ -175,8 +180,8 @@ public class Board {
 						sb.append("|*");
 					}
 					else{
-						Pawn p = boardCopy.popAtColumn(j);
-						if(p.equals(Pawn.black)){
+						Color p = boardCopy.popAtColumn(j);
+						if(p.equals(Color.black)){
 							sb.append("|B");
 						}
 						else{
@@ -218,8 +223,8 @@ public class Board {
 					sb.append("|*");
 				}
 				else{
-					Pawn p = boardCopy.popAtColumn(j);
-					if(p.equals(Pawn.black)){
+					Color p = boardCopy.popAtColumn(j);
+					if(p.equals(Color.black)){
 						sb.append("|B");
 					}
 					else{
@@ -239,8 +244,8 @@ public class Board {
 			if (board.get(i).size() != other.getSizeOfColumn(i)) return false;
 			else if(board.get(i).size() > 0)
 			{
-				Pawn pawn = board.get(i).peek();
-				Pawn otherPawn = other.peekAtColumn(i);
+				Color pawn = board.get(i).peek();
+				Color otherPawn = other.peekAtColumn(i);
 				if(!pawn.equals(otherPawn)) return false;
 			}
 		}

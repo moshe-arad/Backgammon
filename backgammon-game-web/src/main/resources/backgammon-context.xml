@@ -16,14 +16,24 @@
 		<constructor-arg name="firstName" value="Moshe" />
 		<constructor-arg name="lastName" value="Arad" />
 		<constructor-arg name="age" value="33" />
+		<constructor-arg name="pawn" ref="white" />
 	</bean>
-
+	
+	<bean id="black" class="org.moshe.arad.game.instrument.Color">
+		<property name="innerValue" value="black" />
+	</bean>
+	
+	<bean id="white" class="org.moshe.arad.game.instrument.Color">
+		<property name="innerValue" value="white" />
+	</bean>
+	
 	<bean id="secondPlayer" class="org.moshe.arad.game.player.Player">
 		<qualifier value="secondPlayer" />
 		<constructor-arg name="id" value="056889933" />
 		<constructor-arg name="firstName" value="James" />
 		<constructor-arg name="lastName" value="Brown" />
 		<constructor-arg name="age" value="67" />
+		<constructor-arg name="pawn" ref="black" />
 	</bean>
 
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />

@@ -1,6 +1,14 @@
 package org.moshe.arad.game.instrument;
 
-public enum Pawn {
-	white,
-	black
+public class Pawn {
+
+	private Color color;
+
+	public Pawn(Color color) {
+		this.color = color;
+	}
+
+	public Color getColor() {
+		return color;
+	}
 }

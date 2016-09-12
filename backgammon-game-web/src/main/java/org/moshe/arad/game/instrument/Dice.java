@@ -15,4 +15,8 @@ public class Dice {
 	public int getValue() {
 		return value;
 	}
+	
+	public void initDiceValue(){
+		value = 0;
+	}
 }

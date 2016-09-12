@@ -40,8 +40,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	}
 
 	public void playGameTurn(Player player) {
-		// TODO Auto-generated method stub
-		
+		rollDices(new Dice[]{firstDice, secondDice});
 	}
 
 	public void doWinnerActions() {

@@ -2,76 +2,73 @@ package org.moshe.arad.game.instrument;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.function.ToIntBiFunction;
 
 public class Board {
 
 	public static final int LENGTH = 24;
 	public static final int MAX_COLUMN = 15;
-	private List<Deque<Color>> board = new ArrayList<Deque<Color>>(LENGTH);
+	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
 	
 	public Board() {
 		for(int i=0; i<LENGTH; i++)
-			board.add(new ArrayDeque<Color>(MAX_COLUMN));
+			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
 	}
 	
 	public Board(Board b){
 		if(b == null) throw new NullPointerException("Board parameter is null.");
 		
 		for(int i=0; i<LENGTH; i++)
-			board.add(new ArrayDeque<Color>(MAX_COLUMN));
+			board.add(new ArrayDeque<Pawn>(MAX_COLUMN));
 		
 		for(int i=0; i<LENGTH; i++){
-			Color pawn = b.peekAtColumn(i);
+			Pawn pawn = b.peekAtColumn(i);
 			for(int j=0; j<b.getSizeOfColumn(i); j++)
 				board.get(i).push(pawn);
 		}
 	}
 	
 	public void initBoard(){
-		for(Deque<Color> column:board){
+		for(Deque<Pawn> column:board){
 			column.clear();
 		}
-		
+				
 		for(int i=0; i<2; i++)
-			board.get(0).push(Color.black);
+			board.get(0).push(new Pawn(Color.black));
 		
 		for(int i=0; i<5; i++)
-			board.get(5).push(Color.white);
+			board.get(5).push(new Pawn(Color.white));
 		
 		for(int i=0; i<3; i++)
-			board.get(7).push(Color.white);
+			board.get(7).push(new Pawn(Color.white));
 		
 		for(int i=0; i<5; i++)
-			board.get(11).push(Color.black);
+			board.get(11).push(new Pawn(Color.black));
 		
 		for(int i=0; i<5; i++)
-			board.get(12).push(Color.white);
+			board.get(12).push(new Pawn(Color.white));
 		
 		for(int i=0; i<3; i++)
-			board.get(16).push(Color.black);
+			board.get(16).push(new Pawn(Color.black));
 		
 		for(int i=0; i<5; i++)
-			board.get(18).push(Color.black);
+			board.get(18).push(new Pawn(Color.black));
 		
 		for(int i=0; i<2; i++)
-			board.get(23).push(Color.white);
+			board.get(23).push(new Pawn(Color.white));
 	}
 	
-	public boolean setPawn(Color pawn, int index){
+	public boolean setPawn(Pawn pawn, int index){
 		if(pawn == null) return false;
 		if((index < 0) || (index > LENGTH-1)){
 			System.out.println("Index value out of bounds.");
 			return false;
 		}
 		else{
-			if((board.get(index).size() > 0) && (board.get(index).peek() != null) && (!board.get(index).peek().equals(pawn))){
-				System.out.println("Can't place diffent kind of pawns on the same column.");
+			if((board.get(index).size() > 0) && (board.get(index).peek() != null) && (!board.get(index).peek().getColor().equals(pawn.getColor()))){
+				System.out.println("Can't place different kind of pawns on the same column.");
 				return false;
 			}
 			else if(board.get(index).size() == MAX_COLUMN){
@@ -90,7 +87,7 @@ public class Board {
 	 * @param index
 	 * @return will return null if empty.
 	 */
-	public Color peekAtColumn(int index){
+	public Pawn peekAtColumn(int index){
 		if((index < 0) || (index > LENGTH-1)){
 			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
 			throw ex;
@@ -114,7 +111,7 @@ public class Board {
 		return board.get(index).isEmpty();
 	}
 	
-	public Color popAtColumn(int index){
+	public Pawn popAtColumn(int index){
 		if((index < 0) || (index > LENGTH-1)){
 			IndexOutOfBoundsException ex = new IndexOutOfBoundsException("Index value out of bounds.");
 			throw ex;
@@ -161,7 +158,7 @@ public class Board {
 	}
 
 	public boolean isHasColor(Color color){
-		for(Deque<Color> column:board){
+		for(Deque<Pawn> column:board){
 			if(column.peek().equals(color)) return true;
 		}
 		return false;
@@ -187,7 +184,7 @@ public class Board {
 						sb.append("|*");
 					}
 					else{
-						Color p = boardCopy.popAtColumn(j);
+						Pawn p = boardCopy.popAtColumn(j);
 						if(p.equals(Color.black)){
 							sb.append("|B");
 						}
@@ -230,7 +227,7 @@ public class Board {
 					sb.append("|*");
 				}
 				else{
-					Color p = boardCopy.popAtColumn(j);
+					Pawn p = boardCopy.popAtColumn(j);
 					if(p.equals(Color.black)){
 						sb.append("|B");
 					}
@@ -251,9 +248,9 @@ public class Board {
 			if (board.get(i).size() != other.getSizeOfColumn(i)) return false;
 			else if(board.get(i).size() > 0)
 			{
-				Color pawn = board.get(i).peek();
-				Color otherPawn = other.peekAtColumn(i);
-				if(!pawn.equals(otherPawn)) return false;
+				Pawn pawn = board.get(i).peek();
+				Pawn otherPawn = other.peekAtColumn(i);
+				if(!pawn.getColor().equals(otherPawn.getColor())) return false;
 			}
 		}
 		return true;

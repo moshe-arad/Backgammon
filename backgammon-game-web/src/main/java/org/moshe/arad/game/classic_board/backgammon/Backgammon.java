@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.instrument.Dice;
+import org.moshe.arad.game.instrument.Pawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.Turn;
@@ -73,7 +73,7 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean makeMove(Player player, Move move, Board board) {
-		Color pawn = board.popAtColumn(move.getFrom());
+		Pawn pawn = board.popAtColumn(move.getFrom());
 		if(pawn != null){
 			if(board.setPawn(pawn, move.getTo())) return true;
 			else return false;
@@ -89,16 +89,16 @@ public class Backgammon extends ClassicBoardGame {
 		
 		if(playerColor.equals(Color.white) && ((move.getTo() - move.getFrom()) > 0)) 
 		{
-			toColor = board.peekAtColumn(move.getTo());
-			fromColor = board.peekAtColumn(move.getFrom());
+			toColor = board.peekAtColumn(move.getTo()).getColor();
+			fromColor = board.peekAtColumn(move.getFrom()).getColor();
 			if(toColor.equals(Color.white) && fromColor.equals(Color.white)) return true;
 			else return false;
 		}
 			
 		if(playerColor.equals(Color.black) && ((move.getFrom() - move.getTo()) > 0)) 
 		{
-			toColor = board.peekAtColumn(move.getTo());
-			fromColor = board.peekAtColumn(move.getFrom());
+			toColor = board.peekAtColumn(move.getTo()).getColor();
+			fromColor = board.peekAtColumn(move.getFrom()).getColor();
 			if(toColor.equals(Color.black) && fromColor.equals(Color.black)) return true;
 			else return false;
 		}

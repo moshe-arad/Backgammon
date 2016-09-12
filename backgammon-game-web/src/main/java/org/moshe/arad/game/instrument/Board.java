@@ -160,6 +160,13 @@ public class Board {
 		System.out.println(sb.toString());
 	}
 
+	public boolean isHasColor(Color color){
+		for(Deque<Color> column:board){
+			if(column.peek().equals(color)) return true;
+		}
+		return false;
+	}
+	
 	private void printUpperBoard(Board boardCopy, StringBuilder sb) {
 		for(int i=0; i<7; i++){
 			sb.append("  #");

@@ -15,14 +15,15 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean isHasWinner() {
-		// TODO Auto-generated method stub
-		return false;
+		Player first = super.howHasTurn();
+		Player second = super.howIsNextInTurn();
+		return (!board.isHasColor(first.getColor()) || !board.isHasColor(second.getColor()));
 	}
 
 	@Override
-	public boolean isWinner(Player player) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isWinner(Player player, Board board) {
+		Color playerColor = player.getColor();
+		return !board.isHasColor(playerColor);
 	}
 
 	@Override
@@ -59,8 +60,8 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public void notifyOnInvalidMove(Player player, Move move) {
-		// TODO Auto-generated method stub
-		
+		String name = player.getFirstName() + " " + player.getLastName();
+		System.out.println(name + ": you made invalid move. try again.");
 	}
 
 	@Override
@@ -72,7 +73,11 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean makeMove(Player player, Move move, Board board) {
-		// TODO Auto-generated method stub
+		Color pawn = board.popAtColumn(move.getFrom());
+		if(pawn != null){
+			if(board.setPawn(pawn, move.getTo())) return true;
+			else return false;
+		}
 		return false;
 	}
 

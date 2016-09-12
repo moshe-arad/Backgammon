@@ -33,7 +33,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 		while(isPlaying){
 			Player playerWithTurn = howHasTurn();
 			playGameTurn(playerWithTurn);
-			if(!isWinner(playerWithTurn)) passTurn();
+			if(!isWinner(playerWithTurn, board)) passTurn();
 			else{
 				doWinnerActions();
 				isPlaying = false;

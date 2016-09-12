@@ -1,5 +1,6 @@
 package org.moshe.arad.game.player;
 
+import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.move.Move;
 
 /**
@@ -18,7 +19,7 @@ public interface PlayerGameable {
 
 	public void playGameTurn(Player player);
 	
-	public boolean isWinner(Player player);
+	public boolean isWinner(Player player, Board board);
 	
 	public boolean isHasMoreMoves(Player player);
 	

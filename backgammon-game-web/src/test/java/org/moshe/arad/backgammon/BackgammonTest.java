@@ -1,7 +1,10 @@
 package org.moshe.arad.backgammon;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.annotation.Resource;
@@ -12,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Pawn;
+import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -178,5 +182,40 @@ public class BackgammonTest {
 		withTurn.getTurn().getSecondDice().rollDice();
 		boolean actual = backgammon.isHasMoreMoves(withTurn);
 		assertTrue("Is has more moves, player with turn & player has more moves, failed.", actual);
+	}
+	
+	@Test
+	public void enterNextMovePlayerIsNullTest(){
+		Move actual = backgammon.enterNextMove(null);
+		assertNull("Enter next move, player is null, failed.", actual);
+	}
+	
+//	@Test
+//	public void enterNextMoveTest(){
+//		Move actual = backgammon.enterNextMove(blackPawnPlayer);
+//		assertNotNull("Enter next move test failed.", actual);
+//	}
+	
+	@Test(expected=NullPointerException.class)
+	public void rollDicesPlayerIsNullTest(){
+		backgammon.rollDices(null);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void rollDicesPlayerWithoutTurnTest(){
+		Player withouTurn = backgammon.howIsNextInTurn();
+		backgammon.rollDices(withouTurn);
+	}
+	
+	@Test
+	public void rollDicesPlayerWithTurnTest(){
+		Player withTurn = backgammon.howHasTurn();
+		withTurn.getTurn().getFirstDice().initDiceValue();
+		assertEquals("First dice init failed.", 0, withTurn.getTurn().getFirstDice().getValue());
+		withTurn.getTurn().getSecondDice().initDiceValue();
+		assertEquals("Second dice init failed.", 0, withTurn.getTurn().getSecondDice().getValue());
+		backgammon.rollDices(withTurn);
+		assertNotEquals("First dice roll failed.", 0, withTurn.getTurn().getFirstDice().getValue());
+		assertNotEquals("Second dice roll failed.", 0, withTurn.getTurn().getSecondDice().getValue());
 	}
 }

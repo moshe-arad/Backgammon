@@ -25,8 +25,9 @@
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
 		<constructor-arg name="color" value="1" />
+		<constructor-arg name="turn"><null /></constructor-arg>
 	</bean>
-	
+
 	<bean id="whitePawnPlayer" class="org.moshe.arad.game.player.Player">
 		<qualifier value="firstPlayer" />
 		<constructor-arg name="id" value="021777777" />
@@ -44,16 +45,17 @@
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
 		<constructor-arg name="color" value="1" />
+		<constructor-arg name="turn"><null /></constructor-arg>
 	</bean>
 
 	<bean id="blackPawn" class="org.moshe.arad.game.instrument.Pawn">
 		<constructor-arg name="color" value="1" />
 	</bean>
-	
+
 	<bean id="whitePawn" class="org.moshe.arad.game.instrument.Pawn">
 		<constructor-arg name="color" value="0" />
 	</bean>
-	
+
 	<bean class="org.moshe.arad.game.instrument.Board" />
 
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
@@ -63,7 +65,7 @@
 	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
 
 	<bean id="turn" class="org.moshe.arad.game.turn.Turn" factory-method="getInstance" />
-
+	
 	<util:list id="order" list-class="java.util.LinkedList">
 		<ref bean="firstPlayer" />
 		<ref bean="secondPlayer" />

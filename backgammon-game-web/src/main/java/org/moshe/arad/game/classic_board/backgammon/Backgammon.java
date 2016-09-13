@@ -37,8 +37,12 @@ public class Backgammon extends ClassicBoardGame {
 		else return true;
 	}
 
+	/**
+	 * TODO write test
+	 */
 	@Override
 	public Move enterNextMove(Player player) {
+		if(player == null) return null;
 		String name = player.getFirstName() + " " + player.getLastName();
 		Scanner reader = new Scanner(System.in);
 		Move move = new Move();
@@ -56,21 +60,27 @@ public class Backgammon extends ClassicBoardGame {
 	private String getMoveInput(String name, Scanner reader, String msg) {
 		System.out.println(name+": " + msg);
 		String input = reader.next();
-		while(!StringUtils.isNumeric(input) && (Integer.parseInt(input) < 0 || Integer.parseInt(input) > 23)){
+		while(!StringUtils.isNumeric(input) || Integer.parseInt(input) < 0 || Integer.parseInt(input) > 23){
 			System.out.println("Your input is invalid. try again.");
+			input = reader.next();
 		}
 		return input;
 	}
 
 	@Override
 	public void notifyOnInvalidMove(Player player, Move move) {
-		String name = player.getFirstName() + " " + player.getLastName();
-		System.out.println(name + ": you made invalid move. try again.");
+		if(player == null) System.out.println("Player is null.");
+		else{
+			String name = player.getFirstName() + " " + player.getLastName();
+			System.out.println(name + ": you made invalid move. try again.");
+		}
 	}
 
 	@Override
 	public void rollDices(Player player) {
+		if(player == null) throw new NullPointerException("Player is null.");
 		Turn turn  = player.getTurn();
+		if(turn == null) throw new NullPointerException("turn is null.");
 		turn.getFirstDice().rollDice();
 		turn.getSecondDice().rollDice();
 	}

@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Color;
+import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.instrument.Pawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
@@ -54,6 +55,7 @@ public class Backgammon extends ClassicBoardGame {
 		msg = "where move to? (index 0-23).";
 		input = getMoveInput(name, reader, msg);
 		move.setTo(Integer.parseInt(input));
+		System.out.println("******************************" + move.getFrom() + ":" +move.getTo());
 		return move;
 	}
 
@@ -103,7 +105,7 @@ public class Backgammon extends ClassicBoardGame {
 		Pawn fromPawn;
 		Pawn toPawn;
 		
-		if(playerColor.equals(Color.white) && ((move.getTo() - move.getFrom()) > 0)) 
+		if(playerColor.equals(Color.white) && ((move.getFrom() - move.getTo()) > 0)) 
 		{
 			toPawn = board.peekAtColumn(move.getTo());
 			fromPawn = board.peekAtColumn(move.getFrom());
@@ -117,7 +119,7 @@ public class Backgammon extends ClassicBoardGame {
 			
 		}
 			
-		if(playerColor.equals(Color.black) && ((move.getFrom() - move.getTo()) > 0)) 
+		if(playerColor.equals(Color.black) && ((move.getTo() - move.getFrom()) > 0)) 
 		{
 			toPawn = board.peekAtColumn(move.getTo());
 			fromPawn = board.peekAtColumn(move.getFrom());
@@ -141,16 +143,42 @@ public class Backgammon extends ClassicBoardGame {
 		board.print();
 		while(isHasMoreMoves(player)){
 			Move move = enterNextMove(player);
-			if(validMove(player, move, super.board)) makeMove(player, move, super.board);
+			if(validMove(player, move, super.board)){
+				if(!makeMove(player, move, super.board)) throw new RuntimeException();
+				else{
+					/**
+					 * init dices.
+					 */
+					System.out.println("After move:");
+					board.print();
+					System.out.println("*************************************");
+				}
+			}
 			else notifyOnInvalidMove(player, move);
 		}
-		System.out.println("After move:");
-		board.print();
-		System.out.println("*************************************");
 	}
 
 	@Override
 	public void initGame() {
 		board.initBoard();
+	}
+
+	@Override
+	public boolean initDices(Player player, Move move) {
+		if((player == null) || (move == null) || (player.getTurn() == null)) return false;
+		Dice first = player.getTurn().getFirstDice();
+		if(first == null) return false;
+		Dice second = player.getTurn().getSecondDice();
+		if(second == null) return false;
+		int moveStep = player.getColor().equals(Color.white) ? (move.getFrom() - move.getTo()) : (move.getTo() - move.getFrom()); 
+		if(moveStep == first.getValue()) {
+			first.initDiceValue();
+			return true;
+		}
+		else if(moveStep == second.getValue()){
+			second.initDiceValue();
+			return true;
+		}
+		else return false;
 	}
 }

@@ -20,4 +20,6 @@ public interface InstrumentGameable {
 	public boolean makeMove(Player player, Move move, Board board);
 	
 	public boolean validMove(Player player, Move move, Board board);
+	
+	public boolean initDices(Player player, Move move);
 }

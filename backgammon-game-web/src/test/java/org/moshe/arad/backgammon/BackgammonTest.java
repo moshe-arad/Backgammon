@@ -6,6 +6,9 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import javax.annotation.Resource;
 
@@ -15,10 +18,13 @@ import org.junit.runner.RunWith;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Color;
+import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.instrument.Pawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -344,15 +350,15 @@ public class BackgammonTest {
 	
 	@Test
 	public void vaildMoveWhitePawnToIsEmptyTest(){
-		assertTrue(board.setPawn(whitePawn, 1));
-		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertTrue(board.setPawn(whitePawn, 4));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(4,1), board);
 		assertTrue("valid Move, white pawn to is empty failed.", actual);
 	}
 	
 	@Test
 	public void vaildMoveBlackPawnToIsEmptyTest(){
-		assertTrue(board.setPawn(blackPawn, 4));
-		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertTrue(board.setPawn(blackPawn, 1));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(1,4), board);
 		assertTrue("valid Move, black pawn To Is Empty failed.", actual);
 	}
 	
@@ -360,7 +366,7 @@ public class BackgammonTest {
 	public void vaildMoveWhitePawnToIsWhiteTest(){
 		assertTrue(board.setPawn(whitePawn, 1));
 		assertTrue(board.setPawn(whitePawn, 4));
-		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(4,1), board);
 		assertTrue("valid Move, white pawn to is white failed.", actual);
 	}
 	
@@ -368,7 +374,81 @@ public class BackgammonTest {
 	public void vaildMoveBlackPawnToIsBlackTest(){
 		assertTrue(board.setPawn(blackPawn, 4));
 		assertTrue(board.setPawn(blackPawn, 1));
-		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(1,4), board);
 		assertTrue("valid Move, black pawn To Is black failed.", actual);
+	}
+	
+	@Test
+	public void initDicesPlayerIsNullTest(){
+		boolean actual = backgammon.initDices(null, new Move());
+		assertFalse("Init dices, player is null test, failed", actual);
+	}
+	
+	@Test
+	public void initDicesTurnIsNullTest(){
+		boolean actual = backgammon.initDices(backgammon.howIsNextInTurn(), new Move());
+		assertFalse("Init dices, turn is null test, failed", actual);
+	}
+	
+	@Test
+	public void initDicesFirstDiceIsNullTest(){
+		Player playerMock = mock(Player.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		Turn turnMock = mock(Turn.class);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		playerMock.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(null);
+		boolean actual = backgammon.initDices(playerMock, new Move());
+		assertFalse("Init dices, first dice is null, test failed.", actual);
+	}
+	
+	@Test
+	public void initDicesSecondDiceIsNullTest(){
+		Player playerMock = mock(Player.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		Turn turnMock = mock(Turn.class);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		playerMock.setTurn(turnMock);
+		Dice firstDiceMock = mock(Dice.class);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(null);
+		boolean actual = backgammon.initDices(playerMock, new Move());
+		assertFalse("Init dices, second dice is null, test failed." , actual);
+	}
+	
+	@Test
+	public void initDicesMoveStepDoesNotInDicesTest(){
+		Player playerMock = mock(Player.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		Turn turnMock = mock(Turn.class);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		playerMock.setTurn(turnMock);
+		Move move = new Move(23, 19);
+		boolean actual = backgammon.initDices(playerMock, move);
+		assertFalse("Init dices, move step does not in dices value, failed.", actual);
+	}
+	
+	@Test
+	public void initDicesInitFirstDiceTest(){
+		Player playerMock = mock(Player.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(3);
+		when(secondDiceMock.getValue()).thenReturn(1);
+		playerMock.setTurn(turnMock);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		Move move = new Move(23, 20);
+		boolean actual = backgammon.initDices(playerMock, move);
+		verify(firstDiceMock).initDiceValue();
+		assertTrue("Init dices, init first dice, failed.", actual);
 	}
 }

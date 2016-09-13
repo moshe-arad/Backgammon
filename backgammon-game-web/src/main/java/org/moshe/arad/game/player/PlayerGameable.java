@@ -1,5 +1,7 @@
 package org.moshe.arad.game.player;
 
+import java.util.Scanner;
+
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.move.Move;
 
@@ -14,6 +16,8 @@ import org.moshe.arad.game.move.Move;
  *  3.if this player has more moves to play.
  *  4.to a player: "enter your move".
  *  5.to a player about invalid move he made.
+ *  
+ *  TODO need to remove Scanner object from method signature.
  */
 public interface PlayerGameable {
 
@@ -23,7 +27,7 @@ public interface PlayerGameable {
 	
 	public boolean isHasMoreMoves(Player player);
 	
-	public Move enterNextMove(Player player);
+	public Move enterNextMove(Player player, Scanner reader);
 	
 	public void notifyOnInvalidMove(Player player, Move move);
 }

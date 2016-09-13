@@ -39,13 +39,13 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	/**
-	 * TODO write test
+	 * TODO to write test, after get rid of final class Scanner 
+	 * need to remove Scanner object from method signature.
 	 */
 	@Override
-	public Move enterNextMove(Player player) {
+	public Move enterNextMove(Player player, Scanner reader) {
 		if(player == null) return null;
 		String name = player.getFirstName() + " " + player.getLastName();
-		Scanner reader = new Scanner(System.in);
 		Move move = new Move();
 		
 		System.out.println(name+": enter your next move.");
@@ -55,7 +55,6 @@ public class Backgammon extends ClassicBoardGame {
 		msg = "where move to? (index 0-23).";
 		input = getMoveInput(name, reader, msg);
 		move.setTo(Integer.parseInt(input));
-		System.out.println("******************************" + move.getFrom() + ":" +move.getTo());
 		return move;
 	}
 
@@ -134,21 +133,23 @@ public class Backgammon extends ClassicBoardGame {
 		else return false;
 	}
 
+	/**
+	 * TODO write test
+	 */
 	@Override
 	public void playGameTurn(Player player) {
+		Scanner reader = new Scanner(System.in);
 		String name = player.getFirstName() + " " + player.getLastName() + ": ";
 		System.out.println(name + "it's your turn. roll the dices.");
 		rollDices(player);
 		System.out.println(name + "you rolled - " + player.getTurn().getFirstDice().getValue() + ": " + player.getTurn().getSecondDice().getValue());
 		board.print();
 		while(isHasMoreMoves(player)){
-			Move move = enterNextMove(player);
+			Move move = enterNextMove(player, reader);
 			if(validMove(player, move, super.board)){
 				if(!makeMove(player, move, super.board)) throw new RuntimeException();
 				else{
-					/**
-					 * init dices.
-					 */
+					initDices(player, move);
 					System.out.println("After move:");
 					board.print();
 					System.out.println("*************************************");

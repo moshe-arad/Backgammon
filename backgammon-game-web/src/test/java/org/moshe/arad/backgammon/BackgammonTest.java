@@ -6,9 +6,12 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Scanner;
 
 import javax.annotation.Resource;
 
@@ -193,14 +196,18 @@ public class BackgammonTest {
 	
 	@Test
 	public void enterNextMovePlayerIsNullTest(){
-		Move actual = backgammon.enterNextMove(null);
+		Move actual = backgammon.enterNextMove(null, new Scanner(System.in));
 		assertNull("Enter next move, player is null, failed.", actual);
 	}
 	
 //	@Test
 //	public void enterNextMoveTest(){
-//		Move actual = backgammon.enterNextMove(blackPawnPlayer);
-//		assertNotNull("Enter next move test failed.", actual);
+//		Scanner readerMock = mock(Scanner.class);
+//		
+//		when(readerMock.next()).thenReturn("23").thenReturn("20");
+//		Move actual = backgammon.enterNextMove(whitePawnPlayer, readerMock);
+//		assertEquals("Enter next move test failed. move from.", 23,actual.getFrom());
+//		assertEquals("Enter next move test failed. move to.", 20,actual.getTo());
 //	}
 	
 	@Test(expected=NullPointerException.class)

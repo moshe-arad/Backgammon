@@ -98,23 +98,35 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean validMove(Player player, Move move, Board board) {
+		if(player == null || move == null || board == null) return false;
 		Color playerColor = player.getColor();
-		Color fromColor;
-		Color toColor;
+		Pawn fromPawn;
+		Pawn toPawn;
 		
 		if(playerColor.equals(Color.white) && ((move.getTo() - move.getFrom()) > 0)) 
 		{
-			toColor = board.peekAtColumn(move.getTo()).getColor();
-			fromColor = board.peekAtColumn(move.getFrom()).getColor();
-			if(toColor.equals(Color.white) && fromColor.equals(Color.white)) return true;
+			toPawn = board.peekAtColumn(move.getTo());
+			fromPawn = board.peekAtColumn(move.getFrom());
+			if(fromPawn == null) return false;
+			else if(fromPawn.getColor().equals(Color.white))
+			{
+				if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
+				else return true;
+			}
 			else return false;
+			
 		}
 			
 		if(playerColor.equals(Color.black) && ((move.getFrom() - move.getTo()) > 0)) 
 		{
-			toColor = board.peekAtColumn(move.getTo()).getColor();
-			fromColor = board.peekAtColumn(move.getFrom()).getColor();
-			if(toColor.equals(Color.black) && fromColor.equals(Color.black)) return true;
+			toPawn = board.peekAtColumn(move.getTo());
+			fromPawn = board.peekAtColumn(move.getFrom());
+			if(fromPawn == null) return false;
+			else if(fromPawn.getColor().equals(Color.black))
+			{
+				if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
+				else return true;
+			}
 			else return false;
 		}
 		else return false;

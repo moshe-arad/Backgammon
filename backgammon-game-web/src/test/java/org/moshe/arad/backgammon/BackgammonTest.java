@@ -271,4 +271,104 @@ public class BackgammonTest {
 		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
 		assertTrue("Make move, valid test empty failed.", actual);
 	}
+	
+	@Test
+	public void validMovePlayerIsNullTest(){
+		boolean actual = backgammon.validMove(null, new Move(), board);
+		assertFalse("valid Move, player is null failed.", actual);
+	}
+	
+	@Test
+	public void validMoveMoveIsNullTest(){
+		boolean actual = backgammon.validMove(blackPawnPlayer, null, board);
+		assertFalse("valid Move, move is null failed.", actual);
+	}
+	
+	@Test
+	public void validMoveBoardIsNullTest(){
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(), null);
+		assertFalse("valid Move, board is null failed.", actual);
+	}
+	
+	@Test
+	public void validMoveWhitePawnToMinusFromNegativeTest(){
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(4,1), board);
+		assertFalse("valid Move, white pawn to minus from negative failed.", actual);
+	}
+	
+	@Test
+	public void validMoveBlackPawnFromMinusToNegativeTest(){
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(1,4), board);
+		assertFalse("valid Move, black pawn from minus to negative failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveWhitePawnEmptyBoardTest(){
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertFalse("valid Move, white pawn empty board failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveBlackPawnEmptyBoardTest(){
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertFalse("valid Move, black pawn empty pawn failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveWhitePawnFromDifferentColorBoardTest(){
+		assertTrue(board.setPawn(blackPawn, 1));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertFalse("valid Move, white pawn from different color failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveBlackPawnFromDifferentColorTest(){
+		assertTrue(board.setPawn(whitePawn, 1));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertFalse("valid Move, black pawn from different color failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveWhitePawnToDifferentColorBoardTest(){
+		assertTrue(board.setPawn(blackPawn, 4));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertFalse("valid Move, white pawn to different color failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveBlackPawnToDifferentColorTest(){
+		assertTrue(board.setPawn(whitePawn, 1));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertFalse("valid Move, black pawn to different color failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveWhitePawnToIsEmptyTest(){
+		assertTrue(board.setPawn(whitePawn, 1));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertTrue("valid Move, white pawn to is empty failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveBlackPawnToIsEmptyTest(){
+		assertTrue(board.setPawn(blackPawn, 4));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertTrue("valid Move, black pawn To Is Empty failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveWhitePawnToIsWhiteTest(){
+		assertTrue(board.setPawn(whitePawn, 1));
+		assertTrue(board.setPawn(whitePawn, 4));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(1,4), board);
+		assertTrue("valid Move, white pawn to is white failed.", actual);
+	}
+	
+	@Test
+	public void vaildMoveBlackPawnToIsBlackTest(){
+		assertTrue(board.setPawn(blackPawn, 4));
+		assertTrue(board.setPawn(blackPawn, 1));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(4,1), board);
+		assertTrue("valid Move, black pawn To Is black failed.", actual);
+	}
 }

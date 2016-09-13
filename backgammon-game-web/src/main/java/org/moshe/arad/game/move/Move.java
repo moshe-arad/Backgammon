@@ -5,6 +5,14 @@ public class Move {
 	private int from;
 	private int to;
 	
+	public Move() {
+	}
+	
+	public Move(int from, int to) {
+		this.from = from;
+		this.to = to;
+	}
+	
 	public void setFrom(int from) {
 		this.from = from;
 	}

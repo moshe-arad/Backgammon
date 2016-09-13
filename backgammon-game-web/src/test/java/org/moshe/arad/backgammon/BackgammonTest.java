@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.Color;
 import org.moshe.arad.game.instrument.Pawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
@@ -217,5 +218,57 @@ public class BackgammonTest {
 		backgammon.rollDices(withTurn);
 		assertNotEquals("First dice roll failed.", 0, withTurn.getTurn().getFirstDice().getValue());
 		assertNotEquals("Second dice roll failed.", 0, withTurn.getTurn().getSecondDice().getValue());
+	}
+	
+	@Test
+	public void makeMovePlayerIsNullTest(){
+		boolean actual = backgammon.makeMove(null, new Move(), board);
+		assertFalse("Make move, player is null failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveMoveIsNullTest(){
+		boolean actual = backgammon.makeMove(blackPawnPlayer, null, board);
+		assertFalse("Make move, move is null failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveBoardIsNullTest(){
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(), null);
+		assertFalse("Make move, board is null failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveEmptyBoardTest(){
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
+		assertFalse("Make move, empty board is failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveInvalidTest(){
+		boolean pawnSet = board.setPawn(blackPawn, 1);
+		assertTrue(pawnSet);
+		pawnSet = board.setPawn(whitePawn, 4);
+		assertTrue(pawnSet);
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
+		assertFalse("Make move, invalid is failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveValidNonEmptyTest(){
+		boolean pawnSet = board.setPawn(blackPawn, 1);
+		assertTrue(pawnSet);
+		pawnSet = board.setPawn(new Pawn(Color.black.getInnerValue()), 4);
+		assertTrue(pawnSet);
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
+		assertTrue("Make move, valid test non empty failed.", actual);
+	}
+	
+	@Test
+	public void makeMoveValidEmptyTest(){
+		boolean pawnSet = board.setPawn(blackPawn, 1);
+		assertTrue(pawnSet);
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
+		assertTrue("Make move, valid test empty failed.", actual);
 	}
 }

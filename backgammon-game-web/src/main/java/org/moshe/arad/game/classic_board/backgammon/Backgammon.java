@@ -87,6 +87,7 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean makeMove(Player player, Move move, Board board) {
+		if(player == null || move == null || board == null) return false;
 		Pawn pawn = board.popAtColumn(move.getFrom());
 		if(pawn != null){
 			if(board.setPawn(pawn, move.getTo())) return true;

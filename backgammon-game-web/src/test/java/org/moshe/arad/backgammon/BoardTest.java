@@ -321,4 +321,28 @@ public class BoardTest {
 	public void boardConstructorNullTest(){
 		new Board(null);
 	}
+	
+	@Test
+	public void clearBoardTest(){
+		Board someBoard = new Board();
+		someBoard.initBoard();
+		someBoard.clearBoard();
+		for(int i=0; i<Board.LENGTH; i++){
+			assertTrue("clear board test failed.", someBoard.isEmptyColumn(i));
+		}
+	}
+	
+	@Test
+	public void isHasColorBlackInvalidTest(){
+		Board someBoard = new Board();
+		someBoard.setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		assertFalse(someBoard.isHasColor(Color.black));
+	}
+	
+	@Test
+	public void isHasColorBlackValidTest(){
+		Board someBoard = new Board();
+		someBoard.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		assertTrue(someBoard.isHasColor(Color.black));
+	}
 }

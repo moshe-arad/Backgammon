@@ -1,43 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 
-<context:annotation-config />
+	<context:annotation-config />
 
-<bean id="firstPlayer" class="org.moshe.arad.game.player.Player" >
-	<qualifier value="firstPlayer" />
-	<constructor-arg name="id" value="021777777" />
-	<constructor-arg name="firstName" value="Moshe-test" />
-	<constructor-arg name="lastName" value="Arad-test" />
-	<constructor-arg name="age" value="13" />
-</bean>
+	<bean id="firstPlayer" class="org.moshe.arad.game.player.Player">
+		<qualifier value="firstPlayer" />
+		<constructor-arg name="id" value="021777777" />
+		<constructor-arg name="firstName" value="Moshe-test" />
+		<constructor-arg name="lastName" value="Arad-test" />
+		<constructor-arg name="age" value="13" />
+		<constructor-arg name="color" value="0" />
+	</bean>
 
-<bean id="secondPlayer" class="org.moshe.arad.game.player.Player" >
-	<qualifier value="secondPlayer" />
-	<constructor-arg name="id" value="056666663" />
-	<constructor-arg name="firstName" value="James-test" />
-	<constructor-arg name="lastName" value="Brown-test" />
-	<constructor-arg name="age" value="12" />
-</bean>
+	<bean id="secondPlayer" class="org.moshe.arad.game.player.Player">
+		<qualifier value="secondPlayer" />
+		<constructor-arg name="id" value="056666663" />
+		<constructor-arg name="firstName" value="James-test" />
+		<constructor-arg name="lastName" value="Brown-test" />
+		<constructor-arg name="age" value="12" />
+		<constructor-arg name="color" value="1" />
+	</bean>
+	
+	<bean id="whitePawnPlayer" class="org.moshe.arad.game.player.Player">
+		<qualifier value="firstPlayer" />
+		<constructor-arg name="id" value="021777777" />
+		<constructor-arg name="firstName" value="Moshe-test" />
+		<constructor-arg name="lastName" value="Arad-test" />
+		<constructor-arg name="age" value="13" />
+		<constructor-arg name="color" value="0" />
+	</bean>
 
-<bean class="org.moshe.arad.game.instrument.Board" />
+	<bean id="blackPawnPlayer" class="org.moshe.arad.game.player.Player">
+		<qualifier value="secondPlayer" />
+		<constructor-arg name="id" value="056666663" />
+		<constructor-arg name="firstName" value="James-test" />
+		<constructor-arg name="lastName" value="Brown-test" />
+		<constructor-arg name="age" value="12" />
+		<constructor-arg name="color" value="1" />
+	</bean>
 
-<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
+	<bean id="blackPawn" class="org.moshe.arad.game.instrument.Pawn">
+		<constructor-arg name="color" value="1" />
+	</bean>
+	
+	<bean id="whitePawn" class="org.moshe.arad.game.instrument.Pawn">
+		<constructor-arg name="color" value="0" />
+	</bean>
+	
+	<bean class="org.moshe.arad.game.instrument.Board" />
 
-<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
+	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
 
-<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
+	<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
 
-<bean id="turn" class="org.moshe.arad.game.turn.Turn" factory-method="getInstance" />
+	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
 
-<util:list id="order" list-class="java.util.LinkedList">
+	<bean id="turn" class="org.moshe.arad.game.turn.Turn"
+		factory-method="getInstance" />
+
+	<util:list id="order" list-class="java.util.LinkedList">
 		<ref bean="firstPlayer" />
 		<ref bean="secondPlayer" />
-</util:list>
+	</util:list>
 
 </beans>

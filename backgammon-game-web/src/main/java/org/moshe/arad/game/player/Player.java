@@ -14,12 +14,16 @@ public class Player {
 	private Turn turn;
 	private Color color;
 
-	public Player(String id, String firstName, String lastName, int age) {
+	public Player(String id, String firstName, String lastName, int age, Turn turn, int color) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
+		this.turn = turn;
+		this.color = Color.getColorByInt(color);
 	}
+
+
 
 	@Override
 	public String toString() {
@@ -45,6 +49,8 @@ public class Player {
 	public Color getColor() {
 		return color;
 	}
-	
-	
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
 }

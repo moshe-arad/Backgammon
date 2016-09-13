@@ -4,8 +4,8 @@ public class Pawn {
 
 	private Color color;
 
-	public Pawn(Color color) {
-		this.color = color;
+	public Pawn(int color) {
+		this.color = Color.getColorByInt(color);
 	}
 
 	public Color getColor() {

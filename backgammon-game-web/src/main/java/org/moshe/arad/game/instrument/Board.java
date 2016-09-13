@@ -30,34 +30,40 @@ public class Board {
 		}
 	}
 	
+	public void clearBoard(){
+		for(Deque<Pawn> column:board){
+			column.clear();
+		}
+	}
+	
 	public void initBoard(){
 		for(Deque<Pawn> column:board){
 			column.clear();
 		}
 				
 		for(int i=0; i<2; i++)
-			board.get(0).push(new Pawn(Color.black));
+			board.get(0).push(new Pawn(Color.black.getInnerValue()));
 		
 		for(int i=0; i<5; i++)
-			board.get(5).push(new Pawn(Color.white));
+			board.get(5).push(new Pawn(Color.white.getInnerValue()));
 		
 		for(int i=0; i<3; i++)
-			board.get(7).push(new Pawn(Color.white));
+			board.get(7).push(new Pawn(Color.white.getInnerValue()));
 		
 		for(int i=0; i<5; i++)
-			board.get(11).push(new Pawn(Color.black));
+			board.get(11).push(new Pawn(Color.black.getInnerValue()));
 		
 		for(int i=0; i<5; i++)
-			board.get(12).push(new Pawn(Color.white));
+			board.get(12).push(new Pawn(Color.white.getInnerValue()));
 		
 		for(int i=0; i<3; i++)
-			board.get(16).push(new Pawn(Color.black));
+			board.get(16).push(new Pawn(Color.black.getInnerValue()));
 		
 		for(int i=0; i<5; i++)
-			board.get(18).push(new Pawn(Color.black));
+			board.get(18).push(new Pawn(Color.black.getInnerValue()));
 		
 		for(int i=0; i<2; i++)
-			board.get(23).push(new Pawn(Color.white));
+			board.get(23).push(new Pawn(Color.white.getInnerValue()));
 	}
 	
 	public boolean setPawn(Pawn pawn, int index){
@@ -159,7 +165,8 @@ public class Board {
 
 	public boolean isHasColor(Color color){
 		for(Deque<Pawn> column:board){
-			if(column.peek().equals(color)) return true;
+			Pawn pawn = column.peek();
+			if(pawn != null && pawn.getColor().equals(color)) return true;
 		}
 		return false;
 	}
@@ -185,7 +192,7 @@ public class Board {
 					}
 					else{
 						Pawn p = boardCopy.popAtColumn(j);
-						if(p.equals(Color.black)){
+						if(p.getColor().equals(Color.black)){
 							sb.append("|B");
 						}
 						else{
@@ -228,7 +235,7 @@ public class Board {
 				}
 				else{
 					Pawn p = boardCopy.popAtColumn(j);
-					if(p.equals(Color.black)){
+					if(p.getColor().equals(Color.black)){
 						sb.append("|B");
 					}
 					else{

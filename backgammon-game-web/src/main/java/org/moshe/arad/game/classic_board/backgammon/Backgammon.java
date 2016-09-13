@@ -17,13 +17,14 @@ public class Backgammon extends ClassicBoardGame {
 	public boolean isHasWinner() {
 		Player first = super.howHasTurn();
 		Player second = super.howIsNextInTurn();
-		return (!board.isHasColor(first.getColor()) || !board.isHasColor(second.getColor()));
+		return (!board.isHasColor(first.getColor()) && board.isHasColor(second.getColor())) || 
+				(board.isHasColor(first.getColor()) && !board.isHasColor(second.getColor()));
 	}
 
 	@Override
 	public boolean isWinner(Player player, Board board) {
 		Color playerColor = player.getColor();
-		return !board.isHasColor(playerColor);
+		return !board.isHasColor(playerColor) && board.isHasColor(Color.getOpposite(playerColor));
 	}
 
 	@Override
@@ -107,11 +108,23 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public void playGameTurn(Player player) {
+		String name = player.getFirstName() + " " + player.getLastName() + ": ";
+		System.out.println(name + "it's your turn. roll the dices.");
 		rollDices(player);
+		System.out.println(name + "you rolled - " + player.getTurn().getFirstDice().getValue() + ": " + player.getTurn().getSecondDice().getValue());
+		board.print();
 		while(isHasMoreMoves(player)){
 			Move move = enterNextMove(player);
 			if(validMove(player, move, super.board)) makeMove(player, move, super.board);
 			else notifyOnInvalidMove(player, move);
 		}
+		System.out.println("After move:");
+		board.print();
+		System.out.println("*************************************");
+	}
+
+	@Override
+	public void initGame() {
+		board.initBoard();
 	}
 }

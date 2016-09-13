@@ -17,4 +17,14 @@ public enum Color {
 	public void setInnerValue(int innerValue) {
 		this.innerValue = innerValue;
 	}
+	
+	public static Color getColorByInt(int innerValue){
+		if(innerValue == 0) return Color.white;
+		else if(innerValue == 1) return Color.black;
+		else return null;
+	}
+	
+	public static Color getOpposite(Color color){
+		return color.equals(black) ? Color.white : Color.black;
+	}
 }

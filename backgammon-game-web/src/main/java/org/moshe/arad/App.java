@@ -16,21 +16,9 @@ public class App
     {
     	ApplicationContext context = new ClassPathXmlApplicationContext("backgammon-context.xml");
     	Backgammon game = context.getBean(Backgammon.class);
-       
-    	System.out.println("First player - " + game.getFirstPlayer());
-    	System.out.println("Second player - " + game.getSecondPlayer());
     	
-    	game.getBoard().initBoard();
-    	
-    	game.getBoard().print();
-    	
-    	Dice d1 = game.howHasTurn().getTurn().getFirstDice();
-    	Dice d2 = game.howHasTurn().getTurn().getSecondDice();
-    	
-    	d1.rollDice();
-    	d2.rollDice();
-    	System.out.println("First dice roll - " + d1.getValue());
-    	System.out.println("Second dice roll - " + d2.getValue());
+    	game.initGame();
+    	game.play();
     	
         ((ClassPathXmlApplicationContext)context).close();
     }

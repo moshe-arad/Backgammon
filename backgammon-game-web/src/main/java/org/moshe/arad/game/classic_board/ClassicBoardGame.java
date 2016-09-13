@@ -5,10 +5,7 @@ import java.util.LinkedList;
 import javax.annotation.Resource;
 
 import org.moshe.arad.game.instrument.Board;
-import org.moshe.arad.game.instrument.Dice;
-import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
-import org.moshe.arad.game.turn.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements ClassicBoardGameable{
@@ -19,15 +16,14 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	private Player firstPlayer;
 	@Resource
 	private Player secondPlayer;
-//	@Resource
-//	private Dice firstDice;
-//	@Resource
-//	private Dice secondDice;
 	@Resource
 	private LinkedList<Player> order;
 	
 	private boolean isPlaying = true;
 	
+	/**
+	 * first call initGame
+	 */
 	public void play(){
 		
 		while(isPlaying){
@@ -42,8 +38,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	}
 
 	public void doWinnerActions() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("we have a winner");
 	}
 	
 	@Override

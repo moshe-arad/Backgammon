@@ -23,13 +23,16 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean isWinner(Player player, Board board) {
+		if((player == null) || (board == null)) return false;
 		Color playerColor = player.getColor();
 		return !board.isHasColor(playerColor) && board.isHasColor(Color.getOpposite(playerColor));
 	}
 
 	@Override
 	public boolean isHasMoreMoves(Player player) {
+		if(player == null) return false;
 		Turn turn = player.getTurn();
+		if(turn == null) return false;
 		if((turn.getFirstDice().getValue() == 0) && (turn.getSecondDice().getValue() == 0)) return false;
 		else return true;
 	}

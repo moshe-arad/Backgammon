@@ -10,7 +10,6 @@ public class Player {
 	private String firstName;
 	private String lastName;
 	private int age;
-	@Autowired
 	private Turn turn;
 	private Color color;
 

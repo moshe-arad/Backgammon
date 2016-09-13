@@ -136,4 +136,47 @@ public class BackgammonTest {
 		boolean actual = backgammon.isWinner(whitePawnPlayer, board);
 		assertFalse("is Winner White Pawn Does Not Have Winner Both Colors Test.", actual);
 	}
+	
+	@Test
+	public void isWinnerPlayerIsNullTest(){
+		boolean actual = backgammon.isWinner(null, board);
+		assertFalse("Is Winner, player is null, failed. ", actual);
+	}
+	
+	@Test
+	public void isWinnerBoardIsNullTest(){
+		boolean actual = backgammon.isWinner(blackPawnPlayer, null);
+		assertFalse("Is Winner, player is null, failed. ", actual);
+	}
+	
+	@Test
+	public void isHasMoreMovesPlayerIsNullTest(){
+		boolean actual = backgammon.isHasMoreMoves(null);
+		assertFalse("Is has more moves, player is null, failed.", actual);
+	}
+	
+	@Test
+	public void isHasMoreMovesPlayerWithoutTurnTest(){
+		Player withoutTurn = backgammon.howIsNextInTurn();
+		boolean actual = backgammon.isHasMoreMoves(withoutTurn);
+		assertFalse("Is has more moves, player without turn, failed.", actual);
+	}
+	
+	@Test
+	public void isHasMoreMovesPlayerWithTurnDoesNotHaveMoreMovesTest(){
+		Player withTurn = backgammon.howHasTurn();
+		withTurn.getTurn().getFirstDice().initDiceValue();
+		withTurn.getTurn().getSecondDice().initDiceValue();
+		boolean actual = backgammon.isHasMoreMoves(withTurn);
+		assertFalse("Is has more moves, player with turn & player does not have more moves, failed.", actual);
+	}
+	
+	@Test
+	public void isHasMoreMovesPlayerWithTurnHasMoreMovesTest(){
+		Player withTurn = backgammon.howHasTurn();
+		withTurn.getTurn().getFirstDice().rollDice();
+		withTurn.getTurn().getSecondDice().rollDice();
+		boolean actual = backgammon.isHasMoreMoves(withTurn);
+		assertTrue("Is has more moves, player with turn & player has more moves, failed.", actual);
+	}
 }

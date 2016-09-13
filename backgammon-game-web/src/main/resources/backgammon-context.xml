@@ -17,6 +17,7 @@
 		<constructor-arg name="lastName" value="Arad" />
 		<constructor-arg name="age" value="33" />
 		<constructor-arg name="color" value="0" />
+		<constructor-arg name="turn" ref="turn" />
 	</bean>
 	
 	<bean id="secondPlayer" class="org.moshe.arad.game.player.Player">

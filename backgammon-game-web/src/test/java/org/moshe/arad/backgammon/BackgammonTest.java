@@ -604,6 +604,42 @@ public class BackgammonTest {
 	}
 	
 	@Test
+	public void validMoveBlackEatWhiteTest(){
+		assertTrue(board.setPawn(whitePawn, 23));
+		assertTrue(board.setPawn(blackPawn, 20));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(1);
+		boolean actual = backgammon.validMove(playerMock, new Move(20, 23), board);
+		assertTrue("valid Move black eat white Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveWhiteEatBlackTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		assertTrue(board.setPawn(whitePawn, 23));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(1);
+		boolean actual = backgammon.validMove(playerMock, new Move(23, 20), board);
+		assertTrue("valid Move white eat black Test failed.", actual);
+	}
+	
+	@Test
 	public void initDicesPlayerIsNullTest(){
 		boolean actual = backgammon.initDices(null, new Move());
 		assertFalse("Init dices, player is null test, failed", actual);

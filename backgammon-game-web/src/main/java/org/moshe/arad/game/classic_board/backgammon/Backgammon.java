@@ -129,8 +129,8 @@ public class Backgammon extends ClassicBoardGame {
 				else if(fromPawn.getColor().equals(Color.white))
 				{
 					if(doCleanUp) return true;
-					else if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
-					else return true;
+					else if((toPawn == null) || toPawn.getColor().equals(Color.white) || (toPawn.getColor().equals(Color.black) && board.getSizeOfColumn(move.getTo()) == 1)) return true;
+					else return false;
 				}
 				else return false;
 				
@@ -144,8 +144,8 @@ public class Backgammon extends ClassicBoardGame {
 				else if(fromPawn.getColor().equals(Color.black))
 				{
 					if(doCleanUp) return true;
-					else if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
-					else return true;
+					else if((toPawn == null) || toPawn.getColor().equals(Color.black) || (toPawn.getColor().equals(Color.white) && board.getSizeOfColumn(move.getTo()) == 1)) return true;
+					else return false;
 				}
 				else return false;
 			}

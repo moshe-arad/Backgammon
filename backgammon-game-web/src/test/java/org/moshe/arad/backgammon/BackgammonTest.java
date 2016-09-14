@@ -286,6 +286,34 @@ public class BackgammonTest {
 	}
 	
 	@Test
+	public void makeMoveRemoveWhiteCleanUpTest(){
+		assertTrue(board.setPawn(whitePawn, 4));
+		boolean actual = backgammon.makeMove(whitePawnPlayer, new Move(4, -1), board);
+		assertTrue("make Move Remove White CleanUp Test", actual);
+		assertTrue(board.isEmptyColumn(4));
+	}
+	
+	@Test
+	public void makeMoveRemoveWhiteCleanUpEmptyBoardTest(){
+		boolean actual = backgammon.makeMove(whitePawnPlayer, new Move(4, -1), board);
+		assertFalse("make Move Remove White CleanUp Empty Board Test", actual);
+	}
+	
+	@Test
+	public void makeMoveRemoveBlackCleanUpTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(20, 24), board);
+		assertTrue("make Move Remove black CleanUp Test", actual);
+		assertTrue(board.isEmptyColumn(20));
+	}
+	
+	@Test
+	public void makeMoveRemoveBlackCleanUpEmptyBoardTest(){
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(20, 24), board);
+		assertFalse("make Move Remove black CleanUp Empty Board Test", actual);
+	}
+	
+	@Test
 	public void validMovePlayerIsNullTest(){
 		boolean actual = backgammon.validMove(null, new Move(), board);
 		assertFalse("valid Move, player is null failed.", actual);
@@ -386,6 +414,36 @@ public class BackgammonTest {
 	}
 	
 	@Test
+	public void validMoveDoCleanUpWhiteCanNotCleanUpTest(){
+		assertTrue(board.setPawn(whitePawn, 4));
+		assertTrue(board.setPawn(new Pawn(Color.white.getInnerValue()), 6));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(4, -1), board);
+		assertFalse("valid Move Do CleanUp White Can Not CleanUp Test", actual);
+	}
+	
+	@Test
+	public void validMoveDoCleanUpWhiteCanCleanUpTest(){
+		assertTrue(board.setPawn(whitePawn, 4));
+		boolean actual = backgammon.validMove(whitePawnPlayer, new Move(4, -1), board);
+		assertTrue("valid Move Do CleanUp White Can CleanUp Test", actual);
+	}
+	
+	@Test
+	public void validMoveDoCleanUpBlackCanNotCleanUpTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		assertTrue(board.setPawn(new Pawn(Color.black.getInnerValue()), 10));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(20, 24), board);
+		assertFalse("valid Move Do CleanUp black Can Not CleanUp Test", actual);
+	}
+	
+	@Test
+	public void validMoveDoCleanUpBlackCanCleanUpTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		boolean actual = backgammon.validMove(blackPawnPlayer, new Move(20, 24), board);
+		assertTrue("valid Move Do CleanUp black Can CleanUp Test", actual);
+	}
+	
+	@Test
 	public void initDicesPlayerIsNullTest(){
 		boolean actual = backgammon.initDices(null, new Move());
 		assertFalse("Init dices, player is null test, failed", actual);
@@ -457,5 +515,43 @@ public class BackgammonTest {
 		boolean actual = backgammon.initDices(playerMock, move);
 		verify(firstDiceMock).initDiceValue();
 		assertTrue("Init dices, init first dice, failed.", actual);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void isCanStartCleanUpPlayerIsNullTest(){
+		backgammon.isCanStartCleanUp(null, board);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void isCanStartCleanUpBoardIsNullTest(){
+		backgammon.isCanStartCleanUp(blackPawnPlayer, null);
+	}
+	
+	@Test
+	public void isCanStartCleanUpWhiteCanNotCleanUpTest(){
+		assertTrue(board.setPawn(whitePawn, 6));
+		assertFalse("is Can Start CleanUp White Can Not CleanUp Test failed.", 
+				backgammon.isCanStartCleanUp(whitePawnPlayer, board));
+	}
+	
+	@Test
+	public void isCanStartCleanUpWhiteCanCleanUpTest(){
+		assertTrue(board.setPawn(whitePawn, 5));
+		assertTrue("is Can Start CleanUp White Can CleanUp Test failed.", 
+				backgammon.isCanStartCleanUp(whitePawnPlayer, board));
+	}
+	
+	@Test
+	public void isCanStartCleanUpBlackCanNotCleanUpTest(){
+		assertTrue(board.setPawn(blackPawn, 17));
+		assertFalse("is Can Start CleanUp black Can Not CleanUp Test failed.", 
+				backgammon.isCanStartCleanUp(blackPawnPlayer, board));
+	}
+	
+	@Test
+	public void isCanStartCleanUpBlackCanCleanUpTest(){
+		assertTrue(board.setPawn(blackPawn, 18));
+		assertTrue("is Can Start CleanUp black Can CleanUp Test failed.", 
+				backgammon.isCanStartCleanUp(blackPawnPlayer, board));
 	}
 }

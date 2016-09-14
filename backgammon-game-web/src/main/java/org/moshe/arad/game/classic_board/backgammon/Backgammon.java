@@ -49,10 +49,10 @@ public class Backgammon extends ClassicBoardGame {
 		Move move = new Move();
 		
 		System.out.println(name+": enter your next move.");
-		String msg = "from where to move? (index 0-23).";
+		String msg = "from where to move? (index -1:24).";
 		String input = getMoveInput(name, reader, msg);
 		move.setFrom(Integer.parseInt(input));
-		msg = "where move to? (index 0-23).";
+		msg = "where move to? (index -1:24).";
 		input = getMoveInput(name, reader, msg);
 		move.setTo(Integer.parseInt(input));
 		return move;
@@ -61,7 +61,7 @@ public class Backgammon extends ClassicBoardGame {
 	private String getMoveInput(String name, Scanner reader, String msg) {
 		System.out.println(name+": " + msg);
 		String input = reader.next();
-		while(!StringUtils.isNumeric(input) || Integer.parseInt(input) < 0 || Integer.parseInt(input) > 23){
+		while(!StringUtils.isNumeric(input) || Integer.parseInt(input) < -1 || Integer.parseInt(input) > 24){
 			System.out.println("Your input is invalid. try again.");
 			input = reader.next();
 		}
@@ -88,10 +88,11 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean makeMove(Player player, Move move, Board board) {
-		if(player == null || move == null || board == null) return false;
+		if(player == null || move == null || board == null) return false; 
 		Pawn pawn = board.popAtColumn(move.getFrom());
 		if(pawn != null){
-			if(board.setPawn(pawn, move.getTo())) return true;
+			if(move.getTo() == -1 || move.getTo() == 24) return true;
+			else if(board.setPawn(pawn, move.getTo())) return true;
 			else return false;
 		}
 		return false;
@@ -102,16 +103,26 @@ public class Backgammon extends ClassicBoardGame {
 		if(player == null || move == null || board == null) return false;
 		Color playerColor = player.getColor();
 		Pawn fromPawn;
-		Pawn toPawn;
+		Pawn toPawn = null;
+		boolean doCleanUp = false;
 		
+		if(move.getTo() == -1 || move.getTo() == 24){
+			boolean isCanCleanUp = isCanStartCleanUp(player, board);
+			if(isCanCleanUp){
+				doCleanUp = true;
+			}
+			else return false;
+		}
+	
 		if(playerColor.equals(Color.white) && ((move.getFrom() - move.getTo()) > 0)) 
 		{
-			toPawn = board.peekAtColumn(move.getTo());
+			if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
 			fromPawn = board.peekAtColumn(move.getFrom());
 			if(fromPawn == null) return false;
 			else if(fromPawn.getColor().equals(Color.white))
 			{
-				if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
+				if(doCleanUp) return true;
+				else if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
 				else return true;
 			}
 			else return false;
@@ -120,12 +131,13 @@ public class Backgammon extends ClassicBoardGame {
 			
 		if(playerColor.equals(Color.black) && ((move.getTo() - move.getFrom()) > 0)) 
 		{
-			toPawn = board.peekAtColumn(move.getTo());
+			if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
 			fromPawn = board.peekAtColumn(move.getFrom());
 			if(fromPawn == null) return false;
 			else if(fromPawn.getColor().equals(Color.black))
 			{
-				if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
+				if(doCleanUp) return true;
+				else if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
 				else return true;
 			}
 			else return false;
@@ -181,5 +193,20 @@ public class Backgammon extends ClassicBoardGame {
 			return true;
 		}
 		else return false;
+	}
+
+	@Override
+	public boolean isCanStartCleanUp(Player player, Board borad) {
+		if((player == null) || (borad == null)) throw new NullPointerException();
+		Color color = player.getColor();
+		if(color.equals(Color.white)){
+			for(int i=23; i>5; i--)
+				if(!borad.isEmptyColumn(i)) return false;
+		}
+		if(color.equals(Color.black)){
+			for(int i=0; i<18; i++)
+				if(!borad.isEmptyColumn(i)) return false;
+		}
+		return true;
 	}
 }

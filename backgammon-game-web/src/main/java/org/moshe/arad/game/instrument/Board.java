@@ -154,11 +154,17 @@ public class Board {
 		sb.append("       ** The Board **").append("\n");
 		
 		sb.append("  ##############################").append("\n");
+		sb.append("  # 1 1 0 0 0 0    0 0 0 0 0 0 #").append("\n");
+		sb.append("  # 1 0 9 8 7 6    5 4 3 2 1 0 #").append("\n");
+		sb.append("  #-------------  -------------#").append("\n");
 		printUpperBoard(boardCopy, sb);
 		
 		sb.append("  #                            #\n");
 		
 		printBottomBoard(boardCopy, sb);
+		sb.append("  #-------------  -------------#").append("\n");
+		sb.append("  # 1 1 1 1 1 1    1 1 2 2 2 2 #").append("\n");
+		sb.append("  # 2 3 4 5 6 7    8 9 0 1 2 3 #").append("\n");
 		sb.append("  ##############################").append("\n");
 		System.out.println(sb.toString());
 	}

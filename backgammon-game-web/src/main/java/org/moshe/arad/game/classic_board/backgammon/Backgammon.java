@@ -105,42 +105,52 @@ public class Backgammon extends ClassicBoardGame {
 		Pawn fromPawn;
 		Pawn toPawn = null;
 		boolean doCleanUp = false;
+		Dice firstDice = player.getTurn().getFirstDice();
+		Dice secondDice = player.getTurn().getSecondDice();
+		int moveStep = move.getTo() - move.getFrom();
 		
-		if(move.getTo() == -1 || move.getTo() == 24){
-			boolean isCanCleanUp = isCanStartCleanUp(player, board);
-			if(isCanCleanUp){
-				doCleanUp = true;
+		if(move.getFrom() == 24 || move.getFrom() == -1) return false;
+		if(move.getFrom() == move.getTo()) return false;
+		if(moveStep<0) moveStep*=-1;
+		if((firstDice.getValue() == moveStep) || (secondDice.getValue() == moveStep) || ((firstDice.getValue() + secondDice.getValue() == moveStep))){
+			if(move.getTo() == -1 || move.getTo() == 24){
+				boolean isCanCleanUp = isCanStartCleanUp(player, board);
+				if(isCanCleanUp){
+					doCleanUp = true;
+				}
+				else return false;
 			}
-			else return false;
-		}
-	
-		if(playerColor.equals(Color.white) && ((move.getFrom() - move.getTo()) > 0)) 
-		{
-			if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
-			fromPawn = board.peekAtColumn(move.getFrom());
-			if(fromPawn == null) return false;
-			else if(fromPawn.getColor().equals(Color.white))
+		
+			if(playerColor.equals(Color.white) && ((move.getFrom() - move.getTo()) > 0)) 
 			{
-				if(doCleanUp) return true;
-				else if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
-				else return true;
+				if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
+				fromPawn = board.peekAtColumn(move.getFrom());
+				if(fromPawn == null) return false;
+				else if(fromPawn.getColor().equals(Color.white))
+				{
+					if(doCleanUp) return true;
+					else if((toPawn == null) || toPawn.getColor().equals(Color.white)) return true;
+					else return true;
+				}
+				else return false;
+				
 			}
-			else return false;
-			
-		}
-			
-		if(playerColor.equals(Color.black) && ((move.getTo() - move.getFrom()) > 0)) 
-		{
-			if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
-			fromPawn = board.peekAtColumn(move.getFrom());
-			if(fromPawn == null) return false;
-			else if(fromPawn.getColor().equals(Color.black))
+				
+			if(playerColor.equals(Color.black) && ((move.getTo() - move.getFrom()) > 0)) 
 			{
-				if(doCleanUp) return true;
-				else if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
-				else return true;
+				if(!doCleanUp) toPawn = board.peekAtColumn(move.getTo());
+				fromPawn = board.peekAtColumn(move.getFrom());
+				if(fromPawn == null) return false;
+				else if(fromPawn.getColor().equals(Color.black))
+				{
+					if(doCleanUp) return true;
+					else if((toPawn == null) || toPawn.getColor().equals(Color.black)) return true;
+					else return true;
+				}
+				else return false;
 			}
 			else return false;
+
 		}
 		else return false;
 	}

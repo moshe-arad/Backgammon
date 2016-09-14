@@ -1,5 +1,6 @@
 package org.moshe.arad.game.classic_board.backgammon;
 
+import java.util.LinkedList;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
@@ -14,10 +15,25 @@ import org.moshe.arad.game.turn.Turn;
 
 public class Backgammon extends ClassicBoardGame {
 
+	private LinkedList<Pawn> blacksOutsideGame;
+	private LinkedList<Pawn> whitesOutsideGame;
+	
+	public Backgammon() {
+		blacksOutsideGame = new LinkedList<Pawn>();
+		whitesOutsideGame = new LinkedList<Pawn>();
+	}
+	
+	
+	public Backgammon(LinkedList<Pawn> blacksOutsideGame, LinkedList<Pawn> whitesOutsideGame) {
+		this.blacksOutsideGame = blacksOutsideGame;
+		this.whitesOutsideGame = whitesOutsideGame;
+	}
+
 	@Override
 	public boolean isHasWinner() {
 		Player first = super.howHasTurn();
 		Player second = super.howIsNextInTurn();
+		if(blacksOutsideGame.size() > 0 || whitesOutsideGame.size() > 0) return false;
 		return (!board.isHasColor(first.getColor()) && board.isHasColor(second.getColor())) || 
 				(board.isHasColor(first.getColor()) && !board.isHasColor(second.getColor()));
 	}
@@ -25,6 +41,7 @@ public class Backgammon extends ClassicBoardGame {
 	@Override
 	public boolean isWinner(Player player, Board board) {
 		if((player == null) || (board == null)) return false;
+		if(blacksOutsideGame.size() > 0 || whitesOutsideGame.size() > 0) return false;
 		Color playerColor = player.getColor();
 		return !board.isHasColor(playerColor) && board.isHasColor(Color.getOpposite(playerColor));
 	}
@@ -90,8 +107,28 @@ public class Backgammon extends ClassicBoardGame {
 	public boolean makeMove(Player player, Move move, Board board) {
 		if(player == null || move == null || board == null) return false; 
 		Pawn pawn = board.popAtColumn(move.getFrom());
+		Pawn toPawn = (move.getTo() != -1 && move.getTo() != 24) ? board.peekAtColumn(move.getTo()) : null;
 		if(pawn != null){
 			if(move.getTo() == -1 || move.getTo() == 24) return true;
+			else if(toPawn != null){
+				if(toPawn.getColor().equals(Color.white) && (board.getSizeOfColumn(move.getTo()) == 1) && pawn.getColor().equals(Color.black)) {
+					whitesOutsideGame.add(toPawn);
+					board.popAtColumn(move.getTo());
+					board.setPawn(pawn, move.getTo());
+					return true;
+				}
+				else if (toPawn.getColor().equals(Color.black) && (board.getSizeOfColumn(move.getTo()) == 1) && pawn.getColor().equals(Color.white)) {
+					blacksOutsideGame.add(toPawn);
+					board.popAtColumn(move.getTo());
+					board.setPawn(pawn, move.getTo());
+					return true;
+				}
+				else if(toPawn.getColor().equals(pawn.getColor())){
+					board.setPawn(pawn, move.getTo());
+					return true;
+				}
+				else return false;
+			}
 			else if(board.setPawn(pawn, move.getTo())) return true;
 			else return false;
 		}
@@ -166,6 +203,7 @@ public class Backgammon extends ClassicBoardGame {
 		rollDices(player);
 		System.out.println(name + "you rolled - " + player.getTurn().getFirstDice().getValue() + ": " + player.getTurn().getSecondDice().getValue());
 		board.print();
+		printHowManyPawnsAreOutside();
 		while(isHasMoreMoves(player)){
 			Move move = enterNextMove(player, reader);
 			if(validMove(player, move, super.board)){
@@ -174,6 +212,7 @@ public class Backgammon extends ClassicBoardGame {
 					initDices(player, move);
 					System.out.println("After move:");
 					board.print();
+					printHowManyPawnsAreOutside();
 					System.out.println("*************************************");
 				}
 			}
@@ -218,5 +257,19 @@ public class Backgammon extends ClassicBoardGame {
 				if(!borad.isEmptyColumn(i)) return false;
 		}
 		return true;
+	}
+	
+	public void clearPawnsOutsideGame(){
+		blacksOutsideGame.clear();
+		whitesOutsideGame.clear();
+	}
+
+
+	@Override
+	public void printHowManyPawnsAreOutside() {
+		System.out.println("There are " + blacksOutsideGame.size() + " black pawns outside the game.");
+		System.out.println("There are " + whitesOutsideGame.size() + " white pawns outside the game.");
+		System.out.println();
+		System.out.println();
 	}
 }

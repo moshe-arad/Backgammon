@@ -24,4 +24,6 @@ public interface InstrumentGameable {
 	public boolean isCanStartCleanUp(Player player, Board borad);
 	
 	public boolean initDices(Player player, Move move);
+	
+	public void printHowManyPawnsAreOutside();
 }

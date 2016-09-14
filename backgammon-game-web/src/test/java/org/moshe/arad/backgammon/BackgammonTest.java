@@ -27,6 +27,7 @@ import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.portlet.MockActionRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -35,7 +36,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonTest {
 
-	@Autowired
+	@Resource
 	Backgammon backgammon;
 	@Autowired
 	Board board;
@@ -47,10 +48,13 @@ public class BackgammonTest {
 	Player whitePawnPlayer;
 	@Resource
 	Player blackPawnPlayer;
+	@Autowired
+	ApplicationContext backgammonContextTest;
 	
 	@Before
 	public void setup(){
 		board.clearBoard();
+		backgammon.clearPawnsOutsideGame();
 		assertNotNull("Board object is null. can't run tests.", board);
 		assertNotNull("Pawn object is null. can't run tests.", blackPawn);
 	}
@@ -85,6 +89,43 @@ public class BackgammonTest {
 	public void isHasWinnerEmptyBoardTest(){
 		boolean actual = backgammon.isHasWinner();
 		assertFalse("is has winner empty board failed.", actual);
+	}
+	
+	@Test
+	public void isHasWinnerBlacksOutsideGameTest(){
+		Backgammon nonEmptyBlackGame = backgammonContextTest.getBean("nonEmptyBlacksGame", Backgammon.class);
+		boolean actual = nonEmptyBlackGame.isHasWinner();
+		assertFalse("Is has winner blacks outside game test failed.", actual);
+	}
+	
+	@Test
+	public void isHasWinnerWhitesOutsideGameWithBlackOnBoardTest(){
+		Backgammon nonEmptyWhitesGame = backgammonContextTest.getBean("nonEmptyWhitesGame", Backgammon.class);
+		nonEmptyWhitesGame.getBoard().setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		boolean actual = nonEmptyWhitesGame.isHasWinner();
+		assertFalse("Is has winner whites outside game test failed.", actual);
+	}
+	
+	@Test
+	public void isHasWinnerWhitesOutsideGameTest(){
+		Backgammon nonEmptyWhitesGame = backgammonContextTest.getBean("nonEmptyWhitesGame", Backgammon.class);
+		boolean actual = nonEmptyWhitesGame.isHasWinner();
+		assertFalse("Is has winner whites outside game test failed.", actual);
+	}
+	
+	@Test
+	public void isHasWinnerWhitesAndBlacksOutsideGameTest(){
+		Backgammon nonEmptyWhitesGame = backgammonContextTest.getBean("nonEmptyBlackAndWhitesGame", Backgammon.class);
+		boolean actual = nonEmptyWhitesGame.isHasWinner();
+		assertFalse("Is has winner whites and blacks outside game test failed.", actual);
+	}
+	
+	@Test
+	public void isHasWinnerBlacksOutsideGameWithBlackOnBoardTest(){
+		Backgammon nonEmptyBlackGame = backgammonContextTest.getBean("nonEmptyBlacksGame", Backgammon.class);
+		nonEmptyBlackGame.getBoard().setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		boolean actual = nonEmptyBlackGame.isHasWinner();
+		assertFalse("Is has winner blacks outside game test failed.", actual);
 	}
 	
 	@Test
@@ -161,6 +202,20 @@ public class BackgammonTest {
 	public void isWinnerBoardIsNullTest(){
 		boolean actual = backgammon.isWinner(blackPawnPlayer, null);
 		assertFalse("Is Winner, player is null, failed. ", actual);
+	}
+	
+	@Test
+	public void isWinnerBlacksOutsideGameTest(){
+		Backgammon nonEmptyBlacksGame = backgammonContextTest.getBean("nonEmptyBlacksGame", Backgammon.class);
+		boolean actual = nonEmptyBlacksGame.isWinner(blackPawnPlayer, board);
+		assertFalse("Is winner blacks outside game test failed.", actual);
+	}
+	
+	@Test
+	public void isWinnerWhitesOutsideGameTest(){
+		Backgammon nonEmptyWhitesGame = backgammonContextTest.getBean("nonEmptyWhitesGame", Backgammon.class);
+		boolean actual = nonEmptyWhitesGame.isWinner(whitePawnPlayer, board);
+		assertFalse("Is winner whites outside game test failed.", actual);
 	}
 	
 	@Test
@@ -262,6 +317,7 @@ public class BackgammonTest {
 		boolean pawnSet = board.setPawn(blackPawn, 1);
 		assertTrue(pawnSet);
 		pawnSet = board.setPawn(whitePawn, 4);
+		pawnSet = board.setPawn(new Pawn(Color.white.getInnerValue()), 4);
 		assertTrue(pawnSet);
 		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(1,4), board);
 		assertFalse("Make move, invalid is failed.", actual);
@@ -311,6 +367,48 @@ public class BackgammonTest {
 	public void makeMoveRemoveBlackCleanUpEmptyBoardTest(){
 		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(20, 24), board);
 		assertFalse("make Move Remove black CleanUp Empty Board Test", actual);
+	}
+	
+	@Test
+	public void makeMoveWhiteEatBlackTest(){
+		assertTrue(board.setPawn(whitePawn, 23));
+		assertTrue(board.setPawn(blackPawn, 20));
+		boolean actual = backgammon.makeMove(whitePawnPlayer, new Move(23, 20), board);
+		assertTrue("Make move white eat black test, failed.", actual);
+		assertEquals("Make move white eat black test, failed.", 0, board.getSizeOfColumn(23));
+		assertEquals("Make move white eat black test, failed.", Color.white, board.peekAtColumn(20).getColor());
+	}
+	
+	@Test
+	public void makeMoveBlackEatWhiteTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		assertTrue(board.setPawn(whitePawn, 23));
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(20, 23), board);
+		assertTrue("Make move black eat white test, failed.", actual);
+		assertEquals("Make move black eat white test, failed.", 0, board.getSizeOfColumn(20));
+		assertEquals("Make move black eat white test, failed.", Color.black, board.peekAtColumn(23).getColor());
+	}
+	
+	@Test
+	public void makeMoveBlackDoNotEatBlackTest(){
+		assertTrue(board.setPawn(blackPawn, 20));
+		assertTrue(board.setPawn(new Pawn(Color.black.getInnerValue()), 23));
+		boolean actual = backgammon.makeMove(blackPawnPlayer, new Move(20, 23), board);
+		assertTrue("Make move black eat white test, failed.", actual);
+		assertEquals("Make move black do not eat black test, failed.", 0, board.getSizeOfColumn(20));
+		assertEquals("Make move black do not eat black test, failed.", 2, board.getSizeOfColumn(23));
+		assertEquals("Make move black do not eat black test, failed.", Color.black, board.peekAtColumn(23).getColor());
+	}
+	
+	@Test
+	public void makeMoveWhiteDoNotEatWhiteTest(){
+		assertTrue(board.setPawn(whitePawn, 23));
+		assertTrue(board.setPawn(new Pawn(Color.white.getInnerValue()), 20));
+		boolean actual = backgammon.makeMove(whitePawnPlayer, new Move(23, 20), board);
+		assertTrue("Make move white do not eat white test, failed.", actual);
+		assertEquals("Make move white do not eat white test, failed.", 0, board.getSizeOfColumn(23));
+		assertEquals("Make move white do not eat white test, failed.", 2, board.getSizeOfColumn(20));
+		assertEquals("Make move white do not eat white test, failed.", Color.white, board.peekAtColumn(20).getColor());
 	}
 	
 	@Test

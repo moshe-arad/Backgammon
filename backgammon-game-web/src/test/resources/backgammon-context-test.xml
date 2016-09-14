@@ -25,7 +25,9 @@
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
 		<constructor-arg name="color" value="1" />
-		<constructor-arg name="turn"><null /></constructor-arg>
+		<constructor-arg name="turn">
+			<null />
+		</constructor-arg>
 	</bean>
 
 	<bean id="whitePawnPlayer" class="org.moshe.arad.game.player.Player">
@@ -45,7 +47,9 @@
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
 		<constructor-arg name="color" value="1" />
-		<constructor-arg name="turn"><null /></constructor-arg>
+		<constructor-arg name="turn">
+			<null />
+		</constructor-arg>
 	</bean>
 
 	<bean id="blackPawn" class="org.moshe.arad.game.instrument.Pawn">
@@ -62,13 +66,43 @@
 
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
 
-	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
+	<bean id="backgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg ref="empty" />
+		<constructor-arg ref="empty" />
+	</bean>
 
-	<bean id="turn" class="org.moshe.arad.game.turn.Turn" factory-method="getInstance" />
-	
+	<bean id="turn" class="org.moshe.arad.game.turn.Turn"
+		factory-method="getInstance" />
+
 	<util:list id="order" list-class="java.util.LinkedList">
 		<ref bean="firstPlayer" />
 		<ref bean="secondPlayer" />
 	</util:list>
 
+	<util:list id="nonEmptyBlacks" list-class="java.util.LinkedList">
+		<ref bean="blackPawn" />
+	</util:list>
+
+	<util:list id="nonEmptyWhites" list-class="java.util.LinkedList">
+		<ref bean="whitePawn" />
+	</util:list>
+
+	<util:list id="empty" list-class="java.util.LinkedList"
+		scope="prototype">
+	</util:list>
+
+	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg index="0" ref="nonEmptyBlacks" />
+		<constructor-arg index="1" ref="empty" />
+	</bean>
+
+	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg index="0" ref="empty" />
+		<constructor-arg index="1" ref="nonEmptyWhites" />
+	</bean>
+
+	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg index="0" ref="nonEmptyBlacks" />
+		<constructor-arg index="1" ref="nonEmptyWhites" />
+	</bean>
 </beans>

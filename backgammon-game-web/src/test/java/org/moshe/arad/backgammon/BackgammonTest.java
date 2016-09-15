@@ -118,13 +118,13 @@ public class BackgammonTest {
 		assertFalse("Is has winner whites and blacks outside game test failed.", actual);
 	}
 	
-//	@Test
-//	public void isHasWinnerBlacksOutsideGameWithBlackOnBoardTest(){
-//		Backgammon nonEmptyBlackGame = backgammonContextTest.getBean("nonEmptyBlacksGame", Backgammon.class);
-//		nonEmptyBlackGame.getBoard().setPawn(new Pawn(Color.black.getInnerValue()), 0);
-//		boolean actual = nonEmptyBlackGame.isHasWinner();
-//		assertFalse("Is has winner blacks outside game test failed.", actual);
-//	}
+	@Test
+	public void isHasWinnerBlacksOutsideGameWithBlackOnBoardTest(){
+		Backgammon nonEmptyBlackGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		nonEmptyBlackGame.getBoard().setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		boolean actual = nonEmptyBlackGame.isHasWinner();
+		assertFalse("Is has winner blacks outside game test failed.", actual);
+	}
 	
 	@Test
 	public void isWinnerWhitePawnBlackIsWinnerTest(){
@@ -195,12 +195,6 @@ public class BackgammonTest {
 		boolean actual = backgammon.isWinner(null);
 		assertFalse("Is Winner, player is null, failed. ", actual);
 	}
-	
-//	@Test
-//	public void isWinnerBoardIsNullTest(){
-//		boolean actual = backgammon.isWinner(blackPawnPlayer, null);
-//		assertFalse("Is Winner, player is null, failed. ", actual);
-//	}
 	
 	@Test
 	public void isWinnerBlacksOutsideGameTest(){
@@ -407,6 +401,88 @@ public class BackgammonTest {
 		assertEquals("Make move white do not eat white test, failed.", 0, simpleBoard.getSizeOfColumn(23));
 		assertEquals("Make move white do not eat white test, failed.", 2, simpleBoard.getSizeOfColumn(20));
 		assertEquals("Make move white do not eat white test, failed.", Color.white, simpleBoard.peekAtColumn(20).getColor());
+	}
+	
+	@Test
+	public void makeMoveBlackOutsideGoBackToEmptyColumnTest(){
+		Backgammon blackOutSide = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		boolean actual = blackOutSide.makeMove(blackPawnPlayer, new Move(-1, 4), blackOutSide.getBoard());
+		assertTrue("make Move, Black Outside Go Back To Empty Column", actual);
+		assertEquals(0, blackOutSide.getBoard().getHowManyBlacksOutsideGame());
+		assertEquals(1, blackOutSide.getBoard().getSizeOfColumn(4));
+	}
+	
+	@Test
+	public void makeMoveBlackOutsideGoBackToOneBlackTest(){
+		Backgammon blackOutSide = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blackOutSide.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 4));
+		boolean actual = blackOutSide.makeMove(blackPawnPlayer, new Move(-1, 4), blackOutSide.getBoard());
+		assertTrue("make Move, Black Outside Go Back To Empty Column", actual);
+		assertEquals(0, blackOutSide.getBoard().getHowManyBlacksOutsideGame());
+		assertEquals(2, blackOutSide.getBoard().getSizeOfColumn(4));
+	}
+	
+	@Test
+	public void makeMoveBlackOutsideGoBackToTwoBlackTest(){
+		Backgammon blackOutSide = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blackOutSide.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 4));
+		assertTrue(blackOutSide.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 4));
+		boolean actual = blackOutSide.makeMove(blackPawnPlayer, new Move(-1, 4), blackOutSide.getBoard());
+		assertTrue("make Move, Black Outside Go Back To Empty Column", actual);
+		assertEquals(0, blackOutSide.getBoard().getHowManyBlacksOutsideGame());
+		assertEquals(3, blackOutSide.getBoard().getSizeOfColumn(4));
+	}
+	
+	@Test
+	public void makeMoveBlackOutsideGoBackToOneWhiteTest(){
+		Backgammon blackOutSide = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blackOutSide.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 4));
+		boolean actual = blackOutSide.makeMove(blackPawnPlayer, new Move(-1, 4), blackOutSide.getBoard());
+		assertTrue("make Move, Black Outside Go Back To Empty Column", actual);
+		assertEquals(0, blackOutSide.getBoard().getHowManyBlacksOutsideGame());
+		assertEquals(1, blackOutSide.getBoard().getHowManyWhitesOutsideGame());
+		assertEquals(1, blackOutSide.getBoard().getSizeOfColumn(4));
+	}
+	
+	@Test
+	public void makeMoveWhiteOutsideGoBackToEmptyColumnTest(){
+		Backgammon whiteOutSide = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		boolean actual = whiteOutSide.makeMove(whitePawnPlayer, new Move(24, 20), whiteOutSide.getBoard());
+		assertTrue("make Move, white Outside Go Back To Empty Column", actual);
+		assertEquals(0, whiteOutSide.getBoard().getHowManyWhitesOutsideGame());
+		assertEquals(1, whiteOutSide.getBoard().getSizeOfColumn(20));
+	}
+	
+	@Test
+	public void makeMoveWhiteOutsideGoBackToOneWhiteTest(){
+		Backgammon whiteOutSide = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whiteOutSide.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		boolean actual = whiteOutSide.makeMove(whitePawnPlayer, new Move(24, 20), whiteOutSide.getBoard());
+		assertTrue("make Move, white Outside Go Back To one white Column", actual);
+		assertEquals(0, whiteOutSide.getBoard().getHowManyWhitesOutsideGame());
+		assertEquals(2, whiteOutSide.getBoard().getSizeOfColumn(20));
+	}
+	
+	@Test
+	public void makeMoveWhiteOutsideGoBackToTwoWhitesTest(){
+		Backgammon whiteOutSide = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whiteOutSide.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		assertTrue(whiteOutSide.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		boolean actual = whiteOutSide.makeMove(whitePawnPlayer, new Move(24, 20), whiteOutSide.getBoard());
+		assertTrue("make Move, Black Outside Go Back To Empty Column", actual);
+		assertEquals(0, whiteOutSide.getBoard().getHowManyWhitesOutsideGame());
+		assertEquals(3, whiteOutSide.getBoard().getSizeOfColumn(20));
+	}
+	
+	@Test
+	public void makeMoveWhiteOutsideGoBackToOneBlackTest(){
+		Backgammon whiteOutSide = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whiteOutSide.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 20));
+		boolean actual = whiteOutSide.makeMove(whitePawnPlayer, new Move(24, 20), whiteOutSide.getBoard());
+		assertTrue("make Move, white Outside Go Back one black Column", actual);
+		assertEquals(0, whiteOutSide.getBoard().getHowManyWhitesOutsideGame());
+		assertEquals(1, whiteOutSide.getBoard().getHowManyBlacksOutsideGame());
+		assertEquals(1, whiteOutSide.getBoard().getSizeOfColumn(20));
 	}
 	
 	@Test
@@ -733,6 +809,326 @@ public class BackgammonTest {
 		when(secondDiceMock.getValue()).thenReturn(1);
 		boolean actual = backgammon.validMove(playerMock, new Move(23, 20), simpleBoard);
 		assertTrue("valid Move white eat black Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsInsideBoardButHaveWhiteOutsideWithWhiteTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 5));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(3);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(5, 0), whitesOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Inside Board, But Have White Outside, With White. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsInsideBoardButHaveBlackOutsideWithWhiteTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 5));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(3);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(5, 0), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Inside Board, But Have Blacks Outside, With White. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsInsideBoardButHaveBlackOutsideWithBlackTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 0));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(3);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(0, 5), blacksOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Inside Board, But Have Black Outside, WithBlack. Test failed.", actual);		
+	}
+	
+	@Test
+	public void validMoveFromIsInsideBoardButHaveWhiteOutsideWithBlackTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 0));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(3);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(0, 5), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Inside Board, But Have whites Outside, with black. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerBlackOutsideTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(24, 20), blacksOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board, White Player, Black Outside. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerWhiteOutsideTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(-1, 3), whitesOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board, black Player, white Outside. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerBlackOutsideWithBlackIndexesTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board, White Player, Black Outside, With Black Indexes. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerWhiteOutsideWithWhiteIndexesTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24,20), whitesOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board, black Player, white Outside, With White Indexes. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board, Black Player, Black Outside. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24, 20), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board, White Player, White Outside. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideWhiteIsBlockingTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 3));
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 3));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board. Black Player. Black Outside. White Is Blocking. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideBlackIsBlockingTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 20));
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 20));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24, 20), whitesOutsideGame.getBoard());
+		assertFalse("valid Move, From Is Outside Board. White Player. White Outside. black Is Blocking. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideOneBlackTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 3));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. Black Player. Black Outside. one black. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideOneWhiteTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24, 20), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. White Player. White Outside. one white. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideTwoBlackTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 3));
+		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", Pawn.class), 3));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. Black Player. Black Outside. two black. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideTwoWhiteTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20));
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24, 20), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. White Player. White Outside. two white. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideEmptyTest(){
+		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.black);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = blacksOutsideGame.validMove(playerMock, new Move(-1, 3), blacksOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. Black Player. Black Outside. empty on destanation. Test failed.", actual);
+	}
+	
+	@Test
+	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideEmptyTest(){
+		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
+		Player playerMock = mock(Player.class);
+		Turn turnMock = mock(Turn.class);
+		Dice firstDiceMock = mock(Dice.class);
+		Dice secondDiceMock = mock(Dice.class);
+		when(playerMock.getColor()).thenReturn(Color.white);
+		when(playerMock.getTurn()).thenReturn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(2);
+		when(secondDiceMock.getValue()).thenReturn(2);
+		boolean actual = whitesOutsideGame.validMove(playerMock, new Move(24, 20), whitesOutsideGame.getBoard());
+		assertTrue("valid Move, From Is Outside Board. White Player. White Outside. empty on destanation. Test failed.", actual);
 	}
 	
 	@Test

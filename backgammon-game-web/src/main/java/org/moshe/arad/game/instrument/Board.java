@@ -326,4 +326,12 @@ public class Board {
 	public Pawn popWhiteOutsideGame(){
 		return whitesOutsideGame.pop();
 	}
+
+	public Pawn peekBlackOutsideGame() {
+		return blacksOutsideGame.peek();
+	}
+
+	public Pawn peekWhiteOutsideGame() {
+		return whitesOutsideGame.peek();
+	}
 }

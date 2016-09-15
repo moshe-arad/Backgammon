@@ -210,14 +210,19 @@ public class Backgammon extends ClassicBoardGame {
 				if(!makeMove(player, move, super.board)) throw new RuntimeException();
 				else{
 					initDices(player, move);
-					System.out.println("After move:");
-					board.print();
-					printHowManyPawnsAreOutside();
-					System.out.println("*************************************");
+					printOutputAfterMove();
 				}
 			}
 			else notifyOnInvalidMove(player, move);
 		}
+	}
+
+
+	private void printOutputAfterMove() {
+		System.out.println("After move:");
+		board.print();
+		printHowManyPawnsAreOutside();
+		System.out.println("*************************************");
 	}
 
 	@Override

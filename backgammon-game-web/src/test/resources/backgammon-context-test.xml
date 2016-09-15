@@ -60,13 +60,15 @@
 		<constructor-arg name="color" value="0" />
 	</bean>
 
-	<bean class="org.moshe.arad.game.instrument.Board" />
+	<bean id="backgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg ref="simpleBoard" />
+	</bean>
 
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
 
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
 
-	<bean id="backgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+	<bean id="simpleBoard" class="org.moshe.arad.game.instrument.Board">
 		<constructor-arg ref="empty" />
 		<constructor-arg ref="empty" />
 	</bean>
@@ -79,30 +81,42 @@
 		<ref bean="secondPlayer" />
 	</util:list>
 
-	<util:list id="nonEmptyBlacks" list-class="java.util.LinkedList">
+	<util:list id="nonEmptyBlacks" list-class="java.util.LinkedList" scope="prototype">
 		<ref bean="blackPawn" />
 	</util:list>
 
-	<util:list id="nonEmptyWhites" list-class="java.util.LinkedList">
+	<util:list id="nonEmptyWhites" list-class="java.util.LinkedList" scope="prototype">
 		<ref bean="whitePawn" />
 	</util:list>
 
-	<util:list id="empty" list-class="java.util.LinkedList"
-		scope="prototype">
+	<util:list id="empty" list-class="java.util.LinkedList" scope="prototype">
 	</util:list>
 
-	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+	<bean id="nonEmptyBlacksBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg ref="nonEmptyBlacksGame" />
+	</bean>
+
+	<bean id="nonEmptyWhitesBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg ref="nonEmptyWhitesGame" />
+	</bean>
+
+	<bean id="nonEmptyBlackAndWhitesBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+		<constructor-arg ref="nonEmptyBlackAndWhitesGame" />
+	</bean>
+	
+	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.instrument.Board">
 		<constructor-arg index="0" ref="nonEmptyBlacks" />
 		<constructor-arg index="1" ref="empty" />
 	</bean>
 
-	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.instrument.Board">
 		<constructor-arg index="0" ref="empty" />
 		<constructor-arg index="1" ref="nonEmptyWhites" />
 	</bean>
 
-	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
+	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.instrument.Board">
 		<constructor-arg index="0" ref="nonEmptyBlacks" />
 		<constructor-arg index="1" ref="nonEmptyWhites" />
 	</bean>
+
 </beans>

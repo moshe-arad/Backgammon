@@ -3,6 +3,7 @@ package org.moshe.arad.game.instrument;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -11,6 +12,9 @@ public class Board {
 	public static final int LENGTH = 24;
 	public static final int MAX_COLUMN = 15;
 	private List<Deque<Pawn>> board = new ArrayList<Deque<Pawn>>(LENGTH);
+	
+	private LinkedList<Pawn> blacksOutsideGame = new LinkedList<Pawn>();
+	private LinkedList<Pawn> whitesOutsideGame = new LinkedList<Pawn>();
 	
 	public Board() {
 		for(int i=0; i<LENGTH; i++)
@@ -30,6 +34,13 @@ public class Board {
 		}
 	}
 	
+	
+	public Board(LinkedList<Pawn> blacksOutsideGame, LinkedList<Pawn> whitesOutsideGame) {
+		this();
+		this.blacksOutsideGame = blacksOutsideGame;
+		this.whitesOutsideGame = whitesOutsideGame;
+	}
+
 	public void clearBoard(){
 		for(Deque<Pawn> column:board){
 			column.clear();
@@ -166,7 +177,19 @@ public class Board {
 		sb.append("  # 1 1 1 1 1 1    1 1 2 2 2 2 #").append("\n");
 		sb.append("  # 2 3 4 5 6 7    8 9 0 1 2 3 #").append("\n");
 		sb.append("  ##############################").append("\n");
+		
+		printHowManyPawnsOutside(sb);
+		
 		System.out.println(sb.toString());
+	}
+
+	public void printHowManyPawnsOutside() {
+		printHowManyPawnsOutside(new StringBuilder());
+	}
+	
+	private void printHowManyPawnsOutside(StringBuilder sb) {
+		if(blacksOutsideGame.size() > 0) sb.append("  There are " + blacksOutsideGame.size() + " black pawns outside the game.").append("\n");
+		if(whitesOutsideGame.size() > 0) sb.append("  There are " + whitesOutsideGame.size() + " white pawns outside the game.").append("\n");
 	}
 
 	public boolean isHasColor(Color color){
@@ -175,6 +198,13 @@ public class Board {
 			if(pawn != null && pawn.getColor().equals(color)) return true;
 		}
 		return false;
+	}
+	/**
+	 * TODO test
+	 */
+	public void clearPawnsOutsideGame(){
+		blacksOutsideGame.clear();
+		whitesOutsideGame.clear();
 	}
 	
 	private void printUpperBoard(Board boardCopy, StringBuilder sb) {
@@ -267,5 +297,33 @@ public class Board {
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * 
+	 * TODO test all these.
+	 */
+	public int getHowManyBlacksOutsideGame(){
+		return blacksOutsideGame.size();
+	}
+	
+	public int getHowManyWhitesOutsideGame(){
+		return whitesOutsideGame.size();
+	}
+	
+	public boolean addBlackOutsideGame(Pawn black){
+		return blacksOutsideGame.add(black);
+	}
+	
+	public boolean addWhiteOutsideGame(Pawn white){
+		return whitesOutsideGame.add(white);
+	}
+	
+	public Pawn popBlackOutsideGame(){
+		return blacksOutsideGame.pop();
+	}
+	
+	public Pawn popWhiteOutsideGame(){
+		return whitesOutsideGame.pop();
 	}
 }

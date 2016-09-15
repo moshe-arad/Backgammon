@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements ClassicBoardGameable{
 
-	@Autowired
 	protected Board board;
 	@Resource
 	private Player firstPlayer;
@@ -21,6 +20,11 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	
 	private boolean isPlaying = true;
 	
+	
+	public ClassicBoardGame(Board board) {
+		this.board = board;
+	}
+
 	/**
 	 * first call initGame
 	 */
@@ -29,7 +33,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 		while(isPlaying){
 			Player playerWithTurn = howHasTurn();
 			playGameTurn(playerWithTurn);
-			if(!isWinner(playerWithTurn, board)) passTurn();
+			if(!isWinner(playerWithTurn)) passTurn();
 			else{
 				doWinnerActions();
 				isPlaying = false;

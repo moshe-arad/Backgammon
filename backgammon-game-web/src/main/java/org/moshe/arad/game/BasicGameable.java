@@ -1,3 +1,4 @@
+
 package org.moshe.arad.game;
 
 public interface BasicGameable {

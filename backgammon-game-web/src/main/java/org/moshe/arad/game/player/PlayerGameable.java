@@ -20,14 +20,10 @@ import org.moshe.arad.game.move.Move;
  *  TODO need to remove Scanner object from method signature.
  */
 public interface PlayerGameable {
+	
+	public void makePlayed(Move move); // new 
 
-	public void playGameTurn(Player player);
-	
-	public boolean isWinner(Player player);
-	
-	public boolean isHasMoreMoves(Player player, Board board);
-	
-	public Move enterNextMove(Player player, Scanner reader);
+	public void playGameTurn(Player player); // general to move
 	
 	public void notifyOnInvalidMove(Player player, Move move);
 }

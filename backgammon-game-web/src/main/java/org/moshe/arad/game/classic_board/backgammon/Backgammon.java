@@ -362,4 +362,28 @@ public class Backgammon extends ClassicBoardGame {
 	public void printHowManyPawnsAreOutside() {
 		board.printHowManyPawnsOutside();
 	}
+	
+	/**
+	 * 
+	 * TODO implement this.
+	 */
+	public boolean isCanStartCleanUp(){
+		
+	}
+	
+	/**
+	 * 
+	 * TODO implement this.
+	 */
+	public void printHowManyPawnsAreOutside(){
+		
+	}
+	
+	/**
+	 * 
+	 * TODO implement this. and to be removed.
+	 */
+	public Move enterNextMove(Player player, Scanner reader){
+		
+	}
 }

@@ -21,5 +21,5 @@ import org.moshe.arad.game.move.Move;
  */
 public interface PlayerGameable {
 	
-	public void makePlayed(Move move); // new 
+	public void makePlayed(Move move);
 }

@@ -24,7 +24,7 @@ import org.moshe.arad.game.instrument.BackgammonDice;
 import org.moshe.arad.game.instrument.BackgammonPawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
-import org.moshe.arad.game.turn.Turn;
+import org.moshe.arad.game.turn.BackgammonTurn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -507,7 +507,7 @@ public class BackgammonTest {
 	@Test
 	public void validMoveWhitePawnToMinusFromNegativeTest(){
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -523,7 +523,7 @@ public class BackgammonTest {
 	@Test
 	public void validMoveBlackPawnFromMinusToNegativeTest(){
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -539,7 +539,7 @@ public class BackgammonTest {
 	@Test
 	public void vaildMoveWhitePawnEmptyBoardTest(){
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -555,7 +555,7 @@ public class BackgammonTest {
 	@Test
 	public void vaildMoveBlackPawnEmptyBoardTest(){
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -572,7 +572,7 @@ public class BackgammonTest {
 	public void vaildMoveWhitePawnFromDifferentColorBoardTest(){
 		assertTrue(simpleBoard.setPawn(blackPawn, 1));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -590,7 +590,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(whitePawn, 1));
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		Player playerMock = mock(Player.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
 		when(playerMock.getTurn()).thenReturn(turnMock);
@@ -606,7 +606,7 @@ public class BackgammonTest {
 	public void vaildMoveWhitePawnToDifferentColorBoardTest(){
 		assertTrue(simpleBoard.setPawn(blackPawn, 4));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -623,7 +623,7 @@ public class BackgammonTest {
 	public void vaildMoveBlackPawnToDifferentColorTest(){
 		assertTrue(simpleBoard.setPawn(whitePawn, 1));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -640,7 +640,7 @@ public class BackgammonTest {
 	public void vaildMoveWhitePawnToIsEmptyTest(){
 		assertTrue(simpleBoard.setPawn(whitePawn, 4));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -657,7 +657,7 @@ public class BackgammonTest {
 	public void vaildMoveBlackPawnToIsEmptyTest(){
 		assertTrue(simpleBoard.setPawn(blackPawn, 1));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -675,7 +675,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(whitePawn, 1));
 		assertTrue(simpleBoard.setPawn(whitePawn, 4));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -693,7 +693,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(blackPawn, 4));
 		assertTrue(simpleBoard.setPawn(blackPawn, 1));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -711,7 +711,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(whitePawn, 4));
 		assertTrue(simpleBoard.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 6));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -728,7 +728,7 @@ public class BackgammonTest {
 	public void validMoveDoCleanUpWhiteCanCleanUpTest(){
 		assertTrue(simpleBoard.setPawn(whitePawn, 4));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -746,7 +746,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(blackPawn, 20));
 		assertTrue(simpleBoard.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 10));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -763,7 +763,7 @@ public class BackgammonTest {
 	public void validMoveDoCleanUpBlackCanCleanUpTest(){
 		assertTrue(simpleBoard.setPawn(blackPawn, 20));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -781,7 +781,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(whitePawn, 23));
 		assertTrue(simpleBoard.setPawn(blackPawn, 20));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -799,7 +799,7 @@ public class BackgammonTest {
 		assertTrue(simpleBoard.setPawn(blackPawn, 20));
 		assertTrue(simpleBoard.setPawn(whitePawn, 23));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -817,7 +817,7 @@ public class BackgammonTest {
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 5));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -835,7 +835,7 @@ public class BackgammonTest {
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 5));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -853,7 +853,7 @@ public class BackgammonTest {
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 0));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -871,7 +871,7 @@ public class BackgammonTest {
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 0));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -888,7 +888,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardWhitePlayerBlackOutsideTest(){
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -905,7 +905,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardBlackPlayerWhiteOutsideTest(){
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -922,7 +922,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardWhitePlayerBlackOutsideWithBlackIndexesTest(){
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -939,7 +939,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardBlackPlayerWhiteOutsideWithWhiteIndexesTest(){
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -956,7 +956,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideTest(){
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -973,7 +973,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideTest(){
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -992,7 +992,7 @@ public class BackgammonTest {
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 3));
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 3));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -1011,7 +1011,7 @@ public class BackgammonTest {
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 20));
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 20));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -1029,7 +1029,7 @@ public class BackgammonTest {
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 3));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -1047,7 +1047,7 @@ public class BackgammonTest {
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 20));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -1066,7 +1066,7 @@ public class BackgammonTest {
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 3));
 		assertTrue(blacksOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("blackPawn", BackgammonPawn.class), 3));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -1085,7 +1085,7 @@ public class BackgammonTest {
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 20));
 		assertTrue(whitesOutsideGame.getBoard().setPawn(backgammonContextTest.getBean("whitePawn", BackgammonPawn.class), 20));
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -1102,7 +1102,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardBlackPlayerBlackOutsideEmptyTest(){
 		Backgammon blacksOutsideGame = backgammonContextTest.getBean("nonEmptyBlacksBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.black);
@@ -1119,7 +1119,7 @@ public class BackgammonTest {
 	public void validMoveFromIsOutsideBoardWhitePlayerWhiteOutsideEmptyTest(){
 		Backgammon whitesOutsideGame = backgammonContextTest.getBean("nonEmptyWhitesBackgammon", Backgammon.class);
 		Player playerMock = mock(Player.class);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
@@ -1148,7 +1148,7 @@ public class BackgammonTest {
 	public void initDicesFirstDiceIsNullTest(){
 		Player playerMock = mock(Player.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		when(playerMock.getTurn()).thenReturn(turnMock);
 		playerMock.setTurn(turnMock);
 		when(turnMock.getFirstDice()).thenReturn(null);
@@ -1160,7 +1160,7 @@ public class BackgammonTest {
 	public void initDicesSecondDiceIsNullTest(){
 		Player playerMock = mock(Player.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		when(playerMock.getTurn()).thenReturn(turnMock);
 		playerMock.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -1174,7 +1174,7 @@ public class BackgammonTest {
 	public void initDicesMoveStepDoesNotInDicesTest(){
 		Player playerMock = mock(Player.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		when(playerMock.getTurn()).thenReturn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
@@ -1191,7 +1191,7 @@ public class BackgammonTest {
 	public void initDicesInitFirstDiceTest(){
 		Player playerMock = mock(Player.class);
 		when(playerMock.getColor()).thenReturn(Color.white);
-		Turn turnMock = mock(Turn.class);
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
 		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);

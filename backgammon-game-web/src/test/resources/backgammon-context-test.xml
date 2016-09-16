@@ -73,7 +73,7 @@
 		<constructor-arg ref="empty" />
 	</bean>
 
-	<bean id="turn" class="org.moshe.arad.game.turn.Turn"
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn"
 		factory-method="getInstance" />
 
 	<util:list id="order" list-class="java.util.LinkedList">

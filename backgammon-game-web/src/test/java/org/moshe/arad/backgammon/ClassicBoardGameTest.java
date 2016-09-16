@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.player.Player;
-import org.moshe.arad.game.turn.Turn;
+import org.moshe.arad.game.turn.BackgammonTurn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -26,7 +26,7 @@ public class ClassicBoardGameTest {
 	@Resource
 	Player secondPlayer;
 	@Autowired
-	Turn turn;
+	BackgammonTurn turn;
 	
 	@Test
 	public void howHasTurnFirstPlayerValidTest(){

@@ -10,7 +10,7 @@ import org.moshe.arad.game.instrument.BackgammonDice;
 import org.moshe.arad.game.instrument.BackgammonPawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
-import org.moshe.arad.game.turn.Turn;
+import org.moshe.arad.game.turn.BackgammonTurn;
 
 public class Backgammon extends ClassicBoardGame {
 
@@ -38,7 +38,7 @@ public class Backgammon extends ClassicBoardGame {
 	@Override
 	public boolean isHasMoreMoves(Player player, BackgammonBoard board) {
 		if(player == null) return false;
-		Turn turn = player.getTurn();
+		BackgammonTurn turn = player.getTurn();
 		if(turn == null) return false;
 		BackgammonDice firstDice = turn.getFirstDice();
 		BackgammonDice secondDice = turn.getSecondDice();
@@ -136,7 +136,7 @@ public class Backgammon extends ClassicBoardGame {
 	@Override
 	public void rollDices(Player player) {
 		if(player == null) throw new NullPointerException("Player is null.");
-		Turn turn  = player.getTurn();
+		BackgammonTurn turn  = player.getTurn();
 		if(turn == null) throw new NullPointerException("turn is null.");
 		turn.getFirstDice().rollDice();
 		turn.getSecondDice().rollDice();

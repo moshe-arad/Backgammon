@@ -3,15 +3,15 @@ package org.moshe.arad.backgammon;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
-import org.moshe.arad.game.turn.Turn;
+import org.moshe.arad.game.turn.BackgammonTurn;
 
 
 public class TurnTest {
 
 	@Test
 	public void isTheSameTurnObject(){
-		Turn actualFirst = Turn.getInstance();
-		Turn actualSecond = Turn.getInstance();
+		BackgammonTurn actualFirst = BackgammonTurn.getInstance();
+		BackgammonTurn actualSecond = BackgammonTurn.getInstance();
 		
 		assertSame("This is not the same object.", actualFirst, actualSecond);
 	}

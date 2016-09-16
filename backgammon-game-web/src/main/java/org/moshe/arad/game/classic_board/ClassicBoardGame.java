@@ -4,11 +4,13 @@ import java.util.LinkedList;
 
 import javax.annotation.Resource;
 
+import org.moshe.arad.game.BasicGameable;
 import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.TurnOrderGameable;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class ClassicBoardGame implements ClassicBoardGameable{
+public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameable{
 
 	protected BackgammonBoard board;
 	@Resource
@@ -33,7 +35,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 		while(isPlaying){
 			Player playerWithTurn = howHasTurn();
 			playGameTurn(playerWithTurn);
-			if(!isWinner(playerWithTurn)) passTurn();
+			if(!board.isWinner(playerWithTurn)) passTurn();
 			else{
 				doWinnerActions();
 				isPlaying = false;

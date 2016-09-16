@@ -1,19 +1,19 @@
 package org.moshe.arad.game.player;
 
 import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.turn.Turn;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.moshe.arad.game.move.Move;
+import org.moshe.arad.game.turn.BackgammonTurn;
 
-public class Player {
+public class Player implements PlayerGameable{
 
 	private String id;
 	private String firstName;
 	private String lastName;
 	private int age;
-	private Turn turn;
+	private BackgammonTurn turn;
 	private Color color;
 
-	public Player(String id, String firstName, String lastName, int age, Turn turn, int color) {
+	public Player(String id, String firstName, String lastName, int age, BackgammonTurn turn, int color) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -29,11 +29,11 @@ public class Player {
 		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + "]";
 	}
 	
-	public void setTurn(Turn turn) {
+	public void setTurn(BackgammonTurn turn) {
 		this.turn = turn;
 	}
 
-	public Turn getTurn() {
+	public BackgammonTurn getTurn() {
 		return turn;
 	}
 
@@ -51,5 +51,13 @@ public class Player {
 
 	public void setColor(Color color) {
 		this.color = color;
+	}
+
+
+
+	@Override
+	public void makePlayed(Move move) {
+		// TODO Auto-generated method stub
+		
 	}
 }

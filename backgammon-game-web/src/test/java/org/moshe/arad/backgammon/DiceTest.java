@@ -13,16 +13,16 @@ import org.hamcrest.collection.IsIn;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.moshe.arad.game.instrument.Dice;
+import org.moshe.arad.game.instrument.BackgammonDice;
 
 
 public class DiceTest {
 	
-	Dice dice;
+	BackgammonDice dice;
 	
 	@Before
 	public void setup(){
-		dice = new Dice();
+		dice = new BackgammonDice();
 	}
 	
 	@Test

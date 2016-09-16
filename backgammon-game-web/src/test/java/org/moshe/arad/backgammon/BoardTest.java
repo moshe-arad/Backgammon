@@ -10,16 +10,16 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.instrument.Pawn;
+import org.moshe.arad.game.instrument.BackgammonPawn;
 
 
 public class BoardTest {
 
 	@Test
 	public void setNullPawnOnBoardTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
 		boolean actaul = board.setPawn(null, 0);
 		
@@ -28,98 +28,98 @@ public class BoardTest {
 	
 	@Test
 	public void setNegativeIndexPawnOnBoardTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		boolean actual = board.setPawn(new Pawn(Color.black.getInnerValue()), -1);
+		boolean actual = board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), -1);
 		
 		assertFalse("negative index pawn test failed.", actual);
 	}
 	
 	@Test
 	public void setIllegalPositiveIndexPawnOnBoardTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		boolean actual = board.setPawn(new Pawn(Color.black.getInnerValue()), 24);
+		boolean actual = board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 24);
 		
 		assertFalse("positive index pawn test failed.", actual);
 	}
 	
 	@Test
 	public void setPawnOnDifferentKindOfPawnsColumnTest(){
-		Board borad = new Board();
+		BackgammonBoard borad = new BackgammonBoard();
 		
-		boolean firstPawnSetting = borad.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		boolean firstPawnSetting = borad.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertTrue("Setting first pawn on different kind of pawns column fialed.", firstPawnSetting);
 		
-		boolean actual = borad.setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		boolean actual = borad.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
 		
 		assertFalse("Setting second pawn on different kind of pawns column fialed.", actual);
 	}
 	
 	@Test
 	public void setPawnOnFullColumn(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		for(int i=0; i<Board.MAX_COLUMN; i++)
-			board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		for(int i=0; i<BackgammonBoard.MAX_COLUMN; i++)
+			board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
-		boolean actual = board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		boolean actual = board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertFalse("Set pawn in full column failed.", actual);
 	}
 	
 	@Test
 	public void setPawnValidTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		boolean actual = board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		
-		assertTrue("Valid pawn Setting failed.", actual);
-		
-		actual = board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		boolean actual = board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertTrue("Valid pawn Setting failed.", actual);
 		
-		actual = board.setPawn(new Pawn(Color.white.getInnerValue()), 1);
+		actual = board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertTrue("Valid pawn Setting failed.", actual);
 		
-		actual = board.setPawn(new Pawn(Color.white.getInnerValue()), 1);
+		actual = board.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 1);
+		
+		assertTrue("Valid pawn Setting failed.", actual);
+		
+		actual = board.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 1);
 		
 		assertTrue("Valid pawn Setting failed.", actual);
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void peekAtColumnInvalidPositiveIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.peekAtColumn(Board.LENGTH);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.peekAtColumn(BackgammonBoard.LENGTH);
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void peekAtColumnInvalidNegativeIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		board.peekAtColumn(-1);
 	}
 	
 	@Test
 	public void peekAtEmptyColumnTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		Pawn actual = board.peekAtColumn(0);
+		BackgammonPawn actual = board.peekAtColumn(0);
 		
 		assertNull("Peek at EMPTY column failed.", actual);
 	}
 	
 	@Test
 	public void peekAtColumnTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		Color actual = board.peekAtColumn(0).getColor();
 		
 		assertThat("Peek at column failed.", actual, is(Color.black));
@@ -127,27 +127,27 @@ public class BoardTest {
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void sizeOfColumnInvalidPositiveIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.getSizeOfColumn(Board.LENGTH);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.getSizeOfColumn(BackgammonBoard.LENGTH);
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void sizeOfColumnInvalidNegativeIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		board.getSizeOfColumn(-1);
 	}
 	
 	@Test
 	public void sizeOfColumnTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		int actual = board.getSizeOfColumn(0);
 		
 		assertThat("Size of column failed.", actual, is(3));
@@ -155,27 +155,27 @@ public class BoardTest {
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void isEmptyColumnInvalidPositiveIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.isEmptyColumn(Board.LENGTH);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.isEmptyColumn(BackgammonBoard.LENGTH);
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void isEmptyColumnInvalidNegativeIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		board.isEmptyColumn(-1);
 	}
 	
 	@Test
 	public void isEmptyColumnNotEmptyTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		boolean actual = board.isEmptyColumn(0);
 		
 		assertThat("Is empty test with non empty column failed.", actual, is(false));
@@ -183,7 +183,7 @@ public class BoardTest {
 	
 	@Test
 	public void isEmptyColumnEmptyTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
 		boolean actual = board.isEmptyColumn(0);
 		
@@ -192,27 +192,27 @@ public class BoardTest {
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void popAtColumnInvalidPositiveIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.popAtColumn(Board.LENGTH);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.popAtColumn(BackgammonBoard.LENGTH);
 	}
 	
 	@Test(expected=IndexOutOfBoundsException.class)
 	public void popAtColumnInvalidNegativeIndex(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		board.popAtColumn(-1);
 	}
 	
 	@Test
 	public void popAtColumnBlackTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		Color actual = board.popAtColumn(0).getColor();
 		
 		assertThat("Pop at column, Black, failed.", actual, is(Color.black));
@@ -220,11 +220,11 @@ public class BoardTest {
 	
 	@Test
 	public void popAtColumnWhiteTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		board.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		board.setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		board.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
 		Color actual = board.popAtColumn(0).getColor();
 		
 		assertThat("Pop at column, white, failed.", actual, is(Color.white));
@@ -232,86 +232,86 @@ public class BoardTest {
 	
 	@Test
 	public void popAtColumnEmptyTest(){
-		Board board = new Board();
+		BackgammonBoard board = new BackgammonBoard();
 		
-		Pawn actual = board.popAtColumn(0);
+		BackgammonPawn actual = board.popAtColumn(0);
 		
 		assertNull("Pop at column, Null, failed.", actual);
 	}
 	
 	@Test
 	public void simpleEqualBoardTest(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
 		assertEquals("Boards are not equal test. simple test failed.", expected, actaul);
 	}
 	
 	@Test
 	public void simpleValidBlackPawnEqualBoardTest(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
-		actaul.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		expected.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		expected.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertEquals("Boards are not equal test. simple Valid Black Pawn Equal test failed.", expected, actaul);
 	}
 	
 	@Test
 	public void simpleValidWhitePawnEqualBoardTest(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 1); 
-		expected.setPawn(new Pawn(Color.white.getInnerValue()), 1);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 1); 
+		expected.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 1);
 		
 		assertEquals("Boards are not equal test. simple Valid White Pawn Equal test failed.", expected, actaul);
 	}
 	
 	@Test
 	public void equalBoardNotEqualTest(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		expected.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		expected.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertNotEquals("Boards are equal test. not equal test.", expected, actaul);
 	}
 	
 	@Test
 	public void equalBoardDifferentBoardsTest(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		expected.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		expected.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertNotEquals("Boards are equal test. different boards test.", expected, actaul);
 	}
 	
 	@Test
 	public void equalBoardSamePawnDifferentSizeTest6(){
-		Board actaul = new Board();
-		Board expected = new Board();
+		BackgammonBoard actaul = new BackgammonBoard();
+		BackgammonBoard expected = new BackgammonBoard();
 		
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		actaul.setPawn(new Pawn(Color.white.getInnerValue()), 0);
-		expected.setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		actaul.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
+		expected.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
 		
 		assertNotEquals("Boards are equal test. Same Pawn Different Size test.", expected, actaul);
 	}
 	
 	@Test
 	public void boardConstructorTest(){
-		Board someBoard = new Board();
+		BackgammonBoard someBoard = new BackgammonBoard();
 		
-		someBoard.setPawn(new Pawn(Color.black.getInnerValue()), 0);
-		Board actual = new Board(someBoard);
-		Board expected = new Board();
-		expected.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		someBoard.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
+		BackgammonBoard actual = new BackgammonBoard(someBoard);
+		BackgammonBoard expected = new BackgammonBoard();
+		expected.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		
 		assertNotSame("These Borad objects are the same.", expected, actual);
 		assertEquals("Board constructor failure.", expected, actual);
@@ -319,30 +319,30 @@ public class BoardTest {
 	
 	@Test(expected=NullPointerException.class)
 	public void boardConstructorNullTest(){
-		new Board(null);
+		new BackgammonBoard(null);
 	}
 	
 	@Test
 	public void clearBoardTest(){
-		Board someBoard = new Board();
+		BackgammonBoard someBoard = new BackgammonBoard();
 		someBoard.initBoard();
 		someBoard.clearBoard();
-		for(int i=0; i<Board.LENGTH; i++){
+		for(int i=0; i<BackgammonBoard.LENGTH; i++){
 			assertTrue("clear board test failed.", someBoard.isEmptyColumn(i));
 		}
 	}
 	
 	@Test
 	public void isHasColorBlackInvalidTest(){
-		Board someBoard = new Board();
-		someBoard.setPawn(new Pawn(Color.white.getInnerValue()), 0);
+		BackgammonBoard someBoard = new BackgammonBoard();
+		someBoard.setPawn(new BackgammonPawn(Color.white.getInnerValue()), 0);
 		assertFalse(someBoard.isHasColor(Color.black));
 	}
 	
 	@Test
 	public void isHasColorBlackValidTest(){
-		Board someBoard = new Board();
-		someBoard.setPawn(new Pawn(Color.black.getInnerValue()), 0);
+		BackgammonBoard someBoard = new BackgammonBoard();
+		someBoard.setPawn(new BackgammonPawn(Color.black.getInnerValue()), 0);
 		assertTrue(someBoard.isHasColor(Color.black));
 	}
 }

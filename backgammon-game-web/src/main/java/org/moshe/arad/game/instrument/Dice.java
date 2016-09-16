@@ -1,22 +1,10 @@
 package org.moshe.arad.game.instrument;
 
-import java.util.Random;
+public interface Dice {
 
-public class Dice {
-
-	public static final int MAX = 6;
-	private int value;
-	private Random random = new Random();
+	public void rollDice();
 	
-	public void rollDice(){
-		value = random.nextInt(MAX)+1;
-	}
-
-	public int getValue() {
-		return value;
-	}
+	public void initDice();
 	
-	public void initDiceValue(){
-		value = 0;
-	}
+	public int getValue();
 }

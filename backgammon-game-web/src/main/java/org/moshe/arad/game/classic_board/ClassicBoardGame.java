@@ -4,13 +4,13 @@ import java.util.LinkedList;
 
 import javax.annotation.Resource;
 
-import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements ClassicBoardGameable{
 
-	protected Board board;
+	protected BackgammonBoard board;
 	@Resource
 	private Player firstPlayer;
 	@Resource
@@ -21,7 +21,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 	private boolean isPlaying = true;
 	
 	
-	public ClassicBoardGame(Board board) {
+	public ClassicBoardGame(BackgammonBoard board) {
 		this.board = board;
 	}
 
@@ -67,7 +67,7 @@ public abstract class ClassicBoardGame implements ClassicBoardGameable{
 		return (order.peek().getTurn() != null) ? order.peekLast() : null;
 	}
 	
-	public Board getBoard() {
+	public BackgammonBoard getBoard() {
 		return board;
 	}
 	public Player getFirstPlayer() {

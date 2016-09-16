@@ -52,11 +52,11 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="blackPawn" class="org.moshe.arad.game.instrument.Pawn" scope="prototype">
+	<bean id="blackPawn" class="org.moshe.arad.game.instrument.BackgammonPawn" scope="prototype">
 		<constructor-arg name="color" value="1" />
 	</bean>
 
-	<bean id="whitePawn" class="org.moshe.arad.game.instrument.Pawn" scope="prototype">
+	<bean id="whitePawn" class="org.moshe.arad.game.instrument.BackgammonPawn" scope="prototype">
 		<constructor-arg name="color" value="0" />
 	</bean>
 
@@ -64,11 +64,11 @@
 		<constructor-arg ref="simpleBoard" />
 	</bean>
 
-	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
+	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 
-	<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
+	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 
-	<bean id="simpleBoard" class="org.moshe.arad.game.instrument.Board">
+	<bean id="simpleBoard" class="org.moshe.arad.game.instrument.BackgammonBoard">
 		<constructor-arg ref="empty" />
 		<constructor-arg ref="empty" />
 	</bean>
@@ -104,17 +104,17 @@
 		<constructor-arg ref="nonEmptyBlackAndWhitesGame" />
 	</bean>
 	
-	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.instrument.Board" scope="prototype">
+	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
 		<constructor-arg index="0" ref="nonEmptyBlacks" />
 		<constructor-arg index="1" ref="empty" />
 	</bean>
 
-	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.instrument.Board" scope="prototype">
+	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
 		<constructor-arg index="0" ref="empty" />
 		<constructor-arg index="1" ref="nonEmptyWhites" />
 	</bean>
 
-	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.instrument.Board" scope="prototype">
+	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
 		<constructor-arg index="0" ref="nonEmptyBlacks" />
 		<constructor-arg index="1" ref="nonEmptyWhites" />
 	</bean>

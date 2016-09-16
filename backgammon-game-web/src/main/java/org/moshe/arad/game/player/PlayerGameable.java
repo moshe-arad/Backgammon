@@ -2,7 +2,7 @@ package org.moshe.arad.game.player;
 
 import java.util.Scanner;
 
-import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.move.Move;
 
 /**
@@ -22,8 +22,4 @@ import org.moshe.arad.game.move.Move;
 public interface PlayerGameable {
 	
 	public void makePlayed(Move move); // new 
-
-	public void playGameTurn(Player player); // general to move
-	
-	public void notifyOnInvalidMove(Player player, Move move);
 }

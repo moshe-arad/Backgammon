@@ -9,4 +9,6 @@ public interface TurnOrderGameable {
 	public boolean passTurn();
 	
 	public Player howIsNextInTurn();
+	
+	public void playGameTurn(Player player);
 }

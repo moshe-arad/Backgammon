@@ -1,14 +1,8 @@
 package org.moshe.arad.game.instrument;
 
-public class Pawn {
+import org.moshe.arad.game.move.Move;
 
-	private Color color;
+public interface Pawn {
 
-	public Pawn(int color) {
-		this.color = Color.getColorByInt(color);
-	}
-
-	public Color getColor() {
-		return color;
-	}
+	public boolean isAbleToDo(Move move);
 }

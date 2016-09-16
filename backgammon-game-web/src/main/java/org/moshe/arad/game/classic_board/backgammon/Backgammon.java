@@ -4,17 +4,17 @@ import java.util.Scanner;
 
 import org.apache.commons.lang3.StringUtils;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
-import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.instrument.Dice;
-import org.moshe.arad.game.instrument.Pawn;
+import org.moshe.arad.game.instrument.BackgammonDice;
+import org.moshe.arad.game.instrument.BackgammonPawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.Turn;
 
 public class Backgammon extends ClassicBoardGame {
 
-	public Backgammon(Board board) {
+	public Backgammon(BackgammonBoard board) {
 		super(board);
 	}
 
@@ -36,12 +36,12 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean isHasMoreMoves(Player player, Board board) {
+	public boolean isHasMoreMoves(Player player, BackgammonBoard board) {
 		if(player == null) return false;
 		Turn turn = player.getTurn();
 		if(turn == null) return false;
-		Dice firstDice = turn.getFirstDice();
-		Dice secondDice = turn.getSecondDice();
+		BackgammonDice firstDice = turn.getFirstDice();
+		BackgammonDice secondDice = turn.getSecondDice();
 		
 		Color playerColor = player.getColor();
 		
@@ -55,7 +55,7 @@ public class Backgammon extends ClassicBoardGame {
 				else if(board.peekAtColumn(24 - secondDice.getValue()).getColor().equals(Color.black) && board.getSizeOfColumn(24 - secondDice.getValue()) == 1) return true;
 			}
 			else{
-				for(int i=Board.LENGTH -1; i>-1; i--){
+				for(int i=BackgammonBoard.LENGTH -1; i>-1; i--){
 					if(!board.isEmptyColumn(i) && board.peekAtColumn(i).getColor().equals(Color.white)){
 						if(board.isEmptyColumn(i - firstDice.getValue())) return true;
 						else if(board.peekAtColumn(i - firstDice.getValue()).getColor().equals(Color.white)) return true;
@@ -78,7 +78,7 @@ public class Backgammon extends ClassicBoardGame {
 				else if(board.peekAtColumn(-1 + secondDice.getValue()).getColor().equals(Color.white) && board.getSizeOfColumn(-1 + secondDice.getValue()) == 1) return true;
 			}
 			else{
-				for(int i=0; i<Board.LENGTH; i++){
+				for(int i=0; i<BackgammonBoard.LENGTH; i++){
 					if(!board.isEmptyColumn(i) && board.peekAtColumn(i).getColor().equals(Color.black)){
 						if(board.isEmptyColumn(i + firstDice.getValue())) return true;
 						else if(board.peekAtColumn(i + firstDice.getValue()).getColor().equals(Color.black)) return true;
@@ -143,9 +143,9 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean makeMove(Player player, Move move, Board board) {
+	public boolean makeMove(Player player, Move move, BackgammonBoard board) {
 		if(player == null || move == null || board == null) return false;
-		Pawn pawn;
+		BackgammonPawn pawn;
 		
 		if(move.getFrom() != -1 && move.getFrom() != 24) pawn = board.popAtColumn(move.getFrom());
 		else if(move.getFrom() == -1){
@@ -156,7 +156,7 @@ public class Backgammon extends ClassicBoardGame {
 		}
 		else return false;
 		
-		Pawn toPawn = (move.getTo() != -1 && move.getTo() != 24) ? board.peekAtColumn(move.getTo()) : null;
+		BackgammonPawn toPawn = (move.getTo() != -1 && move.getTo() != 24) ? board.peekAtColumn(move.getTo()) : null;
 		if(pawn != null){
 			if(move.getTo() == -1 || move.getTo() == 24) return true;
 			else if(toPawn != null){
@@ -195,14 +195,14 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean validMove(Player player, Move move, Board board) {
+	public boolean validMove(Player player, Move move, BackgammonBoard board) {
 		if(player == null || move == null || board == null) return false;
 		Color playerColor = player.getColor();
-		Pawn fromPawn;
-		Pawn toPawn = null;
+		BackgammonPawn fromPawn;
+		BackgammonPawn toPawn = null;
 		boolean doCleanUp = false;
-		Dice firstDice = player.getTurn().getFirstDice();
-		Dice secondDice = player.getTurn().getSecondDice();
+		BackgammonDice firstDice = player.getTurn().getFirstDice();
+		BackgammonDice secondDice = player.getTurn().getSecondDice();
 		int moveStep = move.getTo() - move.getFrom();
 		
 		if(move.getFrom() == move.getTo()) return false;
@@ -327,9 +327,9 @@ public class Backgammon extends ClassicBoardGame {
 	@Override
 	public boolean initDices(Player player, Move move) {
 		if((player == null) || (move == null) || (player.getTurn() == null)) return false;
-		Dice first = player.getTurn().getFirstDice();
+		BackgammonDice first = player.getTurn().getFirstDice();
 		if(first == null) return false;
-		Dice second = player.getTurn().getSecondDice();
+		BackgammonDice second = player.getTurn().getSecondDice();
 		if(second == null) return false;
 		int moveStep = player.getColor().equals(Color.white) ? (move.getFrom() - move.getTo()) : (move.getTo() - move.getFrom()); 
 		if(moveStep == first.getValue()) {
@@ -344,7 +344,7 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean isCanStartCleanUp(Player player, Board borad) {
+	public boolean isCanStartCleanUp(Player player, BackgammonBoard borad) {
 		if((player == null) || (borad == null)) throw new NullPointerException();
 		Color color = player.getColor();
 		if(color.equals(Color.white)){
@@ -362,6 +362,10 @@ public class Backgammon extends ClassicBoardGame {
 	public void printHowManyPawnsAreOutside() {
 		board.printHowManyPawnsOutside();
 	}
+	
+	/**
+	 * all of these are to be private to backgammon 
+	 */
 	
 	/**
 	 * 
@@ -386,4 +390,10 @@ public class Backgammon extends ClassicBoardGame {
 	public Move enterNextMove(Player player, Scanner reader){
 		
 	}
+	
+	/**
+	 * 
+	 * TODO implement this.
+	 */
+	public void notifyOnInvalidMove(Player player, Move move);
 }

@@ -212,14 +212,14 @@ public class BackgammonTest {
 	
 	@Test
 	public void isHasMoreMovesPlayerIsNullTest(){
-		boolean actual = backgammon.isHasMoreMoves(null);
+		boolean actual = backgammon.isHasMoreMoves(null, simpleBoard);
 		assertFalse("Is has more moves, player is null, failed.", actual);
 	}
 	
 	@Test
 	public void isHasMoreMovesPlayerWithoutTurnTest(){
 		Player withoutTurn = backgammon.howIsNextInTurn();
-		boolean actual = backgammon.isHasMoreMoves(withoutTurn);
+		boolean actual = backgammon.isHasMoreMoves(withoutTurn, simpleBoard);
 		assertFalse("Is has more moves, player without turn, failed.", actual);
 	}
 	
@@ -228,16 +228,17 @@ public class BackgammonTest {
 		Player withTurn = backgammon.howHasTurn();
 		withTurn.getTurn().getFirstDice().initDiceValue();
 		withTurn.getTurn().getSecondDice().initDiceValue();
-		boolean actual = backgammon.isHasMoreMoves(withTurn);
+		boolean actual = backgammon.isHasMoreMoves(withTurn, simpleBoard);
 		assertFalse("Is has more moves, player with turn & player does not have more moves, failed.", actual);
 	}
 	
 	@Test
 	public void isHasMoreMovesPlayerWithTurnHasMoreMovesTest(){
 		Player withTurn = backgammon.howHasTurn();
+		simpleBoard.setPawn(backgammonContextTest.getBean("whitePawn", Pawn.class), 20);
 		withTurn.getTurn().getFirstDice().rollDice();
 		withTurn.getTurn().getSecondDice().rollDice();
-		boolean actual = backgammon.isHasMoreMoves(withTurn);
+		boolean actual = backgammon.isHasMoreMoves(withTurn, simpleBoard);
 		assertTrue("Is has more moves, player with turn & player has more moves, failed.", actual);
 	}
 	

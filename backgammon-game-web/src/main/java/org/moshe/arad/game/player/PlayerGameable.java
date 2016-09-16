@@ -25,7 +25,7 @@ public interface PlayerGameable {
 	
 	public boolean isWinner(Player player);
 	
-	public boolean isHasMoreMoves(Player player);
+	public boolean isHasMoreMoves(Player player, Board board);
 	
 	public Move enterNextMove(Player player, Scanner reader);
 	

@@ -36,12 +36,62 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	@Override
-	public boolean isHasMoreMoves(Player player) {
+	public boolean isHasMoreMoves(Player player, Board board) {
 		if(player == null) return false;
 		Turn turn = player.getTurn();
 		if(turn == null) return false;
-		if((turn.getFirstDice().getValue() == 0) && (turn.getSecondDice().getValue() == 0)) return false;
-		else return true;
+		Dice firstDice = turn.getFirstDice();
+		Dice secondDice = turn.getSecondDice();
+		
+		Color playerColor = player.getColor();
+		
+		if((firstDice.getValue() == 0) && (secondDice.getValue() == 0)) return false;
+		if(playerColor.equals(Color.white)){
+			if(board.getHowManyWhitesOutsideGame() > 0){
+				if(board.isEmptyColumn(24 - firstDice.getValue()) || board.isEmptyColumn(24 - secondDice.getValue())) return true;
+				else if(board.peekAtColumn(24 - firstDice.getValue()).getColor().equals(Color.white)) return true; 
+				else if(board.peekAtColumn(24 - secondDice.getValue()).getColor().equals(Color.white)) return true;
+				else if(board.peekAtColumn(24 - firstDice.getValue()).getColor().equals(Color.black) && board.getSizeOfColumn(24 - firstDice.getValue()) == 1) return true;
+				else if(board.peekAtColumn(24 - secondDice.getValue()).getColor().equals(Color.black) && board.getSizeOfColumn(24 - secondDice.getValue()) == 1) return true;
+			}
+			else{
+				for(int i=Board.LENGTH -1; i>-1; i--){
+					if(!board.isEmptyColumn(i) && board.peekAtColumn(i).getColor().equals(Color.white)){
+						if(board.isEmptyColumn(i - firstDice.getValue())) return true;
+						else if(board.peekAtColumn(i - firstDice.getValue()).getColor().equals(Color.white)) return true;
+						else if(board.peekAtColumn(i - firstDice.getValue()).getColor().equals(Color.black) && board.getSizeOfColumn(i - firstDice.getValue()) == 1) return true;
+						/*************************/
+						else if(board.isEmptyColumn(i - secondDice.getValue())) return true;
+						else if(board.peekAtColumn(i - secondDice.getValue()).getColor().equals(Color.white)) return true;
+						else if(board.peekAtColumn(i - secondDice.getValue()).getColor().equals(Color.black) && board.getSizeOfColumn(i - secondDice.getValue()) == 1) return true;
+					}
+				}
+			}
+		}
+		/**************************************************/
+		else if(playerColor.equals(Color.black)){
+			if(board.getHowManyBlacksOutsideGame() > 0){
+				if(board.isEmptyColumn(-1 + firstDice.getValue()) || board.isEmptyColumn(-1 + secondDice.getValue())) return true;
+				else if(board.peekAtColumn(-1 + firstDice.getValue()).getColor().equals(Color.black)) return true; 
+				else if(board.peekAtColumn(-1 + secondDice.getValue()).getColor().equals(Color.black)) return true;
+				else if(board.peekAtColumn(-1 + firstDice.getValue()).getColor().equals(Color.white) && board.getSizeOfColumn(-1 + firstDice.getValue()) == 1) return true;
+				else if(board.peekAtColumn(-1 + secondDice.getValue()).getColor().equals(Color.white) && board.getSizeOfColumn(-1 + secondDice.getValue()) == 1) return true;
+			}
+			else{
+				for(int i=0; i<Board.LENGTH; i++){
+					if(!board.isEmptyColumn(i) && board.peekAtColumn(i).getColor().equals(Color.black)){
+						if(board.isEmptyColumn(i + firstDice.getValue())) return true;
+						else if(board.peekAtColumn(i + firstDice.getValue()).getColor().equals(Color.black)) return true;
+						else if(board.peekAtColumn(i + firstDice.getValue()).getColor().equals(Color.white) && board.getSizeOfColumn(i + firstDice.getValue()) == 1) return true;
+						/*************************/
+						else if(board.isEmptyColumn(i + secondDice.getValue())) return true;
+						else if(board.peekAtColumn(i + secondDice.getValue()).getColor().equals(Color.black)) return true;
+						else if(board.peekAtColumn(i + secondDice.getValue()).getColor().equals(Color.white) && board.getSizeOfColumn(i + secondDice.getValue()) == 1) return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -248,7 +298,7 @@ public class Backgammon extends ClassicBoardGame {
 		System.out.println(name + "you rolled - " + player.getTurn().getFirstDice().getValue() + ": " + player.getTurn().getSecondDice().getValue());
 		board.print();
 		board.printHowManyPawnsOutside();
-		while(isHasMoreMoves(player)){
+		while(isHasMoreMoves(player, board)){
 			Move move = enterNextMove(player, reader);
 			if(validMove(player, move, super.board)){
 				if(!makeMove(player, move, super.board)) throw new RuntimeException();

@@ -3,6 +3,7 @@ package org.moshe.arad.game.player;
 import java.util.Scanner;
 
 import org.moshe.arad.game.instrument.BackgammonBoard;
+import org.moshe.arad.game.instrument.BackgammonPawn;
 import org.moshe.arad.game.move.Move;
 
 /**
@@ -19,7 +20,12 @@ import org.moshe.arad.game.move.Move;
  *  
  *  TODO need to remove Scanner object from method signature.
  */
-public interface PlayerGameable {
+public interface Playerable {
 	
 	public void makePlayed(Move move);
+	
+	/**
+	 * specific for backgammon
+	 */
+	public boolean isCanPlayWith(BackgammonPawn pawn);
 }

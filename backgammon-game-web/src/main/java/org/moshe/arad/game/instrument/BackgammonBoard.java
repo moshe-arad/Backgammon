@@ -16,10 +16,14 @@ public class BackgammonBoard implements Board {
 
 	public static final int LENGTH = 24;
 	public static final int MAX_COLUMN = 15;
+	public static final int EATEN_WHITE = 24;
+	public static final int EATEN_BLACK = -1;
+	public static final int OUT_WHITE = -1;
+	public static final int OUT_BLACK = 24;
 	private List<Deque<BackgammonPawn>> board = new ArrayList<Deque<BackgammonPawn>>(LENGTH);
 
-	private LinkedList<BackgammonPawn> blacksOutsideGame = new LinkedList<BackgammonPawn>();
-	private LinkedList<BackgammonPawn> whitesOutsideGame = new LinkedList<BackgammonPawn>();
+	private LinkedList<BackgammonPawn> eatenBlacks = new LinkedList<BackgammonPawn>();
+	private LinkedList<BackgammonPawn> eatenWhites = new LinkedList<BackgammonPawn>();
 
 	/**
 	 * TODO Check usage of constructors.
@@ -45,8 +49,8 @@ public class BackgammonBoard implements Board {
 
 	public BackgammonBoard(LinkedList<BackgammonPawn> blacksOutsideGame, LinkedList<BackgammonPawn> whitesOutsideGame) {
 		this();
-		this.blacksOutsideGame = blacksOutsideGame;
-		this.whitesOutsideGame = whitesOutsideGame;
+		this.eatenBlacks = blacksOutsideGame;
+		this.eatenWhites = whitesOutsideGame;
 	}
 
 	@Override
@@ -110,13 +114,13 @@ public class BackgammonBoard implements Board {
 
 	@Override
 	public boolean setPawn(Pawn pawn, BoardLocation location) {
-		if ((pawn == null) || (location == null)) throw new NullPointerException("pawn or location are null.");
+		if ((pawn == null) || (location == null)) return false;
 		else {
 			int locationIndex = ((BackgammonBoardLocation) location).getIndex();
 			BackgammonPawn backgammonPawn = (BackgammonPawn) pawn;
 
 			if (locationIndex < 0 || locationIndex > LENGTH - 1) {
-				throw new IndexOutOfBoundsException("Index value out of bounds.");
+				return false;
 			} else {
 				if ((board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn))) {
 					System.out.println("Can't place different kind of pawns on the same column.");
@@ -196,24 +200,24 @@ public class BackgammonBoard implements Board {
 	}
 
 	public int getSizeOfColumn(BackgammonBoardLocation location) {
-		if(location == null) throw new NullPointerException("location is null.");
+		if(location == null) return -1;
 		else{
 			int locationIndex = location.getIndex();
 			
 			if (locationIndex < 0 || locationIndex > (LENGTH - 1)) {
-				throw new IndexOutOfBoundsException("Index value out of bounds.");
+				return -1;
 			}
 			return board.get(locationIndex).size();
 		}		
 	}
 
 	public boolean isEmptyColumn(BackgammonBoardLocation location) {
-		if(location == null) throw new NullPointerException("location is null.");
+		if(location == null) return false;
 		else{
 			int locationIndex = location.getIndex();
 			
 			if (locationIndex < 0 || locationIndex > (LENGTH - 1)) {
-				throw new IndexOutOfBoundsException("Index value out of bounds.");
+				return false;
 			}
 			return board.get(locationIndex).isEmpty();
 		}
@@ -325,10 +329,10 @@ public class BackgammonBoard implements Board {
 	private String printHowManyPawnsOutside() {
 		StringBuilder sb = new StringBuilder();
 		
-		if (blacksOutsideGame.size() > 0)
-			sb.append("  There are " + blacksOutsideGame.size() + " black pawns outside the game.").append("\n");
-		if (whitesOutsideGame.size() > 0)
-			sb.append("  There are " + whitesOutsideGame.size() + " white pawns outside the game.").append("\n");
+		if (eatenBlacks.size() > 0)
+			sb.append("  There are " + eatenBlacks.size() + " black pawns outside the game.").append("\n");
+		if (eatenWhites.size() > 0)
+			sb.append("  There are " + eatenWhites.size() + " white pawns outside the game.").append("\n");
 		return sb.toString();
 	}
 
@@ -359,8 +363,8 @@ public class BackgammonBoard implements Board {
 	 * TODO test
 	 */
 	public void clearPawnsOutsideGame() {
-		blacksOutsideGame.clear();
-		whitesOutsideGame.clear();
+		eatenBlacks.clear();
+		eatenWhites.clear();
 	}
 
 	private void printUpperBoard(BackgammonBoard boardCopy, StringBuilder sb) {
@@ -468,35 +472,35 @@ public class BackgammonBoard implements Board {
 	 * TODO test all these.
 	 */
 	public int getHowManyBlacksOutsideGame() {
-		return blacksOutsideGame.size();
+		return eatenBlacks.size();
 	}
 
 	public int getHowManyWhitesOutsideGame() {
-		return whitesOutsideGame.size();
+		return eatenWhites.size();
 	}
 
 	public boolean addBlackOutsideGame(BackgammonPawn black) {
-		return blacksOutsideGame.add(black);
+		return eatenBlacks.add(black);
 	}
 
 	public boolean addWhiteOutsideGame(BackgammonPawn white) {
-		return whitesOutsideGame.add(white);
+		return eatenWhites.add(white);
 	}
 
 	public BackgammonPawn popBlackOutsideGame() {
-		return blacksOutsideGame.pop();
+		return eatenBlacks.pop();
 	}
 
 	public BackgammonPawn popWhiteOutsideGame() {
-		return whitesOutsideGame.pop();
+		return eatenWhites.pop();
 	}
 
 	public BackgammonPawn peekBlackOutsideGame() {
-		return blacksOutsideGame.peek();
+		return eatenBlacks.peek();
 	}
 
 	public BackgammonPawn peekWhiteOutsideGame() {
-		return whitesOutsideGame.peek();
+		return eatenWhites.peek();
 	}
 
 	@Override
@@ -507,10 +511,72 @@ public class BackgammonBoard implements Board {
 
 	@Override
 	public boolean isValidMove(Player player, Move move) {
-		// TODO Auto-generated method stub
-		return false;
+		int fromIndex, toIndex, step;
+		
+		if(player == null || move == null) return false;
+		else{
+			fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
+			toIndex = ((BackgammonBoardLocation)move.getTo()).getIndex();
+			BackgammonBoardLocation toLocation = ((BackgammonBoardLocation)move.getTo());
+			step = fromIndex - toIndex < 0 ? (fromIndex - toIndex)*(-1) : fromIndex - toIndex;
+			BackgammonPawn pawnFrom = board.get(fromIndex).peek();
+			Dice firstDice = player.getTurn().getFirstDice();
+			Dice secondDice = player.getTurn().getSecondDice();
+	
+			if(!pawnFrom.isAbleToDo(move)) return false;
+			if(firstDice.getValue() != step || secondDice.getValue() != step) return false;
+			if(!player.isCanPlayWith(pawnFrom)) return false;
+			if(!isPawnCanBeSetIn(pawnFrom, toLocation)) return false;
+			if(!isEatenPawnCanComeBack(fromIndex, pawnFrom, toLocation)) return false; 
+			if(!isCanTakePawnOutside(toIndex)) return false;
+		}
+		return true;
 	}
 
+	private boolean isPawnCanBeSetIn(BackgammonPawn pawn, BackgammonBoardLocation to){
+		BackgammonPawn other = board.get(to.getIndex()).peek();
+		int sizeAtTo = board.get(to.getIndex()).size();
+		
+		if(!other.equals(pawn) && sizeAtTo > 1) return false;
+		else return true;
+	}
+	
+	private boolean isEatenPawnCanComeBack(int fromIndex, BackgammonPawn pawnFrom, BackgammonBoardLocation toLocation){
+		if(fromIndex == EATEN_WHITE && !isEatenWhiteCanComeBack(pawnFrom, toLocation)) return false;
+		if(fromIndex == EATEN_BLACK && !isEatenBlackCanComeBack(pawnFrom, toLocation)) return false;
+		return true;
+	}
+	
+	private boolean isEatenWhiteCanComeBack(BackgammonPawn pawn, BackgammonBoardLocation to){
+		if(eatenWhites.size() == 0) return false;
+		return isPawnCanBeSetIn(pawn, to);
+	}
+	
+	private boolean isEatenBlackCanComeBack(BackgammonPawn pawn, BackgammonBoardLocation to){
+		if(eatenBlacks.size() == 0) return false;
+		return isPawnCanBeSetIn(pawn, to);
+	}
+	
+	private boolean isCanTakePawnOutside(int toIndex){
+		if(toIndex == OUT_WHITE && !isWhiteCanTakePawnOutside()) return false;
+		if(toIndex == OUT_BLACK && !isBlackCanTakePawnOutside()) return false;
+		return true;
+	}
+	
+	private boolean isWhiteCanTakePawnOutside(){
+		for(int i=6; i<24; i++){
+			if(board.get(i).peek() instanceof WhiteBackgammonPawn) return false;
+		}
+		return true;
+	}
+	
+	private boolean isBlackCanTakePawnOutside(){
+		for(int i=0; i<18; i++){
+			if(board.get(i).peek() instanceof BlackBackgammonPawn) return false;
+		}
+		return true;
+	}
+	
 	@Override
 	public boolean isWinner(Player player) {
 		// TODO Auto-generated method stub

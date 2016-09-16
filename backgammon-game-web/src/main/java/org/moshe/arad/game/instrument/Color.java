@@ -1,5 +1,6 @@
 package org.moshe.arad.game.instrument;
 
+@Deprecated
 public enum Color {
 	white(0),
 	black(1);

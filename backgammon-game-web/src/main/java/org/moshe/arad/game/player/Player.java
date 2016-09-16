@@ -1,17 +1,32 @@
 package org.moshe.arad.game.player;
 
+import org.moshe.arad.game.instrument.BackgammonPawn;
+import org.moshe.arad.game.instrument.BlackBackgammonPawn;
 import org.moshe.arad.game.instrument.Color;
+import org.moshe.arad.game.instrument.WhiteBackgammonPawn;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.turn.BackgammonTurn;
 
-public class Player implements PlayerGameable{
+public class Player implements Playerable{
 
 	private String id;
 	private String firstName;
 	private String lastName;
 	private int age;
 	private BackgammonTurn turn;
+	/**
+	 * TODO remove color.
+	 */
 	private Color color;
+	private boolean isWhite;
+
+
+
+	public boolean isWhite() {
+		return isWhite;
+	}
+
+
 
 	public Player(String id, String firstName, String lastName, int age, BackgammonTurn turn, int color) {
 		this.id = id;
@@ -59,5 +74,13 @@ public class Player implements PlayerGameable{
 	public void makePlayed(Move move) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	@Override
+	public boolean isCanPlayWith(BackgammonPawn pawn) {
+		return (isWhite && pawn instanceof WhiteBackgammonPawn) ||
+				(!isWhite && pawn instanceof BlackBackgammonPawn);
 	}
 }

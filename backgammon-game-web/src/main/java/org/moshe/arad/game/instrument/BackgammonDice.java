@@ -4,6 +4,7 @@ import java.util.Random;
 
 public class BackgammonDice implements Dice {
 
+	public static final int NONE = 0;
 	public static final int MAX = 6;
 	private int value;
 	private Random random = new Random();
@@ -20,6 +21,6 @@ public class BackgammonDice implements Dice {
 
 	@Override
 	public void initDice() {
-		value = 0;
+		value = NONE;
 	}
 }

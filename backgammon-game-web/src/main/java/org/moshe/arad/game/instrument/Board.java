@@ -6,11 +6,7 @@ import org.moshe.arad.game.player.Player;
 
 public interface Board {
 
-	/**
-	 * 
-	 * old name makeMove
-	 */
-	public boolean executeMove(Player player, Move move);
+	public void executeMove(Player player, Move move);
 	
 	public boolean isValidMove(Player player, Move move);
 	

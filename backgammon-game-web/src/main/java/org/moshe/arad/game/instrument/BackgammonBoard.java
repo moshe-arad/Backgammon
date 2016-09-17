@@ -504,11 +504,44 @@ public class BackgammonBoard implements Board {
 	}
 
 	@Override
-	public boolean executeMove(Player player, Move move) {
-		// TODO Auto-generated method stub
-		return false;
+	public void executeMove(Player player, Move move) {
+		int fromIndex, toIndex;
+		
+		if(player == null || move == null) throw new NullPointerException();
+		else{
+			fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
+			toIndex = ((BackgammonBoardLocation)move.getTo()).getIndex();
+			if(player.isWhite()) executeWhiteBackgammonMove(fromIndex, toIndex);
+			else executeBlackBackgammonMove(fromIndex, toIndex);
+		}
 	}
 
+	private void executeWhiteBackgammonMove(int fromIndex, int toIndex){
+		BackgammonPawn pawnFrom;
+		
+		if(fromIndex == EATEN_WHITE) pawnFrom = eatenWhites.pop();
+		else pawnFrom = board.get(fromIndex).pop();
+		if(toIndex != OUT_WHITE){
+			if(!board.get(toIndex).peek().equals(pawnFrom)){
+				eatenBlacks.add(board.get(toIndex).pop());
+			}
+			board.get(toIndex).push(pawnFrom);
+		}
+	}
+	
+	private void executeBlackBackgammonMove(int fromIndex, int toIndex){
+		BackgammonPawn pawnFrom;
+		
+		if(fromIndex == EATEN_BLACK) pawnFrom = eatenBlacks.pop();
+		else pawnFrom = board.get(fromIndex).pop();
+		if(toIndex != OUT_BLACK){
+			if(!board.get(toIndex).peek().equals(pawnFrom)){
+				eatenWhites.add(board.get(toIndex).pop());
+			}
+			board.get(toIndex).push(pawnFrom);
+		}
+	}
+	
 	@Override
 	public boolean isValidMove(Player player, Move move) {
 		int fromIndex, toIndex, step;
@@ -524,7 +557,7 @@ public class BackgammonBoard implements Board {
 			Dice secondDice = player.getTurn().getSecondDice();
 	
 			if(!pawnFrom.isAbleToDo(move)) return false;
-			if(firstDice.getValue() != step || secondDice.getValue() != step) return false;
+			if(!isDicesHaveCorrectValue(firstDice, secondDice, toIndex, step)) return false;
 			if(!player.isCanPlayWith(pawnFrom)) return false;
 			if(!eatenPawnsValidation(fromIndex, pawnFrom)) return false;
 			if(!isPawnCanBeSetIn(pawnFrom, toLocation)) return false;
@@ -534,6 +567,34 @@ public class BackgammonBoard implements Board {
 		return true;
 	}
 
+	private boolean isDicesHaveCorrectValue(Dice first, Dice second, int toIndex, int step){
+		return isDicesHaveCorrectValueNotForOuting(first, second, toIndex, step) ||
+				isDicesHaveCorrectValueForOutingBlack(first, second, toIndex, step) ||
+				isDicesHaveCorrectValueForOutingWhite(first, second, toIndex, step);
+	}
+	
+	private boolean isDicesHaveCorrectValueNotForOuting(Dice first, Dice second, int toIndex, int step){
+		if(toIndex != OUT_BLACK && toIndex != OUT_WHITE){
+			if(first.getValue() != step || second.getValue() != step) return false;
+			else return true;
+		}
+		else return false;
+	}
+	
+	private boolean isDicesHaveCorrectValueForOutingBlack(Dice first, Dice second, int toIndex, int step){
+		if(toIndex == OUT_BLACK && isBlackCanTakePawnOutside()){
+			if(first.getValue() >= step || second.getValue() >= step) return true;
+		}
+		return false;
+	}
+	
+	private boolean isDicesHaveCorrectValueForOutingWhite(Dice first, Dice second, int toIndex, int step){
+		if(toIndex == OUT_WHITE && isWhiteCanTakePawnOutside()){
+			if(first.getValue() >= step || second.getValue() >= step) return true;
+		}
+		return false;
+	}
+	
 	private boolean eatenPawnsValidation(int fromIndex, BackgammonPawn pawnFrom){
 		if(fromIndex != EATEN_WHITE && eatenWhites.size() > 0 && pawnFrom.equals(eatenWhites.peek())) return false;
 		if(fromIndex != EATEN_BLACK && eatenBlacks.size() > 0 && pawnFrom.equals(eatenBlacks.peek())) return false;
@@ -586,13 +647,41 @@ public class BackgammonBoard implements Board {
 	
 	@Override
 	public boolean isWinner(Player player) {
-		// TODO Auto-generated method stub
-		return false;
+		return !isHasColor(player.isWhite());
 	}
 
+	private boolean isHasColor(boolean isWhite){
+		for(int i=0; i<LENGTH; i++){
+			if(isWhite && (board.get(i).peek() instanceof WhiteBackgammonPawn)) return true;
+			if(!isWhite && (board.get(i).peek() instanceof BlackBackgammonPawn)) return true;
+		}
+		return false;
+	}
 	@Override
 	public boolean isHasMoreMoves(Player player) {
-		// TODO Auto-generated method stub
+		Dice first = player.getTurn().getFirstDice();
+		Dice second = player.getTurn().getSecondDice();		
+		
+		if(first.getValue() == BackgammonDice.NONE && second.getValue() == BackgammonDice.NONE) return false;
+		else if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && player.isWhite() && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
+//		else if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && player.isWhite() && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
+		
+			
+		}
 		return false;
+	}
+	
+	private boolean isWhiteHasMoreMoves(Dice first, Dice second){
+		BackgammonBoardLocation toLocationFirst = new BackgammonBoardLocation(OUT_WHITE - first.getValue());
+		BackgammonBoardLocation toLocationSecond = new BackgammonBoardLocation(OUT_WHITE - second.getValue());
+		if(eatenWhites.size() > 0 && isPawnCanBeSetIn(eatenWhites.peek(), toLocationFirst) && isPawnCanBeSetIn(eatenWhites.peek(), toLocationSecond)) return false;
+		return true;
+	}
+	
+	private boolean isWhiteHasMoreMoves(Dice dice){
+		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(OUT_WHITE - dice.getValue());
+		
+		if(eatenWhites.size() > 0 && !isPawnCanBeSetIn(eatenWhites.peek(), toLocation)) return false;
+		return true;
 	}
 }

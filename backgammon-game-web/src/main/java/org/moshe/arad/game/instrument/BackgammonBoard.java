@@ -526,6 +526,7 @@ public class BackgammonBoard implements Board {
 			if(!pawnFrom.isAbleToDo(move)) return false;
 			if(firstDice.getValue() != step || secondDice.getValue() != step) return false;
 			if(!player.isCanPlayWith(pawnFrom)) return false;
+			if(!eatenPawnsValidation(fromIndex, pawnFrom)) return false;
 			if(!isPawnCanBeSetIn(pawnFrom, toLocation)) return false;
 			if(!isEatenPawnCanComeBack(fromIndex, pawnFrom, toLocation)) return false; 
 			if(!isCanTakePawnOutside(toIndex)) return false;
@@ -533,6 +534,12 @@ public class BackgammonBoard implements Board {
 		return true;
 	}
 
+	private boolean eatenPawnsValidation(int fromIndex, BackgammonPawn pawnFrom){
+		if(fromIndex != EATEN_WHITE && eatenWhites.size() > 0 && pawnFrom.equals(eatenWhites.peek())) return false;
+		if(fromIndex != EATEN_BLACK && eatenBlacks.size() > 0 && pawnFrom.equals(eatenBlacks.peek())) return false;
+		return true;
+	}
+	
 	private boolean isPawnCanBeSetIn(BackgammonPawn pawn, BackgammonBoardLocation to){
 		BackgammonPawn other = board.get(to.getIndex()).peek();
 		int sizeAtTo = board.get(to.getIndex()).size();

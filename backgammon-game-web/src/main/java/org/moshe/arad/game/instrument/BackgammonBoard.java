@@ -663,25 +663,36 @@ public class BackgammonBoard implements Board {
 		Dice second = player.getTurn().getSecondDice();		
 		
 		if(first.getValue() == BackgammonDice.NONE && second.getValue() == BackgammonDice.NONE) return false;
-		else if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && player.isWhite() && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
-//		else if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && player.isWhite() && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
-		
-			
-		}
-		return false;
+		else if(player.isWhite()) return checkWhiteHasMoreMoves(first, second, player);
+		else if(!player.isWhite()) return checkBlackHasMoreMoves(first, second, player);
+		else throw new RuntimeException();
 	}
 	
-	private boolean isWhiteHasMoreMoves(Dice first, Dice second){
-		BackgammonBoardLocation toLocationFirst = new BackgammonBoardLocation(OUT_WHITE - first.getValue());
-		BackgammonBoardLocation toLocationSecond = new BackgammonBoardLocation(OUT_WHITE - second.getValue());
-		if(eatenWhites.size() > 0 && isPawnCanBeSetIn(eatenWhites.peek(), toLocationFirst) && isPawnCanBeSetIn(eatenWhites.peek(), toLocationSecond)) return false;
-		return true;
+	private boolean checkBlackHasMoreMoves(Dice first, Dice second, Player player) {
+		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first) && !isBlackHasMoreMoves(second)) return false;
+		else if(first.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first)) return false;
+		else if(second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(second)) return false;
+		else return true;
 	}
-	
+
+	private boolean checkWhiteHasMoreMoves(Dice first, Dice second, Player player) {
+		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
+		else if(first.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first)) return false;
+		else if(second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(second)) return false;
+		else return true;
+	}
+
 	private boolean isWhiteHasMoreMoves(Dice dice){
 		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(OUT_WHITE - dice.getValue());
 		
 		if(eatenWhites.size() > 0 && !isPawnCanBeSetIn(eatenWhites.peek(), toLocation)) return false;
+		return true;
+	}
+	
+	private boolean isBlackHasMoreMoves(Dice dice){
+		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(OUT_BLACK + dice.getValue());
+		
+		if(eatenBlacks.size() > 0 && !isPawnCanBeSetIn(eatenBlacks.peek(), toLocation)) return false;
 		return true;
 	}
 }

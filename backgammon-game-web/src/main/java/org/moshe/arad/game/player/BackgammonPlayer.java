@@ -18,6 +18,17 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	private BackgammonTurn turn;
 	private boolean isWhite;
 
+	
+	public BackgammonPlayer(String id, String firstName, String lastName, int age, BackgammonTurn turn,
+			boolean isWhite) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.age = age;
+		this.turn = turn;
+		this.isWhite = isWhite;
+	}
+
 	@Override
 	public void makePlayed(Move move) { 
 		Dice first = turn.getFirstDice();
@@ -44,10 +55,6 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 				(!isWhite && pawn instanceof BlackBackgammonPawn));
 	}
 
-	public boolean isWhite() {
-		return isWhite;
-	}
-
 	@Override
 	public BackgammonTurn getTurn() {
 		return turn;
@@ -56,6 +63,10 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	@Override
 	public void setTurn(Turn turn) {
 		this.turn = (BackgammonTurn)turn;
+	}
+	
+	public boolean isWhite() {
+		return isWhite;
 	}
 
 	public String getFirstName() {

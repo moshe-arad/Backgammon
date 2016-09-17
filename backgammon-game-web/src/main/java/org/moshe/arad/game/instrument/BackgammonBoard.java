@@ -10,7 +10,9 @@ import java.util.NoSuchElementException;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.BoardLocation;
 import org.moshe.arad.game.move.Move;
+import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.BackgammonTurn;
 
 public class BackgammonBoard implements Board {
 
@@ -87,18 +89,22 @@ public class BackgammonBoard implements Board {
 
 	@Override
 	public boolean isHasMoreMoves(Player player) {
-		Dice first = player.getTurn().getFirstDice();
-		Dice second = player.getTurn().getSecondDice();		
+		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
+		BackgammonTurn turn = backgammonPlayer.getTurn();
+		Dice first =  turn.getFirstDice();
+		Dice second = turn.getSecondDice();		
 		
 		if(first.getValue() == BackgammonDice.NONE && second.getValue() == BackgammonDice.NONE) return false;
-		else if(player.isWhite()) return checkWhiteHasMoreMoves(first, second, player);
-		else if(!player.isWhite()) return checkBlackHasMoreMoves(first, second, player);
+		else if(backgammonPlayer.isWhite()) return checkWhiteHasMoreMoves(first, second, backgammonPlayer);
+		else if(!backgammonPlayer.isWhite()) return checkBlackHasMoreMoves(first, second, backgammonPlayer);
 		else throw new RuntimeException();
 	}
 	
 	@Override
 	public boolean isValidMove(Player player, Move move) {
 		int fromIndex, toIndex, step;
+		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
+		BackgammonTurn turn = backgammonPlayer.getTurn();
 		
 		if(player == null || move == null) return false;
 		else{
@@ -107,8 +113,8 @@ public class BackgammonBoard implements Board {
 			BackgammonBoardLocation toLocation = ((BackgammonBoardLocation)move.getTo());
 			step = fromIndex - toIndex < 0 ? (fromIndex - toIndex)*(-1) : fromIndex - toIndex;
 			BackgammonPawn pawnFrom = board.get(fromIndex).peek();
-			Dice firstDice = player.getTurn().getFirstDice();
-			Dice secondDice = player.getTurn().getSecondDice();
+			Dice firstDice = turn.getFirstDice();
+			Dice secondDice = turn.getSecondDice();
 	
 			if(!pawnFrom.isAbleToDo(move)) return false;
 			if(!isDicesHaveCorrectValue(firstDice, secondDice, toIndex, step)) return false;
@@ -127,9 +133,10 @@ public class BackgammonBoard implements Board {
 		
 		if(player == null || move == null) throw new NullPointerException();
 		else{
+			BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
 			fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
 			toIndex = ((BackgammonBoardLocation)move.getTo()).getIndex();
-			if(player.isWhite()) executeWhiteBackgammonMove(fromIndex, toIndex);
+			if(backgammonPlayer.isWhite()) executeWhiteBackgammonMove(fromIndex, toIndex);
 			else executeBlackBackgammonMove(fromIndex, toIndex);
 		}
 	}
@@ -160,7 +167,8 @@ public class BackgammonBoard implements Board {
 
 	@Override
 	public boolean isWinner(Player player) {
-		return !isHasColor(player.isWhite());
+		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
+		return !isHasColor(backgammonPlayer.isWhite());
 	}
 	
 	@Override
@@ -502,14 +510,14 @@ public class BackgammonBoard implements Board {
 		return false;
 	}
 	
-	private boolean checkBlackHasMoreMoves(Dice first, Dice second, Player player) {
+	private boolean checkBlackHasMoreMoves(Dice first, Dice second, BackgammonPlayer player) {
 		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first) && !isBlackHasMoreMoves(second)) return false;
 		else if(first.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first)) return false;
 		else if(second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(second)) return false;
 		else return true;
 	}
 
-	private boolean checkWhiteHasMoreMoves(Dice first, Dice second, Player player) {
+	private boolean checkWhiteHasMoreMoves(Dice first, Dice second, BackgammonPlayer player) {
 		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
 		else if(first.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first)) return false;
 		else if(second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(second)) return false;

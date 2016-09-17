@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
-import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.turn.BackgammonTurn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,22 +22,22 @@ public class ClassicBoardGameTest {
 	@Autowired
 	Backgammon backgammon;
 	@Resource
-	Player firstPlayer;
+	BackgammonPlayer firstPlayer;
 	@Resource
-	Player secondPlayer;
+	BackgammonPlayer secondPlayer;
 	@Autowired
 	BackgammonTurn turn;
 	
 	@Test
 	public void howHasTurnFirstPlayerValidTest(){
-		Player actual = backgammon.howHasTurn();
+		BackgammonPlayer actual = backgammon.howHasTurn();
 		
 		assertEquals("How has turn test failed.", firstPlayer, actual);
 	}
 	
 	@Test
 	public void howHasTurnSecondPlayerInvalidTest(){
-		Player actual = backgammon.howHasTurn();
+		BackgammonPlayer actual = backgammon.howHasTurn();
 		
 		assertNotEquals("How has turn test failed.", secondPlayer, actual);
 	}
@@ -48,7 +48,7 @@ public class ClassicBoardGameTest {
 		
 		assertTrue("Failed to pass turn. pass turn test failed.", isTurnPassed);
 		
-		Player hasTurn = backgammon.howHasTurn();
+		BackgammonPlayer hasTurn = backgammon.howHasTurn();
 		
 		assertEquals("Didn't pass turn correctly. pass turn test failed" ,secondPlayer, hasTurn);
 		
@@ -63,7 +63,7 @@ public class ClassicBoardGameTest {
 	
 	@Test
 	public void howIsNextInTurnTest(){
-		Player next = backgammon.howIsNextInTurn();
+		BackgammonPlayer next = backgammon.howIsNextInTurn();
 		
 		assertEquals("Second player is not next in turn. How is next in turn test failed." ,secondPlayer, next);
 		

@@ -5,33 +5,30 @@ import java.util.LinkedList;
 import javax.annotation.Resource;
 
 import org.moshe.arad.game.BasicGameable;
-import org.moshe.arad.game.instrument.BackgammonBoard;
+import org.moshe.arad.game.instrument.Board;
+import org.moshe.arad.game.player.BackgammonPlayer;
+import org.moshe.arad.game.player.ClassicGamePlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.TurnOrderGameable;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameable{
 
-	protected BackgammonBoard board;
+	protected Board board;
 	@Resource
 	private Player firstPlayer;
 	@Resource
 	private Player secondPlayer;
 	@Resource
-	private LinkedList<Player> order;
-	
+	private LinkedList<ClassicGamePlayer> order;
 	private boolean isPlaying = true;
-	
-	
-	public ClassicBoardGame(BackgammonBoard board) {
-		this.board = board;
-	}
 
-	/**
-	 * first call initGame
-	 */
+	@Override
+	public void initGame() {
+		board.initBoard();
+	}
+	
+	@Override
 	public void play(){
-		
 		while(isPlaying){
 			Player playerWithTurn = howHasTurn();
 			playGameTurn(playerWithTurn);
@@ -43,19 +40,20 @@ public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameab
 		}
 	}
 
+	@Override
 	public void doWinnerActions() {
 		System.out.println("we have a winner");
 	}
 	
 	@Override
-	public Player howHasTurn() {
+	public ClassicGamePlayer howHasTurn() {
 		return (order.peek().getTurn() != null) ? order.peek() : null;  
 	}
 
 	@Override
 	public boolean passTurn() {
 		if(order.peek().getTurn() != null){
-			Player played = order.pop();
+			ClassicGamePlayer played = order.pop();
 			order.peek().setTurn(played.getTurn());
 			played.setTurn(null);
 			order.addLast(played);
@@ -69,7 +67,7 @@ public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameab
 		return (order.peek().getTurn() != null) ? order.peekLast() : null;
 	}
 	
-	public BackgammonBoard getBoard() {
+	public Board getBoard() {
 		return board;
 	}
 	public Player getFirstPlayer() {

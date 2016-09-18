@@ -311,9 +311,9 @@ public class BackgammonBoard implements Board {
 	
 	private BackgammonPawn popPawnFromEatenQueueOrPopFromColumn(int fromIndex){
 		try{
-			if(fromIndex == OUT_WHITE) return eatenWhites.pop();
-			else if(fromIndex == OUT_BLACK) return eatenBlacks.pop();
-			else return board.get(fromIndex).pop();
+			if(fromIndex == EATEN_WHITE) return eatenWhites.peek();
+			else if(fromIndex == EATEN_BLACK) return eatenBlacks.peek();
+			else return board.get(fromIndex).peek();
 		}catch(NoSuchElementException ex){
 			return null;
 		}
@@ -463,7 +463,7 @@ public class BackgammonBoard implements Board {
 	
 	private boolean isDicesHaveCorrectValueNotForOuting(Dice first, Dice second, int toIndex, int step){
 		if(toIndex != OUT_BLACK && toIndex != OUT_WHITE){
-			if(first.getValue() != step || second.getValue() != step) return false;
+			if(first.getValue() != step && second.getValue() != step) return false;
 			else return true;
 		}
 		else return false;
@@ -490,6 +490,7 @@ public class BackgammonBoard implements Board {
 	}
 	
 	private boolean isPawnCanBeSetIn(BackgammonPawn pawn, BackgammonBoardLocation to){
+		if(to.getIndex() == OUT_BLACK || to.getIndex() == OUT_WHITE) return true;
 		BackgammonPawn other = board.get(to.getIndex()).peek();
 		int sizeAtTo = board.get(to.getIndex()).size();
 		

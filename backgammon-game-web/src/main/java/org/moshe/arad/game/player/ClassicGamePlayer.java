@@ -6,7 +6,7 @@ import org.moshe.arad.game.turn.Turn;
 
 public abstract class ClassicGamePlayer implements Player{
 
-	public abstract void makePlayed(Move move);
+	public abstract void makePlayed(Move move) throws Exception;
 	
 	public abstract Turn getTurn();
 
@@ -18,6 +18,7 @@ public abstract class ClassicGamePlayer implements Player{
 	public abstract void rollDices(); 
 	/**
 	 * specific for backgammon
+	 * @throws Exception 
 	 */
-	public abstract boolean isCanPlayWith(BackgammonPawn pawn);
+	public abstract boolean isCanPlayWith(BackgammonPawn pawn) throws Exception;
 }

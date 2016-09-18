@@ -11,7 +11,7 @@ import org.moshe.arad.game.turn.Turn;
  */
 public interface Player {
 	
-	public void makePlayed(Move move);
+	public void makePlayed(Move move) throws Exception;
 	
 	public Turn getTurn();
 
@@ -23,6 +23,7 @@ public interface Player {
 	public void rollDices(); 
 	/**
 	 * specific for backgammon
+	 * @throws Exception 
 	 */
-	public boolean isCanPlayWith(BackgammonPawn pawn);
+	public boolean isCanPlayWith(BackgammonPawn pawn) throws Exception;
 }

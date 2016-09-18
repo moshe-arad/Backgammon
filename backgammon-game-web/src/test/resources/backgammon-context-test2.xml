@@ -31,4 +31,5 @@
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 	<bean class="org.moshe.arad.game.instrument.BlackBackgammonPawn" scope="prototype"/>
 	<bean class="org.moshe.arad.game.instrument.WhiteBackgammonPawn" scope="prototype"/>
+	<bean class="org.moshe.arad.game.instrument.BackgammonBoard" />
 </beans>

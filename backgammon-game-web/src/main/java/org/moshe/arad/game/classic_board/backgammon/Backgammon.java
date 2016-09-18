@@ -31,14 +31,18 @@ public class Backgammon extends ClassicBoardGame {
 		System.out.println(name + "you rolled - " + backgammonPlayer.getTurn().getFirstDice().getValue() + ": " + backgammonPlayer.getTurn().getSecondDice().getValue());
 		board.display();
 		
-		while(board.isHasMoreMoves(player)){
-			Move move = enterNextMove(player, reader);
-			if(board.isValidMove(player, move)){
-				board.executeMove(player, move);
-				player.makePlayed(move);
-				printOutputAfterMove();
+		try {
+			while(board.isHasMoreMoves(player)){
+				Move move = enterNextMove(player, reader);
+				if(board.isValidMove(player, move)){
+					board.executeMove(player, move);
+					player.makePlayed(move);
+					printOutputAfterMove();
+				}
+				else notifyOnInvalidMove(player, move);
 			}
-			else notifyOnInvalidMove(player, move);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	

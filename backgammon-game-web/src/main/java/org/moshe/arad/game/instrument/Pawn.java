@@ -4,5 +4,5 @@ import org.moshe.arad.game.move.Move;
 
 public interface Pawn {
 
-	public boolean isAbleToDo(Move move);
+	public boolean isAbleToDo(Move move) throws Exception;
 }

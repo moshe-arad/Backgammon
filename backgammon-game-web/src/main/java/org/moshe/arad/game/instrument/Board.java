@@ -13,9 +13,9 @@ public interface Board {
 	
 	public void display();
 	
-	public boolean isHasMoreMoves(Player player);
+	public boolean isHasMoreMoves(Player player) throws Exception;
 	
-	public boolean isValidMove(Player player, Move move);
+	public boolean isValidMove(Player player, Move move) throws Exception;
 	
 	public void executeMove(Player player, Move move);
 	

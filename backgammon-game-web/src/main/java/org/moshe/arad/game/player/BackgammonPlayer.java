@@ -28,8 +28,8 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	}
 
 	@Override
-	public void makePlayed(Move move) {
-		if(move == null) throw new NullPointerException("move is null.");
+	public void makePlayed(Move move) throws Exception {
+		if(move == null) throw new Exception("move is null.");
 		Dice first = turn.getFirstDice();
 		Dice second = turn.getSecondDice();
 		int fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
@@ -49,8 +49,9 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	}
 
 	@Override
-	public boolean isCanPlayWith(BackgammonPawn pawn) {
-		return (pawn != null) && ((isWhite && BackgammonPawn.isWhite(pawn)) ||
+	public boolean isCanPlayWith(BackgammonPawn pawn) throws Exception {
+		if(pawn == null) throw new Exception("pawn is null.");
+		return ((isWhite && BackgammonPawn.isWhite(pawn)) ||
 				(!isWhite && !BackgammonPawn.isWhite(pawn)));
 	}
 

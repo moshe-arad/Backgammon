@@ -35,7 +35,7 @@ public class BackgammonPlayerTest {
 	@Resource
 	Player secondPlayer;
 	@Autowired
-	Turn turn;
+	BackgammonTurn turn;
 	@Resource
 	Dice firstDice;
 	@Resource
@@ -45,17 +45,18 @@ public class BackgammonPlayerTest {
 	
 	@After
 	public void cleanup(){
+		firstPlayer.setTurn(turn);
 		firstDice.initDice();
 		secondDice.initDice();
 	}
 	
-	@Test(expected=NullPointerException.class)
-	public void makePlayedMoveIsNull(){
+	@Test(expected=Exception.class)
+	public void makePlayedMoveIsNull() throws Exception{
 		firstPlayer.makePlayed(null);
 	}
 	
 	@Test
-	public void makePlayedTwoMatchingDicesTest(){
+	public void makePlayedTwoMatchingDicesTest() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		firstPlayer.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -71,7 +72,7 @@ public class BackgammonPlayerTest {
 	}
 	
 	@Test
-	public void makePlayedMatchFirstDiceTest(){
+	public void makePlayedMatchFirstDiceTest() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		firstPlayer.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -87,7 +88,7 @@ public class BackgammonPlayerTest {
 	}
 	
 	@Test
-	public void makePlayedMatchSecondDiceTest(){
+	public void makePlayedMatchSecondDiceTest() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		firstPlayer.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -103,7 +104,7 @@ public class BackgammonPlayerTest {
 	}
 	
 	@Test
-	public void makePlayedStepDoesNotMatchFirstDiceTest(){
+	public void makePlayedStepDoesNotMatchFirstDiceTest() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		firstPlayer.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -119,7 +120,7 @@ public class BackgammonPlayerTest {
 	}
 	
 	@Test
-	public void makePlayedStepDoesNotMatchSecondDiceTest(){
+	public void makePlayedStepDoesNotMatchSecondDiceTest() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		firstPlayer.setTurn(turnMock);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
@@ -145,31 +146,31 @@ public class BackgammonPlayerTest {
 		assertThat(secondDice.getValue(), IsIn.isIn(new Integer[]{1,2,3,4,5,6}));
 	}
 	
-	@Test
-	public void isCanPlayWithPawnIsNull(){
-		assertFalse(firstPlayer.isCanPlayWith(null));
+	@Test(expected=Exception.class)
+	public void isCanPlayWithPawnIsNull() throws Exception{
+		firstPlayer.isCanPlayWith(null);
 	}
 	
 	@Test
-	public void isCanPlayWithPlayerWhitePawnWhite(){
+	public void isCanPlayWithPlayerWhitePawnWhite() throws Exception{
 		WhiteBackgammonPawn whitePawn = testContext.getBean(WhiteBackgammonPawn.class);
 		assertTrue(firstPlayer.isCanPlayWith(whitePawn));
 	}
 	
 	@Test
-	public void isCanPlayWithWhitePlayerBlackPawn(){
+	public void isCanPlayWithWhitePlayerBlackPawn() throws Exception{
 		BlackBackgammonPawn blackPawn = testContext.getBean(BlackBackgammonPawn.class);
 		assertFalse(firstPlayer.isCanPlayWith(blackPawn));
 	}
 	
 	@Test
-	public void isCanPlayWithBlackPlayerWhitePawn(){
+	public void isCanPlayWithBlackPlayerWhitePawn() throws Exception{
 		WhiteBackgammonPawn whitePawn = testContext.getBean(WhiteBackgammonPawn.class);
 		assertFalse(secondPlayer.isCanPlayWith(whitePawn));
 	}
 	
 	@Test
-	public void isCanPlayWithBlackPlayerBlackPawn(){
+	public void isCanPlayWithBlackPlayerBlackPawn() throws Exception{
 		BlackBackgammonPawn blackPawn = testContext.getBean(BlackBackgammonPawn.class);
 		assertTrue(secondPlayer.isCanPlayWith(blackPawn));
 	}

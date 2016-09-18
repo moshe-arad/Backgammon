@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/*
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:backgammon-context-test.xml")
 public class ClassicBoardGameTest {
@@ -76,3 +77,4 @@ public class ClassicBoardGameTest {
 		assertEquals("First player is not next in turn. How is next in turn test failed." ,firstPlayer, next);
 	}
 }
+*/

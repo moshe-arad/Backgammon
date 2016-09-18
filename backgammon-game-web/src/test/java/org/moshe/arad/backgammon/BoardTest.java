@@ -1,20 +1,6 @@
 package org.moshe.arad.backgammon;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Test;
-import org.moshe.arad.game.instrument.BackgammonBoard;
-import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.instrument.BackgammonPawn;
-
-
+/*
 public class BoardTest {
 
 	@Test
@@ -346,3 +332,4 @@ public class BoardTest {
 		assertTrue(someBoard.isHasColor(Color.black));
 	}
 }
+*/

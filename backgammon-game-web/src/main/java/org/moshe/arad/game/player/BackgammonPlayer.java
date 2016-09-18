@@ -1,9 +1,7 @@
 package org.moshe.arad.game.player;
 
 import org.moshe.arad.game.instrument.BackgammonPawn;
-import org.moshe.arad.game.instrument.BlackBackgammonPawn;
 import org.moshe.arad.game.instrument.Dice;
-import org.moshe.arad.game.instrument.WhiteBackgammonPawn;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.turn.BackgammonTurn;
@@ -30,7 +28,8 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	}
 
 	@Override
-	public void makePlayed(Move move) { 
+	public void makePlayed(Move move) {
+		if(move == null) throw new NullPointerException("move is null.");
 		Dice first = turn.getFirstDice();
 		Dice second = turn.getSecondDice();
 		int fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
@@ -51,8 +50,8 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 
 	@Override
 	public boolean isCanPlayWith(BackgammonPawn pawn) {
-		return (pawn != null) && ((isWhite && pawn instanceof WhiteBackgammonPawn) ||
-				(!isWhite && pawn instanceof BlackBackgammonPawn));
+		return (pawn != null) && ((isWhite && BackgammonPawn.isWhite(pawn)) ||
+				(!isWhite && !BackgammonPawn.isWhite(pawn)));
 	}
 
 	@Override

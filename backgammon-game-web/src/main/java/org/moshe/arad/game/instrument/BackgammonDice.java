@@ -6,7 +6,7 @@ public class BackgammonDice implements Dice {
 
 	public static final int NONE = 0;
 	public static final int MAX = 6;
-	private int value;
+	private int value = NONE;
 	private Random random = new Random();
 	
 	@Override

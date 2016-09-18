@@ -11,7 +11,7 @@ public class BlackBackgammonPawn extends BackgammonPawn{
 	}
 
 	@Override
-	public boolean equals(BackgammonPawn other) {
-		return other instanceof BlackBackgammonPawn; 
-	}
+	public boolean equals(Object obj) {
+		return obj instanceof BlackBackgammonPawn;
+	}	
 }

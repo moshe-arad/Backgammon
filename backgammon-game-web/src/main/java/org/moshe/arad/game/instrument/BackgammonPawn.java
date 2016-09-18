@@ -7,6 +7,8 @@ public abstract class BackgammonPawn implements Pawn {
 	@Override
 	public abstract boolean isAbleToDo(Move move);
 
-	public abstract boolean equals(BackgammonPawn other);
+	public static boolean isWhite(BackgammonPawn pawn){
+		return pawn instanceof WhiteBackgammonPawn;
+	}
 	
 }

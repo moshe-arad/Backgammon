@@ -13,6 +13,7 @@
 		<constructor-arg name="lastName" value="Arad-test" />
 		<constructor-arg name="age" value="13" />
 		<constructor-arg name="turn" ref="turn" />
+		<constructor-arg name="isWhite" value="true" />
 	</bean>
 
 	<bean id="secondPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
@@ -21,13 +22,13 @@
 		<constructor-arg name="firstName" value="James-test" />
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
-		<constructor-arg name="color" value="1" />
-		<constructor-arg name="turn">
-			<null />
-		</constructor-arg>
+		<constructor-arg name="turn" ><null /></constructor-arg>
+		<constructor-arg name="isWhite" value="false" />
 	</bean>
 	
-	<bean id="turn class="org.moshe.arad.game.turn.BackgammonTurn" />
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" />
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	<bean class="org.moshe.arad.game.instrument.BlackBackgammonPawn" scope="prototype"/>
+	<bean class="org.moshe.arad.game.instrument.WhiteBackgammonPawn" scope="prototype"/>
 </beans>

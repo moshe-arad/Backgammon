@@ -1,35 +1,6 @@
 package org.moshe.arad.backgammon;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.Scanner;
-
-import javax.annotation.Resource;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.moshe.arad.game.classic_board.backgammon.Backgammon;
-import org.moshe.arad.game.instrument.BackgammonBoard;
-import org.moshe.arad.game.instrument.Color;
-import org.moshe.arad.game.instrument.BackgammonDice;
-import org.moshe.arad.game.instrument.BackgammonPawn;
-import org.moshe.arad.game.move.Move;
-import org.moshe.arad.game.player.BackgammonPlayer;
-import org.moshe.arad.game.turn.BackgammonTurn;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
+/*
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonTest {
@@ -1244,3 +1215,4 @@ public class BackgammonTest {
 				backgammon.isCanStartCleanUp(blackPawnPlayer, simpleBoard));
 	}
 }
+*/

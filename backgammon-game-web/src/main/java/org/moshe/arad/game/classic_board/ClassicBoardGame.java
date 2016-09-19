@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.moshe.arad.game.BasicGameable;
 import org.moshe.arad.game.instrument.Board;
-import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.ClassicGamePlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.TurnOrderGameable;
@@ -29,14 +28,19 @@ public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameab
 	
 	@Override
 	public void play(){
-		while(isPlaying){
-			Player playerWithTurn = howHasTurn();
-			playGameTurn(playerWithTurn);
-			if(!board.isWinner(playerWithTurn)) passTurn();
-			else{
-				doWinnerActions();
-				isPlaying = false;
+		try{
+			while(isPlaying){
+				Player playerWithTurn = howHasTurn();
+				playGameTurn(playerWithTurn);
+				if(!board.isWinner(playerWithTurn)) passTurn();
+				else{
+					doWinnerActions();
+					isPlaying = false;
+				}
 			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

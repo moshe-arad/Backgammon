@@ -1,12 +1,11 @@
-package org.moshe.arad.backgammon;
+package org.moshe.arad.game;
 
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 import org.moshe.arad.game.turn.BackgammonTurn;
 
-
-public class TurnTest {
+public class BackgammonTurnTest {
 
 	@Test
 	public void isTheSameTurnObject(){

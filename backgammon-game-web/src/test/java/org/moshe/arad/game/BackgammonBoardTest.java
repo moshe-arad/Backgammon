@@ -1,8 +1,10 @@
-package org.moshe.arad.after_refactor;
+package org.moshe.arad.game;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import javax.annotation.Resource;
@@ -24,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:backgammon-context-test2.xml")
+@ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonBoardTest {
 
 	@Autowired
@@ -47,6 +49,7 @@ public class BackgammonBoardTest {
 	}
 	
 	@Test(expected=Exception.class)
+	@SuppressWarnings("unused")
 	public void copyConstructorNull() throws Exception{
 		BackgammonBoard copyBoard = new BackgammonBoard(null);
 		
@@ -170,8 +173,6 @@ public class BackgammonBoardTest {
 		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
 		when(firstDiceMock.getValue()).thenReturn(5);
 		when(secondDiceMock.getValue()).thenReturn(3);
-		
-		WhiteBackgammonPawn pawn1 = testContext.getBean(WhiteBackgammonPawn.class);
 		
 		board.addWhitePawnToEatenQueue(testContext.getBean(WhiteBackgammonPawn.class));
 		
@@ -440,8 +441,6 @@ public class BackgammonBoardTest {
 		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
 		when(firstDiceMock.getValue()).thenReturn(5);
 		when(secondDiceMock.getValue()).thenReturn(3);
-		
-		BlackBackgammonPawn pawn1 = testContext.getBean(BlackBackgammonPawn.class);
 		
 		board.addBlackPawnToEatenQueue(testContext.getBean(BlackBackgammonPawn.class));
 		
@@ -1022,5 +1021,17 @@ public class BackgammonBoardTest {
 		assertEquals(testContext.getBean(WhiteBackgammonPawn.class), board.peekAtColumn(new BackgammonBoardLocation(19)));
 		assertEquals(0, board.getWhiteEatenSize());
 		assertEquals(0, board.getBlackEatenSize());
+	}
+	
+	@Test(expected=Exception.class)
+	public void isWinnerPlayerIsNull() throws Exception{
+		board.isWinner(null);
+	}
+	
+	@Test
+	public void isWinnerWhitePlayerWinner() throws Exception{
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(0));
+		assertTrue(board.isWinner(firstPlayer));
+		assertFalse(board.isWinner(secondPlayer));
 	}
 }

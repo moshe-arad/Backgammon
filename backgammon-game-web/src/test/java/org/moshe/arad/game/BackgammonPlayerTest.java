@@ -1,6 +1,10 @@
-package org.moshe.arad.after_refactor;
+package org.moshe.arad.game;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,17 +21,15 @@ import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.instrument.WhiteBackgammonPawn;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
-import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.BackgammonTurn;
-import org.moshe.arad.game.turn.Turn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:backgammon-context-test2.xml")
+@ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonPlayerTest {
 
 	@Resource

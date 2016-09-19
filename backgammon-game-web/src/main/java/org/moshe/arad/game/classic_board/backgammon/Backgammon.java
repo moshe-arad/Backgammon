@@ -13,9 +13,15 @@ public class Backgammon extends ClassicBoardGame {
 
 	@Override
 	public boolean isHasWinner() {
-		BackgammonPlayer first = (BackgammonPlayer)super.howHasTurn();
-		BackgammonPlayer second = (BackgammonPlayer)super.howIsNextInTurn();
-		return board.isWinner(first) || board.isWinner(second);
+		try{
+			BackgammonPlayer first = (BackgammonPlayer)super.howHasTurn();
+			BackgammonPlayer second = (BackgammonPlayer)super.howIsNextInTurn();
+			return board.isWinner(first) || board.isWinner(second);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	/**

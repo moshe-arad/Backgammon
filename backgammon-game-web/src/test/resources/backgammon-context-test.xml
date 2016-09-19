@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
-		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:annotation-config />
-
+	
 	<bean id="firstPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
-		<qualifier value="firstPlayer" />
 		<constructor-arg name="id" value="021777777" />
 		<constructor-arg name="firstName" value="Moshe-test" />
 		<constructor-arg name="lastName" value="Arad-test" />
 		<constructor-arg name="age" value="13" />
-		<constructor-arg name="color" value="0" />
 		<constructor-arg name="turn" ref="turn" />
+		<constructor-arg name="isWhite" value="true" />
 	</bean>
 
 	<bean id="secondPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
@@ -24,99 +22,14 @@
 		<constructor-arg name="firstName" value="James-test" />
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
-		<constructor-arg name="color" value="1" />
-		<constructor-arg name="turn">
-			<null />
-		</constructor-arg>
-	</bean>
-
-	<bean id="whitePawnPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
-		<qualifier value="firstPlayer" />
-		<constructor-arg name="id" value="021777777" />
-		<constructor-arg name="firstName" value="Moshe-test" />
-		<constructor-arg name="lastName" value="Arad-test" />
-		<constructor-arg name="age" value="13" />
-		<constructor-arg name="color" value="0" />
-		<constructor-arg name="turn" ref="turn" />
-	</bean>
-
-	<bean id="blackPawnPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
-		<qualifier value="secondPlayer" />
-		<constructor-arg name="id" value="056666663" />
-		<constructor-arg name="firstName" value="James-test" />
-		<constructor-arg name="lastName" value="Brown-test" />
-		<constructor-arg name="age" value="12" />
-		<constructor-arg name="color" value="1" />
-		<constructor-arg name="turn">
-			<null />
-		</constructor-arg>
-	</bean>
-
-	<bean id="blackPawn" class="org.moshe.arad.game.instrument.BackgammonPawn" scope="prototype">
-		<constructor-arg name="color" value="1" />
-	</bean>
-
-	<bean id="whitePawn" class="org.moshe.arad.game.instrument.BackgammonPawn" scope="prototype">
-		<constructor-arg name="color" value="0" />
-	</bean>
-
-	<bean id="backgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon">
-		<constructor-arg ref="simpleBoard" />
-	</bean>
-
-	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
-
-	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
-
-	<bean id="simpleBoard" class="org.moshe.arad.game.instrument.BackgammonBoard">
-		<constructor-arg ref="empty" />
-		<constructor-arg ref="empty" />
-	</bean>
-
-	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn"
-		factory-method="getInstance" />
-
-	<util:list id="order" list-class="java.util.LinkedList">
-		<ref bean="firstPlayer" />
-		<ref bean="secondPlayer" />
-	</util:list>
-
-	<util:list id="nonEmptyBlacks" list-class="java.util.LinkedList" scope="prototype">
-		<ref bean="blackPawn" />
-	</util:list>
-
-	<util:list id="nonEmptyWhites" list-class="java.util.LinkedList" scope="prototype">
-		<ref bean="whitePawn" />
-	</util:list>
-
-	<util:list id="empty" list-class="java.util.LinkedList" scope="prototype">
-	</util:list>
-
-	<bean id="nonEmptyBlacksBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon" scope="prototype">
-		<constructor-arg ref="nonEmptyBlacksGame" />
-	</bean>
-
-	<bean id="nonEmptyWhitesBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon" scope="prototype">
-		<constructor-arg ref="nonEmptyWhitesGame" />
-	</bean>
-
-	<bean id="nonEmptyBlackAndWhitesBackgammon" class="org.moshe.arad.game.classic_board.backgammon.Backgammon" scope="prototype">
-		<constructor-arg ref="nonEmptyBlackAndWhitesGame" />
+		<constructor-arg name="turn" ><null /></constructor-arg>
+		<constructor-arg name="isWhite" value="false" />
 	</bean>
 	
-	<bean id="nonEmptyBlacksGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
-		<constructor-arg index="0" ref="nonEmptyBlacks" />
-		<constructor-arg index="1" ref="empty" />
-	</bean>
-
-	<bean id="nonEmptyWhitesGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
-		<constructor-arg index="0" ref="empty" />
-		<constructor-arg index="1" ref="nonEmptyWhites" />
-	</bean>
-
-	<bean id="nonEmptyBlackAndWhitesGame" class="org.moshe.arad.game.instrument.BackgammonBoard" scope="prototype">
-		<constructor-arg index="0" ref="nonEmptyBlacks" />
-		<constructor-arg index="1" ref="nonEmptyWhites" />
-	</bean>
-
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" />
+	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	<bean class="org.moshe.arad.game.instrument.BlackBackgammonPawn" scope="prototype"/>
+	<bean class="org.moshe.arad.game.instrument.WhiteBackgammonPawn" scope="prototype"/>
+	<bean class="org.moshe.arad.game.instrument.BackgammonBoard" />
 </beans>

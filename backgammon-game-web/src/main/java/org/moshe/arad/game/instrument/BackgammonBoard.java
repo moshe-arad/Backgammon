@@ -172,7 +172,8 @@ public class BackgammonBoard implements Board {
 	}
 
 	@Override
-	public boolean isWinner(Player player) {
+	public boolean isWinner(Player player) throws Exception {
+		if(player == null) throw new Exception("player is null.");
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
 		return !isHasColor(backgammonPlayer.isWhite());
 	}
@@ -283,19 +284,7 @@ public class BackgammonBoard implements Board {
 			}
 		}
 	}
-	
-	public boolean isHasBackgammonPawnType(BackgammonPawn other) {
-		for (Deque<BackgammonPawn> column : board) {
-			BackgammonPawn pawn = column.peek();
-			if (pawn != null && pawn.equals(other))
-				return true;
-		}
-		return false;
-	}
 
-	/**
-	 * TODO test
-	 */
 	public void clearPawnsOutsideGame() {
 		eatenBlacks.clear();
 		eatenWhites.clear();

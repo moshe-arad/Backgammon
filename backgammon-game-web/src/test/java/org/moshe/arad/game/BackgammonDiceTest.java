@@ -1,4 +1,4 @@
-package org.moshe.arad.after_refactor;
+package org.moshe.arad.game;
 
 import static org.junit.Assert.*;
 
@@ -16,7 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:backgammon-context-test2.xml")
+@ContextConfiguration("classpath:backgammon-context-test.xml")
 public class BackgammonDiceTest {
 
 	@Resource

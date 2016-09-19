@@ -2,7 +2,6 @@ package org.moshe.arad.game.instrument;
 
 import org.moshe.arad.game.move.BoardLocation;
 import org.moshe.arad.game.move.Move;
-import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
 
 public interface Board {
@@ -21,5 +20,5 @@ public interface Board {
 	
 	public boolean setPawn(Pawn pawn, BoardLocation location);
 	
-	public boolean isWinner(Player player);
+	public boolean isWinner(Player player) throws Exception;
 }

@@ -17,7 +17,7 @@ public interface Board {
 	
 	public boolean isValidMove(Player player, Move move) throws Exception;
 	
-	public void executeMove(Player player, Move move);
+	public void executeMove(Player player, Move move) throws Exception;
 	
 	public boolean setPawn(Pawn pawn, BoardLocation location);
 	

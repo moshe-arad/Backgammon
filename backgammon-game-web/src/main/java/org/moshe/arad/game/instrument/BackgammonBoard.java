@@ -134,10 +134,10 @@ public class BackgammonBoard implements Board {
 	}
 	
 	@Override
-	public void executeMove(Player player, Move move) {
+	public void executeMove(Player player, Move move) throws Exception {
 		int fromIndex, toIndex;
 		
-		if(player == null || move == null) throw new NullPointerException();
+		if(player == null || move == null) throw new Exception("player or move are null.");
 		else{
 			BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
 			fromIndex = ((BackgammonBoardLocation)move.getFrom()).getIndex();
@@ -309,6 +309,14 @@ public class BackgammonBoard implements Board {
 		eatenWhites.add(pawn);
 	}
 	
+	public int getBlackEatenSize(){
+		return eatenBlacks.size();
+	}
+	
+	public int getWhiteEatenSize(){
+		return eatenWhites.size();
+	}
+	
 	private BackgammonPawn popPawnFromEatenQueueOrPopFromColumn(int fromIndex){
 		try{
 			if(fromIndex == EATEN_WHITE) return eatenWhites.peek();
@@ -435,7 +443,7 @@ public class BackgammonBoard implements Board {
 		if(fromIndex == EATEN_WHITE) pawnFrom = eatenWhites.pop();
 		else pawnFrom = board.get(fromIndex).pop();
 		if(toIndex != OUT_WHITE){
-			if(!board.get(toIndex).peek().equals(pawnFrom)){
+			if(board.get(toIndex).peek() != null && !board.get(toIndex).peek().equals(pawnFrom)){
 				eatenBlacks.add(board.get(toIndex).pop());
 			}
 			board.get(toIndex).push(pawnFrom);
@@ -448,7 +456,7 @@ public class BackgammonBoard implements Board {
 		if(fromIndex == EATEN_BLACK) pawnFrom = eatenBlacks.pop();
 		else pawnFrom = board.get(fromIndex).pop();
 		if(toIndex != OUT_BLACK){
-			if(!board.get(toIndex).peek().equals(pawnFrom)){
+			if(board.get(toIndex).peek() != null && !board.get(toIndex).peek().equals(pawnFrom)){
 				eatenWhites.add(board.get(toIndex).pop());
 			}
 			board.get(toIndex).push(pawnFrom);

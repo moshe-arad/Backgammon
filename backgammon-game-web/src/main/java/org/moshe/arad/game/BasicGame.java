@@ -1,12 +1,18 @@
 package org.moshe.arad.game;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public abstract class BasicGame implements BasicGameable{
 
+	private final Logger logger = LogManager.getLogger("org.moshe.arad");
 	@Override
 	public void start(){
+		logger.info("Template pattern begins.");
 		initGame();
 		play();
 		doWinnerActions();
+		logger.info("Template pattern ends.");
 	}
 	
 	@Override

@@ -2,6 +2,8 @@ package org.moshe.arad.game.classic_board;
 
 import javax.annotation.Resource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.moshe.arad.game.BasicGame;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.player.BackgammonPlayer;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame extends BasicGame {
 
+	private final Logger logger = LogManager.getLogger("org.moshe.arad");
 	@Autowired
 	protected Board board;
 	@Resource
@@ -24,11 +27,14 @@ public abstract class ClassicBoardGame extends BasicGame {
 
 	@Override
 	public void initGame() {
+		logger.info("Initializing board...");
 		board.initBoard();
+		logger.info("Board initializing completed...");
 	}
 	
 	@Override
 	public void play(){
+		logger.info("Game is about to begin...");
 		try{
 			while(isPlaying){
 				Player playerWithTurn = turnOrderManager.howHasTurn();
@@ -40,11 +46,12 @@ public abstract class ClassicBoardGame extends BasicGame {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+		logger.info("Game end with a winner...");
 	}
 
 	@Override
 	public void doWinnerActions() {
-		System.out.println("we have a winner");
+		logger.info("we have a winner");
 	}
 
 	@Override
@@ -55,6 +62,7 @@ public abstract class ClassicBoardGame extends BasicGame {
 			return board.isWinner(first) || board.isWinner(second);
 		}
 		catch (Exception e) {
+			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
 		return false;

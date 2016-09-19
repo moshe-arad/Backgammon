@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.BoardLocation;
 import org.moshe.arad.game.move.Move;
@@ -25,7 +27,8 @@ public class BackgammonBoard implements Board {
 	private List<Deque<BackgammonPawn>> board = new ArrayList<Deque<BackgammonPawn>>(LENGTH);
 	private LinkedList<BackgammonPawn> eatenBlacks = new LinkedList<BackgammonPawn>();
 	private LinkedList<BackgammonPawn> eatenWhites = new LinkedList<BackgammonPawn>();
-
+	private final Logger logger = LogManager.getLogger("org.moshe.arad");
+	
 	public BackgammonBoard() {
 		for (int i = 0; i < LENGTH; i++)
 			board.add(new ArrayDeque<BackgammonPawn>(MAX_COLUMN));
@@ -127,6 +130,7 @@ public class BackgammonBoard implements Board {
 				if(!isEatenPawnCanComeBack(fromIndex, pawnFrom, toLocation)) return false; 
 				if(!isCanTakePawnOutside(toIndex)) return false;
 			} catch (Exception e) {
+				logger.error(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -158,10 +162,10 @@ public class BackgammonBoard implements Board {
 				return false;
 			} else {
 				if ((board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn))) {
-					System.out.println("Can't place different kind of pawns on the same column.");
+					logger.warn("Can't place different kind of pawns on the same column.");
 					return false;
 				} else if (board.get(locationIndex).size() == MAX_COLUMN) {
-					System.out.println("This column is full.");
+					logger.warn("This column is full.");
 					return false;
 				} else {
 					board.get(locationIndex).push(backgammonPawn);
@@ -323,7 +327,7 @@ public class BackgammonBoard implements Board {
 			sb.append("  There are " + eatenBlacks.size() + " black pawns outside the game.").append("\n");
 		if (eatenWhites.size() > 0)
 			sb.append("  There are " + eatenWhites.size() + " white pawns outside the game.").append("\n");
-		System.out.println(sb.toString());
+		logger.info(sb.toString());
 	}
 
 	private void printUpperBoard(BackgammonBoard boardCopy, StringBuilder sb) {

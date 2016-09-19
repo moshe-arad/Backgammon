@@ -3,6 +3,8 @@ package org.moshe.arad.game.classic_board.backgammon;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
@@ -11,25 +13,29 @@ import org.moshe.arad.game.player.Player;
 
 public class Backgammon extends ClassicBoardGame {
 
+	private final Logger logger = LogManager.getLogger("org.moshe.arad");
+	
 	@Override
 	public void playGameTurn(Player player) {
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
 		Scanner reader = new Scanner(System.in);
 		String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName() + ": ";
-		System.out.println(name + "it's your turn. roll the dices.");
+		logger.info(name + "it's your turn. roll the dices.");
 		player.rollDices();
-		System.out.println(name + "you rolled - " + backgammonPlayer.getTurn().getFirstDice().getValue() + ": " + backgammonPlayer.getTurn().getSecondDice().getValue());
-		board.display();
+		logger.info(name + "you rolled - " + backgammonPlayer.getTurn().getFirstDice().getValue() + ": " + backgammonPlayer.getTurn().getSecondDice().getValue());
 		
 		try {
 			while(!board.isWinner(player) && board.isHasMoreMoves(player)){
+				logger.info("The board as follows:");
+				logger.info(board);
 				Move move = enterNextMove(player, reader);
 				if(board.isValidMove(player, move)){
 					board.executeMove(player, move);
 					player.makePlayed(move);
-					printOutputAfterMove();
+					logger.info("A move was made...");
+					logger.info("************************************");
 				}
-				else notifyOnInvalidMove(player, move);
+				else notifyOnInvalidMove(player);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,7 +53,7 @@ public class Backgammon extends ClassicBoardGame {
 		String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName();
 		Move move = new Move();
 		
-		System.out.println(name+": enter your next move.");
+		logger.info(name+": enter your next move.");
 		String msg = "from where to move? (index -1:24).";
 		String input = getMoveInput(name, reader, msg);
 		move.setFrom(new BackgammonBoardLocation(Integer.parseInt(input)));
@@ -58,28 +64,22 @@ public class Backgammon extends ClassicBoardGame {
 	}
 
 	private String getMoveInput(String name, Scanner reader, String msg) {
-		System.out.println(name+": " + msg);
+		logger.info(name+": " + msg);
 		String input = reader.next();
 		while(!NumberUtils.isNumber(input) || Integer.parseInt(input) <= -2 || Integer.parseInt(input) >= 25){
-			System.out.println("Your input is invalid. try again.");
+			logger.warn("Your input is invalid. try again.");
 			input = reader.next();
 		}
 		return input;
 	}
 
 
-	public void notifyOnInvalidMove(Player player, Move move) {		
-		if(player == null) System.out.println("Player is null.");
+	public void notifyOnInvalidMove(Player player) {		
+		if(player == null) logger.error("Player is null.");
 		else{
 			BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
 			String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName();
-			System.out.println(name + ": you made invalid move. try again.");
+			logger.warn(name + ": you made invalid move. try again.");
 		}
-	}
-	
-	private void printOutputAfterMove() {
-		System.out.println("After move:");
-		board.display();
-		System.out.println("*************************************");
 	}
 }

@@ -12,22 +12,6 @@ import org.moshe.arad.game.player.Player;
 public class Backgammon extends ClassicBoardGame {
 
 	@Override
-	public boolean isHasWinner() {
-		try{
-			BackgammonPlayer first = (BackgammonPlayer)super.howHasTurn();
-			BackgammonPlayer second = (BackgammonPlayer)super.howIsNextInTurn();
-			return board.isWinner(first) || board.isWinner(second);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	/**
-	 * TODO write test
-	 */
-	@Override
 	public void playGameTurn(Player player) {
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
 		Scanner reader = new Scanner(System.in);

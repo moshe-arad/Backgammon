@@ -120,7 +120,7 @@ public class BackgammonBoard implements Board {
 			try {
 				if(pawnFrom == null) return false;
 				if(!pawnFrom.isAbleToDo(move)) return false;
-				if(!isDicesHaveCorrectValue(firstDice, secondDice, toIndex, step)) return false;
+				if(!isDicesHaveCorrectValue(firstDice, secondDice, fromIndex, toIndex, step)) return false;
 				if(!player.isCanPlayWith(pawnFrom)) return false;
 				if(!eatenPawnsValidation(fromIndex, pawnFrom)) return false;
 				if(!isPawnCanBeSetIn(pawnFrom, toLocation)) return false;
@@ -452,10 +452,10 @@ public class BackgammonBoard implements Board {
 		}
 	}
 
-	private boolean isDicesHaveCorrectValue(Dice first, Dice second, int toIndex, int step){
+	private boolean isDicesHaveCorrectValue(Dice first, Dice second, int fromIndex, int toIndex, int step){
 		return isDicesHaveCorrectValueNotForOuting(first, second, toIndex, step) ||
-				isDicesHaveCorrectValueForOutingBlack(first, second, toIndex, step) ||
-				isDicesHaveCorrectValueForOutingWhite(first, second, toIndex, step);
+				isDicesHaveCorrectValueForOutingBlack(first, second, fromIndex, toIndex, step) ||
+				isDicesHaveCorrectValueForOutingWhite(first, second, fromIndex, toIndex, step);
 	}
 	
 	private boolean isDicesHaveCorrectValueNotForOuting(Dice first, Dice second, int toIndex, int step){
@@ -466,16 +466,42 @@ public class BackgammonBoard implements Board {
 		else return false;
 	}
 	
-	private boolean isDicesHaveCorrectValueForOutingBlack(Dice first, Dice second, int toIndex, int step){
+	private boolean isDicesHaveCorrectValueForOutingBlack(Dice first, Dice second, int fromIndex, int toIndex, int step){
 		if(toIndex == OUT_BLACK && isBlackCanTakePawnOutside()){
-			if(first.getValue() >= step || second.getValue() >= step) return true;
+			if(first.getValue() == step || second.getValue() == step) return true;
+			else if(first.getValue() > step || second.getValue() > step){
+				if(!isBlackPawnsBetweenFromIndexAndHighDice(first, second, fromIndex)) return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isBlackPawnsBetweenFromIndexAndHighDice(Dice first, Dice second, int fromIndex) {
+		int highValue = first.getValue() >= second.getValue() ? first.getValue() : second.getValue();
+		BackgammonPawn fromPawn = board.get(fromIndex).peek();
+		for(int i=(OUT_BLACK-highValue); i<fromIndex; i++){
+			BackgammonPawn current = board.get(i).peek();
+			if(current != null && current.equals(fromPawn)) return true;
 		}
 		return false;
 	}
 	
-	private boolean isDicesHaveCorrectValueForOutingWhite(Dice first, Dice second, int toIndex, int step){
+	private boolean isWhitePawnsBetweenFromIndexAndHighDice(Dice first, Dice second, int fromIndex) {
+		int highValue = first.getValue() >= second.getValue() ? first.getValue() : second.getValue();
+		BackgammonPawn fromPawn = board.get(fromIndex).peek();
+		for(int i=(OUT_WHITE + highValue); i>fromIndex; i--){
+			BackgammonPawn current = board.get(i).peek();
+			if(current != null && current.equals(fromPawn)) return true;
+		}
+		return false;
+	}
+	
+	private boolean isDicesHaveCorrectValueForOutingWhite(Dice first, Dice second, int fromIndex, int toIndex, int step){
 		if(toIndex == OUT_WHITE && isWhiteCanTakePawnOutside()){
-			if(first.getValue() >= step || second.getValue() >= step) return true;
+			if(first.getValue() == step || second.getValue() == step) return true;
+			else if(first.getValue() > step || second.getValue() > step){
+				if(!isWhitePawnsBetweenFromIndexAndHighDice(first, second, fromIndex)) return true;
+			}
 		}
 		return false;
 	}

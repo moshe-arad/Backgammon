@@ -1,5 +1,6 @@
 package org.moshe.arad.game.player;
 
+import org.moshe.arad.game.instrument.BackgammonDice;
 import org.moshe.arad.game.instrument.BackgammonPawn;
 import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
@@ -48,6 +49,7 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	public void rollDices() { 
 		turn.getFirstDice().rollDice();
 		turn.getSecondDice().rollDice();
+		doubleDices();
 	}
 
 	@Override
@@ -77,5 +79,12 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 
 	public String getLastName() {
 		return lastName;
+	}
+	
+	private void doubleDices() {
+		if(turn.getFirstDice().getValue() == turn.getSecondDice().getValue()){
+			turn.getFirstDice().setTimes(BackgammonDice.DOUBLE);
+			turn.getSecondDice().setTimes(BackgammonDice.DOUBLE);
+		}
 	}
 }

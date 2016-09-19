@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -138,6 +139,29 @@ public class BackgammonPlayerTest {
 	}
 	
 	@Test
+	public void makePlayedDoubleDices() throws Exception{
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		firstPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(6);
+		when(secondDiceMock.getValue()).thenReturn(6);
+		
+		firstPlayer.rollDices();
+		verify(firstDiceMock).setTimes(BackgammonDice.DOUBLE);
+		verify(secondDiceMock).setTimes(BackgammonDice.DOUBLE);
+		
+		firstPlayer.makePlayed(new Move(new BackgammonBoardLocation(23), new BackgammonBoardLocation(17)));
+		verify(firstDiceMock).initDice();
+		
+		firstPlayer.makePlayed(new Move(new BackgammonBoardLocation(23), new BackgammonBoardLocation(17)));
+		verify(firstDiceMock, times(2)).initDice();
+	}
+	
+	@Test
 	public void rollDicesTest(){
 		assertEquals(BackgammonDice.NONE,firstDice.getValue());
 		assertEquals(BackgammonDice.NONE,secondDice.getValue());
@@ -146,6 +170,22 @@ public class BackgammonPlayerTest {
 		assertNotEquals(BackgammonDice.NONE,secondDice.getValue());
 		assertThat(firstDice.getValue(),IsIn.isIn(new Integer[]{1,2,3,4,5,6}));
 		assertThat(secondDice.getValue(), IsIn.isIn(new Integer[]{1,2,3,4,5,6}));
+	}
+	
+	@Test
+	public void rollDicesDoubleTest(){
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		firstPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(6);
+		when(secondDiceMock.getValue()).thenReturn(6);
+		firstPlayer.rollDices();
+		verify(firstDiceMock).setTimes(BackgammonDice.DOUBLE);
+		verify(secondDiceMock).setTimes(BackgammonDice.DOUBLE);
 	}
 	
 	@Test(expected=Exception.class)

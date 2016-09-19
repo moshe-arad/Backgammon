@@ -16,8 +16,7 @@ public class App
     	ApplicationContext context = new ClassPathXmlApplicationContext("backgammon-context.xml");
     	Backgammon game = context.getBean(Backgammon.class);
     	
-    	game.initGame();
-    	game.play();
+    	game.start();
     	
         ((ClassPathXmlApplicationContext)context).close();
     }

@@ -1,24 +1,23 @@
 package org.moshe.arad.game.classic_board;
 
-import java.util.LinkedList;
-
 import javax.annotation.Resource;
 
-import org.moshe.arad.game.BasicGameable;
+import org.moshe.arad.game.BasicGame;
 import org.moshe.arad.game.instrument.Board;
-import org.moshe.arad.game.player.ClassicGamePlayer;
+import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
-import org.moshe.arad.game.turn.TurnOrderGameable;
+import org.moshe.arad.game.turn.TurnOrderable;
 
-public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameable{
+public abstract class ClassicBoardGame extends BasicGame {
 
 	protected Board board;
 	@Resource
 	private Player firstPlayer;
 	@Resource
 	private Player secondPlayer;
-	@Resource
-	private LinkedList<ClassicGamePlayer> order;
+	
+	private TurnOrderable turnOrderManager;
+	
 	private boolean isPlaying = true;
 
 	@Override
@@ -30,13 +29,10 @@ public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameab
 	public void play(){
 		try{
 			while(isPlaying){
-				Player playerWithTurn = howHasTurn();
+				Player playerWithTurn = turnOrderManager.howHasTurn();
 				playGameTurn(playerWithTurn);
-				if(!board.isWinner(playerWithTurn)) passTurn();
-				else{
-					doWinnerActions();
-					isPlaying = false;
-				}
+				if(!isHasWinner()) turnOrderManager.passTurn();
+				else isPlaying = false;
 			}
 		}
 		catch (Exception e) {
@@ -48,28 +44,21 @@ public abstract class ClassicBoardGame implements BasicGameable, TurnOrderGameab
 	public void doWinnerActions() {
 		System.out.println("we have a winner");
 	}
-	
-	@Override
-	public ClassicGamePlayer howHasTurn() {
-		return (order.peek().getTurn() != null) ? order.peek() : null;  
-	}
 
 	@Override
-	public boolean passTurn() {
-		if(order.peek().getTurn() != null){
-			ClassicGamePlayer played = order.pop();
-			order.peek().setTurn(played.getTurn());
-			played.setTurn(null);
-			order.addLast(played);
-			return true;
+	public boolean isHasWinner() {
+		try{
+			BackgammonPlayer first = (BackgammonPlayer)turnOrderManager.howHasTurn();
+			BackgammonPlayer second = (BackgammonPlayer)turnOrderManager.howIsNextInTurn();
+			return board.isWinner(first) || board.isWinner(second);
 		}
-		else return false;
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
-
-	@Override
-	public Player howIsNextInTurn() {
-		return (order.peek().getTurn() != null) ? order.peekLast() : null;
-	}
+	
+	public abstract void playGameTurn(Player player);
 	
 	public Board getBoard() {
 		return board;

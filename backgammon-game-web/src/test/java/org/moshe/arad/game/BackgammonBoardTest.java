@@ -829,6 +829,41 @@ public class BackgammonBoardTest {
 	}
 	
 	@Test
+	public void isValidMoveWhitePlayerToIndexIsOutNotExactDiceValue2() throws Exception{
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		firstPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(3);
+		when(secondDiceMock.getValue()).thenReturn(6);
+		
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(4));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+		Move move = new Move(new BackgammonBoardLocation(4), new BackgammonBoardLocation(BackgammonBoard.OUT_WHITE));
+		assertFalse(board.isValidMove(firstPlayer, move));
+	}
+	
+	@Test
+	public void isValidMoveWhitePlayerToIndexIsOutNotExactDiceValue3() throws Exception{
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		firstPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(3);
+		when(secondDiceMock.getValue()).thenReturn(3);
+		
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(4));
+		Move move = new Move(new BackgammonBoardLocation(4), new BackgammonBoardLocation(BackgammonBoard.OUT_WHITE));
+		assertFalse(board.isValidMove(firstPlayer, move));
+	}
+	
+	@Test
 	public void isValidMoveWhitePlayerToIndexIsOutCanNotTakeOut() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);

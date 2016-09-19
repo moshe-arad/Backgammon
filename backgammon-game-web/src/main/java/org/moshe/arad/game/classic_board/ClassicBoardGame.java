@@ -7,15 +7,17 @@ import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.TurnOrderable;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class ClassicBoardGame extends BasicGame {
 
+	@Autowired
 	protected Board board;
 	@Resource
 	private Player firstPlayer;
 	@Resource
 	private Player secondPlayer;
-	
+	@Autowired
 	private TurnOrderable turnOrderManager;
 	
 	private boolean isPlaying = true;

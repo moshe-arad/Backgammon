@@ -8,37 +8,37 @@
 
 	<context:annotation-config />
 
-	<bean class="org.moshe.arad.game.instrument.Board" />
-
-	<bean id="firstPlayer" class="org.moshe.arad.game.player.Player">
-		<qualifier value="firstPlayer" />
+	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
+	
+	<bean class="org.moshe.arad.game.instrument.BackgammonBoard" />
+	
+	<bean id="firstPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
 		<constructor-arg name="id" value="021787221" />
 		<constructor-arg name="firstName" value="Moshe" />
 		<constructor-arg name="lastName" value="Arad" />
 		<constructor-arg name="age" value="33" />
-		<constructor-arg name="color" value="0" />
 		<constructor-arg name="turn" ref="turn" />
+		<constructor-arg name="isWhite" value="true" />
 	</bean>
-	
-	<bean id="secondPlayer" class="org.moshe.arad.game.player.Player">
+
+	<bean id="secondPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
 		<qualifier value="secondPlayer" />
-		<constructor-arg name="id" value="056889933" />
+		<constructor-arg name="id" value="023456223" />
 		<constructor-arg name="firstName" value="James" />
 		<constructor-arg name="lastName" value="Brown" />
-		<constructor-arg name="age" value="67" />
-		<constructor-arg name="color" value="1" />
+		<constructor-arg name="age" value="72" />
+		<constructor-arg name="turn" ><null /></constructor-arg>
+		<constructor-arg name="isWhite" value="false" />
 	</bean>
-
-	<bean id="firstDice" class="org.moshe.arad.game.instrument.Dice" />
-
-	<bean id="secondDice" class="org.moshe.arad.game.instrument.Dice" />
-
-	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
-
-	<bean id="turn" class="org.moshe.arad.game.turn.Turn" factory-method="getInstance" />
-
+	
 	<util:list id="order" list-class="java.util.LinkedList">
-		<ref bean="secondPlayer" />
-		<ref bean="firstPlayer" />
+		<ref bean="firstPlayer"/>
+		<ref bean="secondPlayer"/>
 	</util:list>
+	
+	<bean class="org.moshe.arad.game.turn.ClassicGameTurnOrderManager" />
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" />
+	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	
 </beans>

@@ -2,7 +2,7 @@ package org.moshe.arad.game.classic_board.backgammon;
 
 import java.util.Scanner;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
@@ -22,7 +22,7 @@ public class Backgammon extends ClassicBoardGame {
 		board.display();
 		
 		try {
-			while(board.isHasMoreMoves(player)){
+			while(!board.isWinner(player) && board.isHasMoreMoves(player)){
 				Move move = enterNextMove(player, reader);
 				if(board.isValidMove(player, move)){
 					board.executeMove(player, move);
@@ -60,7 +60,7 @@ public class Backgammon extends ClassicBoardGame {
 	private String getMoveInput(String name, Scanner reader, String msg) {
 		System.out.println(name+": " + msg);
 		String input = reader.next();
-		while(!StringUtils.isNumeric(input) || Integer.parseInt(input) < -1 || Integer.parseInt(input) > 24){
+		while(!NumberUtils.isNumber(input) || Integer.parseInt(input) <= -2 || Integer.parseInt(input) >= 25){
 			System.out.println("Your input is invalid. try again.");
 			input = reader.next();
 		}

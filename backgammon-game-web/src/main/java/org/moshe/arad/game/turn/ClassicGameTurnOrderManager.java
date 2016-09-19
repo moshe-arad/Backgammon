@@ -2,11 +2,14 @@ package org.moshe.arad.game.turn;
 
 import java.util.LinkedList;
 
+import javax.annotation.Resource;
+
 import org.moshe.arad.game.player.ClassicGamePlayer;
 import org.moshe.arad.game.player.Player;
 
 public class ClassicGameTurnOrderManager implements TurnOrderable {
 
+	@Resource
 	private LinkedList<ClassicGamePlayer> order;
 	
 	@Override

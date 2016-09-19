@@ -316,14 +316,14 @@ public class BackgammonBoard implements Board {
 		}
 	}
 	
-	private String printHowManyPawnsOutside() {
+	private void printHowManyPawnsOutside() {
 		StringBuilder sb = new StringBuilder();
 		
 		if (eatenBlacks.size() > 0)
 			sb.append("  There are " + eatenBlacks.size() + " black pawns outside the game.").append("\n");
 		if (eatenWhites.size() > 0)
 			sb.append("  There are " + eatenWhites.size() + " white pawns outside the game.").append("\n");
-		return sb.toString();
+		System.out.println(sb.toString());
 	}
 
 	private void printUpperBoard(BackgammonBoard boardCopy, StringBuilder sb) {

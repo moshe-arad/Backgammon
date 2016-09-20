@@ -311,7 +311,7 @@ public class BackgammonBoard implements Board {
 	}
 	
 	private boolean isCanSetOnDestination(int locationIndex, BackgammonPawn backgammonPawn) {
-		return (!(board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn)));
+		return (board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn)) ? false : true;
 	}
 	
 	private BackgammonPawn popPawnFromEatenQueueOrPopFromColumn(int fromIndex){

@@ -1,55 +1,29 @@
 package org.moshe.arad.game.player;
 
-import org.moshe.arad.game.instrument.Color;
+import org.moshe.arad.game.instrument.BackgammonPawn;
+import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.turn.Turn;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class Player {
-
-	private String id;
-	private String firstName;
-	private String lastName;
-	private int age;
-	private Turn turn;
-	private Color color;
-
-	public Player(String id, String firstName, String lastName, int age, Turn turn, int color) {
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.age = age;
-		this.turn = turn;
-		this.color = Color.getColorByInt(color);
-	}
-
-
-
-	@Override
-	public String toString() {
-		return "Player [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", age=" + age + "]";
-	}
+/**
+ * 
+ * @author moshe-arad
+ *
+ */
+public interface Player {
 	
-	public void setTurn(Turn turn) {
-		this.turn = turn;
-	}
+	public void makePlayed(Move move) throws Exception;
+	
+	public Turn getTurn();
 
-	public Turn getTurn() {
-		return turn;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public Color getColor() {
-		return color;
-	}
-
-	public void setColor(Color color) {
-		this.color = color;
-	}
+	public void setTurn(Turn turn);
+	
+	/**
+	 * specific for backgammon
+	 */
+	public void rollDices(); 
+	/**
+	 * specific for backgammon
+	 * @throws Exception 
+	 */
+	public boolean isCanPlayWith(BackgammonPawn pawn) throws Exception;
 }

@@ -2,27 +2,36 @@ package org.moshe.arad.game.move;
 
 public class Move {
 
-	private int from;
-	private int to;
+	private BoardLocation from;
+	private BoardLocation to;
 	
 	public Move() {
 	}
 	
-	public Move(int from, int to) {
+	public Move(BoardLocation from, BoardLocation to) {
 		this.from = from;
+		this.to = to;
+	}
+
+	public BoardLocation getFrom() {
+		return from;
+	}
+
+	public BoardLocation getTo() {
+		return to;
+	}
+
+	/**
+	 * 
+	 * TODO remove setters
+	 */
+	public void setFrom(BoardLocation from) {
+		this.from = from;
+	}
+
+	public void setTo(BoardLocation to) {
 		this.to = to;
 	}
 	
-	public void setFrom(int from) {
-		this.from = from;
-	}
-	public void setTo(int to) {
-		this.to = to;
-	}
-	public int getFrom() {
-		return from;
-	}
-	public int getTo() {
-		return to;
-	}
+	
 }

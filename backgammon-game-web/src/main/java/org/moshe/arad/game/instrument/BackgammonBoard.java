@@ -161,7 +161,7 @@ public class BackgammonBoard implements Board {
 			if (locationIndex < 0 || locationIndex > LENGTH - 1) {
 				return false;
 			} else {
-				if ((board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn))) {
+				if (!isCanSetOnDestination(locationIndex, backgammonPawn)) {
 					logger.warn("Can't place different kind of pawns on the same column.");
 					return false;
 				} else if (board.get(locationIndex).size() == MAX_COLUMN) {
@@ -308,6 +308,10 @@ public class BackgammonBoard implements Board {
 	
 	public int getWhiteEatenSize(){
 		return eatenWhites.size();
+	}
+	
+	private boolean isCanSetOnDestination(int locationIndex, BackgammonPawn backgammonPawn) {
+		return (!(board.get(locationIndex).size() > 0) && (board.get(locationIndex).peek() != null) && (!board.get(locationIndex).peek().equals(backgammonPawn)));
 	}
 	
 	private BackgammonPawn popPawnFromEatenQueueOrPopFromColumn(int fromIndex){

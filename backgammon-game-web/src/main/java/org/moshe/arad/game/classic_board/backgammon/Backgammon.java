@@ -6,6 +6,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
+import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
@@ -18,14 +19,17 @@ public class Backgammon extends ClassicBoardGame {
 	@Override
 	public void playGameTurn(Player player) {
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
+		Dice first = backgammonPlayer.getTurn().getFirstDice();
+		Dice second = backgammonPlayer.getTurn().getSecondDice();
 		Scanner reader = new Scanner(System.in);
 		String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName() + ": ";
+		
 		logger.info(name + "it's your turn. roll the dices.");
 		player.rollDices();
-		logger.info(name + "you rolled - " + backgammonPlayer.getTurn().getFirstDice().getValue() + ": " + backgammonPlayer.getTurn().getSecondDice().getValue());
+		logger.info(name + "you rolled - " + first.getValue() + ": " + second.getValue());
 		
 		try {
-			while(!board.isWinner(player) && board.isHasMoreMoves(player)){
+			while(isCanKeepPlay(player)){
 				logger.info("The board as follows:");
 				logger.info(board);
 				Move move = enterNextMove(player, reader);
@@ -40,6 +44,10 @@ public class Backgammon extends ClassicBoardGame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private boolean isCanKeepPlay(Player player) throws Exception {
+		return !board.isWinner(player) && board.isHasMoreMoves(player);
 	}
 	
 	/**

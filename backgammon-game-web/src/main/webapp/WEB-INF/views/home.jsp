@@ -6,11 +6,11 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Insert title here</title>
-	<link rel="stylesheet" href='<spring:url value="/resources/bootstrap/bootstrap.min.css"/>' type="text/css" />
-	<link rel="stylesheet" href='<spring:url value="/resources/css/home.css"/>' type="text/css" />
-	<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
-	<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
+		<title>Arad's Backgammon Game</title>
+		<link rel="stylesheet" href='<spring:url value="/resources/bootstrap/bootstrap.min.css"/>' type="text/css" />
+		<link rel="stylesheet" href='<spring:url value="/resources/css/home.css"/>' type="text/css" />
+		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
+		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
 	</head>
 	<body>
 		<nav class="navbar navbar-inverse">

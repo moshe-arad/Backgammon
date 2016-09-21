@@ -11,4 +11,9 @@ public class HomeController {
 	public String goHome(){
 		return "home";
 	}
+	
+	@RequestMapping(value = "/game")
+	public String goGame(){
+		return "backgammon";
+	}
 }

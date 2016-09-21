@@ -1,0 +1,13 @@
+.board-edge-black{
+	background-color:black;
+	color:black;
+}
+
+.board-edge-brown{
+	background-color:brown;
+	color:brown;
+}
+
+td{
+	border-width: 0px !important;
+}

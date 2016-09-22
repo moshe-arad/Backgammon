@@ -16,29 +16,101 @@
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-1 col-md-1"></div>
-					<div class="col-lg-10 col-md-10">
+				
+					<div class="col-lg-5">
 						<div class="navbar-header"><h1>Arad's Backgammon Game</h1></div>
-						<div class="navbar-right"><h3>Welcome</h3></div>
 					</div>
-					<div class="col-lg-1 col-md-1"></div>
+					
+					<div class="col-lg-7">
+						<form class="navbar-form navbar-right">
+							
+							<div class="form-group">
+								<label for="userName">User Name:</label>
+								<br/>
+								<input type="text" class="form-control" id="userName" placeholder="User Name">
+							</div>
+							
+							<span>&nbsp;&nbsp;&nbsp;</span>
+							
+							<div class="form-group">
+								<label for="password">Password:</label>
+								<br/>
+								<input type="password" class="form-control" id="password" placeholder="Password">
+							</div>
+							
+							<span>&nbsp;&nbsp;&nbsp;</span>
+							
+							<div class="form-group">
+								<br/>
+								<button type="submit" class="btn btn-primary">Log In</button>
+							</div>
+							
+						</form>
+					</div>
+					
 				</div>
 			</div>
 		</nav>
 		
-		<div class="jumbotron">
-			<div class="container">
-				<h1>Hello & Welocme to Arad's Arcade Games.</h1>
-				<p>This is an demo project, 
-				which gives you the ability to play backgammon against 
-				other players online.</p>
-				<p>Go write a head and register. If you're already familiar with
-				 this demo project click start play button.</p>
-				 <h3>Enjoy!!! ;-)</h3>
-				 <br/>
-				 <button type="button" class="btn btn-primary">Sign-in</button>
-				 &nbsp;&nbsp;&nbsp;
-				 <button type="button" class="btn btn-primary">Register</button>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-7">
+					<div class="jumbotron">
+						<h1>Hello & Welocme to Arad's Arcade Games.</h1>
+						<p>This is an demo project, 
+						which gives you the ability to play backgammon against 
+						other players online.</p>
+						<p>Go write a head and register. If you're already familiar with
+				 		this demo project click start play button.</p>
+				 		<h3>Enjoy!!! ;-)</h3>
+				 		<br/>
+				 		<!-- 
+				 		<button type="button" class="btn btn-primary">Sign-in</button>
+				 		&nbsp;&nbsp;&nbsp;
+				 		<button type="button" class="btn btn-primary">Register</button>
+				 		 -->
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<form>
+						<div class="form-group">
+							<label for="firstName">First Name:</label>
+							<input type="text" class="form-control" id="firstName" placeholder="Your First Name">
+						</div>
+					
+						<div class="form-group">
+							<label for="lastName">Last Name:</label>
+							<input type="text" class="form-control" id="lastName" placeholder="Your Last Name">
+						</div>
+					
+						<!-- JQuery email validation -->
+						<div class="form-group">
+							<label for="email">Email:</label>
+							<input type="email" class="form-control" id="email" placeholder="Your Email">
+						</div>
+					
+						<!-- JQuery make sure available user name -->
+						<div class="form-group">
+							<label for="userName">User Name:</label>
+							<input type="text" class="form-control" id="userName" placeholder="User Name">
+						</div>
+						
+						<!-- JQuery validate confime password -->
+						<!-- JQuery password validation -->
+						<div class="form-group">
+							<label for="password">Password:</label>
+							<input type="password" class="form-control" id="password" placeholder="Password">
+						</div>
+					
+						<div class="form-group">
+							<label for="confirmPassword">Confirm Password:</label>
+							<input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+						</div>
+					
+						<button type="submit" class="btn btn-primary">Register</button>
+					</form>
+				</div>
+				<div class="col-lg-1"></div>
 			</div>
 		</div>
 	</body>

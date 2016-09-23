@@ -5,8 +5,16 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 	<security:http auto-config="true" use-expressions="false">
-		<security:intercept-url pattern="/**" access="ROLE_USER"/>
+		<security:form-login login-page="/home" login-processing-url="/home" 
+		username-parameter="userNameLogin" password-parameter="passwordLogin"
+		default-target-url="/game/"
+		authentication-failure-url="/home?error=true" />
+		
+		<security:logout logout-url="/logout" logout-success-url="/home?logout=true"/>
+		<security:intercept-url pattern="/game" access="ROLE_USER"/>
+		<security:intercept-url pattern="/game/*" access="ROLE_USER"/>
 	</security:http>
 	
 	<security:authentication-manager>

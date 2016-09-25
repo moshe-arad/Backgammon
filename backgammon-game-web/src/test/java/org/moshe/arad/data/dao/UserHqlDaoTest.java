@@ -13,8 +13,8 @@ import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.data.dao.hql.UserHqlDaoImpl;
-import org.moshe.arad.data.entities.User;
+import org.moshe.arad.repositories.dao.hql.UserHqlDaoImpl;
+import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -40,11 +40,11 @@ public class UserHqlDaoTest {
 	
 	@Test
 	public void findByFirstNameTest(){
-		User user1 = new User("Moshe", "lastName1", "email1", "userName1", "password1",
+		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
 				"role1", new Date(), 1L, new Date(), 1L);
-		User user2 = new User("Jimi", "lastName2", "email2", "userName2", "password2",
+		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
 				"role2", new Date(), 2L, new Date(), 2L);
-		User user3 = new User("Moshe", "lastName3", "email3", "userName3", "password3",
+		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
 				"role3", new Date(), 3L, new Date(), 3L);
 	
 		try{
@@ -54,8 +54,8 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<User> users = userHqlDao.findByFirstName("Moshe");
-			for(User user:users)
+			List<GameUser> users = userHqlDao.findByFirstName("Moshe");
+			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(2, users.size());
 		}
@@ -72,11 +72,11 @@ public class UserHqlDaoTest {
 	
 	@Test
 	public void findAllTest(){
-		User user1 = new User("Moshe", "lastName1", "email1", "userName1", "password1",
+		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
 				"role1", new Date(), 1L, new Date(), 1L);
-		User user2 = new User("Jimi", "lastName2", "email2", "userName2", "password2",
+		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
 				"role2", new Date(), 2L, new Date(), 2L);
-		User user3 = new User("Moshe", "lastName3", "email3", "userName3", "password3",
+		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
 				"role3", new Date(), 3L, new Date(), 3L);
 	
 		try{
@@ -86,9 +86,40 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<User> users = userHqlDao.findAll();
+			List<GameUser> users = userHqlDao.findAll();
 			
 			assertEquals(3, users.size());
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+			throw ex;
+		}
+		finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void findByUserNameTest(){
+		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
+				"role1", new Date(), 1L, new Date(), 1L);
+		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
+				"role2", new Date(), 2L, new Date(), 2L);
+		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
+				"role3", new Date(), 3L, new Date(), 3L);
+	
+		try{
+			tx.begin();
+			session.save(user1);
+			session.save(user2);
+			session.save(user3);
+			tx.commit();
+			
+			GameUser user = userHqlDao.findByUserName("userName2");
+			
+			assertEquals("userName2", user.getUserName());
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());

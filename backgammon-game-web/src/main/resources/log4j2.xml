@@ -2,7 +2,7 @@
 <Configuration status="warn">
   <Appenders>
     <Console name="Backgammon_OUT" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %red{%-5level %logger{36}} - %blue{%msg}%n"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %red{%-5level %logger{36} [line - %L]} - %blue{%msg}%n"/>
     </Console>
   </Appenders>
   <Loggers>

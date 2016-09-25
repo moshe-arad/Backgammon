@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao.interfaces;
+package org.moshe.arad.repositories.dao.interfaces;
 
 import java.util.List;
 

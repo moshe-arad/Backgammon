@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao;
+package org.moshe.arad.repositories.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.moshe.arad.data.dao.interfaces.Dao;
+import org.moshe.arad.repositories.dao.interfaces.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, ID> {

@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao.hql;
+package org.moshe.arad.repositories.dao.hql;
 
 import java.util.List;
 
@@ -7,24 +7,25 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.moshe.arad.data.dao.AbstractDao;
-import org.moshe.arad.data.dao.interfaces.UserDao;
-import org.moshe.arad.data.entities.User;
+import org.moshe.arad.repositories.dao.AbstractDao;
+import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.entities.GameUser;
 
-public class UserHqlDaoImpl extends AbstractDao<User, Long> implements UserDao {
+
+public class UserHqlDaoImpl extends AbstractDao<GameUser, Long> implements UserDao {
 
 private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 	
 	@Override
-	public List<User> findByFirstName(String firstName) {
-		List<User> usersByFirstName = null;
+	public List<GameUser> findByFirstName(String firstName) {
+		List<GameUser> usersByFirstName = null;
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
 		
 		try{
 			tx.begin();
 			@SuppressWarnings("unchecked")
-			Query<User> query = session.createQuery("select u from User u" +
+			Query<GameUser> query = session.createQuery("select u from GameUser u" +
 			" where u.firstName = ?");
 			
 			query.setParameter(0, firstName);
@@ -46,14 +47,14 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public List<User> findAll() {
+	public List<GameUser> findAll() {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
-		List<User> users = null;
+		List<GameUser> users = null;
 		
 		try{
 			tx.begin();
-			Query<User> query = session.createQuery("select u from User u", User.class);
+			Query<GameUser> query = session.createQuery("select u from GameUser u", GameUser.class);
 			users = query.list();
 			tx.commit();
 		}
@@ -76,7 +77,7 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		
 		try{
 			tx.begin();
-			Query query = session.createQuery("delete from User");
+			Query query = session.createQuery("delete from GameUser");
 			int rows = query.executeUpdate();
 			tx.commit();
 			logger.info(rows + " rows affected, and deleted.");
@@ -89,6 +90,32 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		finally {
 			session.close();
 		}		
+	}
+
+	@Override
+	public GameUser findByUserName(String userName) {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		GameUser user = null;
+		
+		try{
+			tx.begin();
+			Query query = session.createQuery("select u from GameUser u"
+					+ "where u.userName = ?");
+			query.setParameter(0, userName);
+			user = (GameUser) query.getSingleResult();
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}
+		
+		return user;
 	}
 
 }

@@ -19,7 +19,7 @@
 		<property name="dataSource" ref="myDataSource" />
 		<property name="annotatedClasses">
 			<list>
-				<value>org.moshe.arad.data.entities.User</value>
+				<value>org.moshe.arad.repositories.entities.GameUser</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -30,6 +30,6 @@
 		</property>
 	</bean>
 	
-	<bean class="org.moshe.arad.data.dao.criteria.UserCriteriaDaoImpl" />
-	<bean class="org.moshe.arad.data.dao.hql.UserHqlDaoImpl" />
+	<bean class="org.moshe.arad.repositories.dao.criteria.UserCriteriaDaoImpl" />
+	<bean class="org.moshe.arad.repositories.dao.hql.UserHqlDaoImpl" />
 </beans>

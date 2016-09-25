@@ -1,4 +1,4 @@
-package org.moshe.arad.data.entities;
+package org.moshe.arad.repositories.entities;
 
 import java.util.Date;
 
@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="users")
-public class User {
+@Table(name="game_users")
+public class GameUser {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -45,10 +45,10 @@ public class User {
 	@Column(name="created_by")
 	private Long createdBy;
 
-	public User() {
+	public GameUser() {
 	}
 	
-	public User(String firstName, String lastName, String email, String userName, String password,
+	public GameUser(String firstName, String lastName, String email, String userName, String password,
 			String role, Date lastUpdatedDate, Long lastUpdatedBy, Date createdDate, Long createdBy) {
 		this.firstName = firstName;
 		this.lastName = lastName;

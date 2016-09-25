@@ -17,8 +17,8 @@
 	<bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 		<property name="dataSource" ref="myDataSource" />
 		<property name="annotatedClasses">
-			<list>
-				<value>org.moshe.arad.data.entities.User</value>
+			<list>			
+				<value>org.moshe.arad.repositories.entities.GameUser</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -28,4 +28,6 @@
 			</props>
 		</property>
 	</bean>
+	
+	<bean class="org.moshe.arad.repositories.dao.criteria.UserCriteriaDaoImpl" />
 </beans>

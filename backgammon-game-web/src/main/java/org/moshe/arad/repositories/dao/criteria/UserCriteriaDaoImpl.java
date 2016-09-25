@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao.criteria;
+package org.moshe.arad.repositories.dao.criteria;
 
 import java.util.List;
 
@@ -10,26 +10,26 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.query.Query;
-import org.moshe.arad.data.dao.AbstractDao;
-import org.moshe.arad.data.dao.interfaces.UserDao;
-import org.moshe.arad.data.entities.User;
+import org.moshe.arad.repositories.dao.AbstractDao;
+import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.entities.GameUser;
 
-public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements UserDao {
+
+public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements UserDao {
 
 	private final Logger logger = LogManager.getLogger(UserCriteriaDaoImpl.class);
 	
 	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override
-	public List<User> findByFirstName(String firstName) {
+	public List<GameUser> findByFirstName(String firstName) {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
-		List<User> users = null;
+		List<GameUser> users = null;
 				
 		try{
 			tx.begin();
 			Criterion firstNameCriterion = Restrictions.eq("firstName", firstName);			
-			Criteria firstNameCriteria = session.createCriteria(User.class).addOrder(Order.asc("firstName"));
+			Criteria firstNameCriteria = session.createCriteria(GameUser.class).addOrder(Order.asc("firstName"));
 			firstNameCriteria.add(firstNameCriterion);
 			users = firstNameCriteria.list();
 			tx.commit();
@@ -48,14 +48,14 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public List<User> findAll() {
+	public List<GameUser> findAll() {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
-		List<User> users = null;
+		List<GameUser> users = null;
 		
 		try{
 			tx.begin();
-			Criteria usersCriteria = session.createCriteria(User.class);
+			Criteria usersCriteria = session.createCriteria(GameUser.class);
 			users = usersCriteria.list();
 			tx.commit();
 		}
@@ -78,10 +78,10 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 		
 		try{
 			tx.begin();
-			Criteria usersCriteria = session.createCriteria(User.class);
-			List<User> usersToDelete = usersCriteria.list();
+			Criteria usersCriteria = session.createCriteria(GameUser.class);
+			List<GameUser> usersToDelete = usersCriteria.list();
 			
-			for(User user:usersToDelete)
+			for(GameUser user:usersToDelete)
 				session.delete(user);
 			
 			tx.commit();
@@ -94,6 +94,31 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 		finally {
 			session.close();
 		}
+	}
+
+	@Override
+	public GameUser findByUserName(String userName) {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		GameUser user = null;
+		
+		try{
+			tx.begin();
+			Criterion userNameCriterion = Restrictions.eq("userName", userName);
+			Criteria userNameCriteria = session.createCriteria(GameUser.class).add(userNameCriterion);
+			user = (GameUser) userNameCriteria.list().get(0);
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}
+		
+		return user;
 	}
 
 }

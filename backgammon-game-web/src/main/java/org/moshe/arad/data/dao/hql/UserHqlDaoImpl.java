@@ -30,6 +30,7 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 			query.setParameter(0, firstName);
 			
 			usersByFirstName = query.getResultList();
+			tx.commit();
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
@@ -51,8 +52,10 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		List<User> users = null;
 		
 		try{
+			tx.begin();
 			Query<User> query = session.createQuery("select u from User u", User.class);
 			users = query.list();
+			tx.commit();
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -65,14 +68,17 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		return users;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void deleteAll() {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
 		
 		try{
-			Query<User> query = session.createQuery("delete from User", User.class);
+			tx.begin();
+			Query query = session.createQuery("delete from User");
 			int rows = query.executeUpdate();
+			tx.commit();
 			logger.info(rows + " rows affected, and deleted.");
 		}
 		catch(Exception ex){

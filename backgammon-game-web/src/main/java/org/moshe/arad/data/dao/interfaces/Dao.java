@@ -19,7 +19,9 @@ public interface Dao<T, ID> {
 	
 	public void delete(T entity);
 	
+	public void deleteAll();
+	
 	public void flush();
 	
-	public void clear();	
+	public void clear();
 }

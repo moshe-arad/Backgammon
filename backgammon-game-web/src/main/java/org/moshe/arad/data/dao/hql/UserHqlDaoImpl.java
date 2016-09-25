@@ -65,4 +65,24 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		return users;
 	}
 
+	@Override
+	public void deleteAll() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		
+		try{
+			Query<User> query = session.createQuery("delete from User", User.class);
+			int rows = query.executeUpdate();
+			logger.info(rows + " rows affected, and deleted.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}		
+	}
+
 }

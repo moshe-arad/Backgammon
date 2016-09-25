@@ -45,6 +45,23 @@ public class User {
 	@Column(name="created_by")
 	private Long createdBy;
 
+	public User() {
+	}
+	
+	public User(String firstName, String lastName, String email, String userName, String password,
+			String role, Date lastUpdatedDate, Long lastUpdatedBy, Date createdDate, Long createdBy) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.userName = userName;
+		this.password = password;
+		this.role = role;
+		this.lastUpdatedDate = lastUpdatedDate;
+		this.lastUpdatedBy = lastUpdatedBy;
+		this.createdDate = createdDate;
+		this.createdBy = createdBy;
+	}
+
 	public Long getUserId() {
 		return userId;
 	}

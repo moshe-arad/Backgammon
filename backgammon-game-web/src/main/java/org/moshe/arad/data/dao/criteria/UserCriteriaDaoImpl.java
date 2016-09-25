@@ -32,6 +32,7 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 			Criteria firstNameCriteria = session.createCriteria(User.class).addOrder(Order.asc("firstName"));
 			firstNameCriteria.add(firstNameCriterion);
 			users = firstNameCriteria.list();
+			tx.commit();
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -56,6 +57,7 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 			tx.begin();
 			Criteria usersCriteria = session.createCriteria(User.class);
 			users = usersCriteria.list();
+			tx.commit();
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -66,6 +68,32 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 			session.close();
 		}
 		return users;
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@Override
+	public void deleteAll() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		
+		try{
+			tx.begin();
+			Criteria usersCriteria = session.createCriteria(User.class);
+			List<User> usersToDelete = usersCriteria.list();
+			
+			for(User user:usersToDelete)
+				session.delete(user);
+			
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}
 	}
 
 }

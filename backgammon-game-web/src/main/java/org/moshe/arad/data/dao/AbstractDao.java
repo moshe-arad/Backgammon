@@ -26,12 +26,18 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 	
 	@Override
 	public Session getSession() {
-		return sessionFactory.getCurrentSession();
+		try{
+			return sessionFactory.getCurrentSession();
+		}
+		catch(Exception ex){
+			return sessionFactory.openSession();
+		}
+		
 	}
 
 	@Override
 	public Transaction getTransaction() {
-		return sessionFactory.getCurrentSession().getTransaction();
+		return getSession().getTransaction();
 	}
 	
 	@Override
@@ -99,6 +105,9 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 		}
 	}
 
+	@Override
+	public abstract void deleteAll();
+	
 	@Override
 	public void flush() {
 		getSession().flush();

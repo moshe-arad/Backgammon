@@ -43,4 +43,26 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		return usersByFirstName;
 	}
 
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<User> findAll() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<User> users = null;
+		
+		try{
+			Query<User> query = session.createQuery("select u from User u", User.class);
+			users = query.list();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}
+		return users;
+	}
+
 }

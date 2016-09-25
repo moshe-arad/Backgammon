@@ -57,24 +57,7 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 	}
 
 	@Override
-	public List<T> findAll() {
-		Session session = getSession();
-		Transaction tx = session.getTransaction();
-		
-		try{
-			tx.begin();
-			session.saveOrUpdate(entity);
-			tx.commit();
-		}
-		catch(Exception ex){
-			logger.error(ex.getMessage());
-			logger.error(ex);
-			tx.rollback();
-		}
-		finally{
-			session.close();
-		}
-	}
+	public abstract List<T> findAll();
 
 	@Override
 	public void save(T entity) {

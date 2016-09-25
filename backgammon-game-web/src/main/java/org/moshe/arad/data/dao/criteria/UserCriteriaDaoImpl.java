@@ -4,8 +4,12 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.moshe.arad.data.dao.AbstractDao;
 import org.moshe.arad.data.dao.interfaces.UserDao;
@@ -15,32 +19,53 @@ public class UserCriteriaDaoImpl extends AbstractDao<User, Long> implements User
 
 	private final Logger logger = LogManager.getLogger(UserCriteriaDaoImpl.class);
 	
+	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override
 	public List<User> findByFirstName(String firstName) {
-//		List<User> usersByFirstName = null;
-//		Session session = getSession();
-//		Transaction tx = session.getTransaction();
-//		
-//		try{
-//			tx.begin();
-//			@SuppressWarnings("unchecked")
-//			Query<User> query = session.createQuery("select u from User u" +
-//			" where u.firstName = ?");
-//			
-//			query.setParameter(0, firstName);
-//			
-//			usersByFirstName = query.getResultList();
-//		}
-//		catch (Exception e) {
-//			logger.error(e.getMessage());
-//			logger.error(e);
-//			tx.rollback();
-//		}
-//		finally{
-//			session.close();
-//		}
-//		
-//		return usersByFirstName;
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<User> users = null;
+				
+		try{
+			tx.begin();
+			Criterion firstNameCriterion = Restrictions.eq("firstName", firstName);			
+			Criteria firstNameCriteria = session.createCriteria(User.class).addOrder(Order.asc("firstName"));
+			firstNameCriteria.add(firstNameCriterion);
+			users = firstNameCriteria.list();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		
+		return users;
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@Override
+	public List<User> findAll() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<User> users = null;
+		
+		try{
+			tx.begin();
+			Criteria usersCriteria = session.createCriteria(User.class);
+			users = usersCriteria.list();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally {
+			session.close();
+		}
+		return users;
 	}
 
 }

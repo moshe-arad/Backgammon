@@ -44,8 +44,6 @@
 							
 							<span>&nbsp;&nbsp;&nbsp;</span>
 							
-							<sec:csrfInput/>
-							
 							<div class="form-group">
 								<br/>
 								<button type="submit" class="btn btn-primary">Log In</button>
@@ -58,6 +56,7 @@
 							<c:if test="${param.logout != null}">
 								<p>You have successfully logged out.</p>
 							</c:if>
+							<sec:csrfInput/>
 						</form>
 						
 					</div>

@@ -100,7 +100,7 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		
 		try{
 			tx.begin();
-			Query query = session.createQuery("select u from GameUser u"
+			Query query = session.createQuery("select u from GameUser u "
 					+ "where u.userName = ?");
 			query.setParameter(0, userName);
 			user = (GameUser) query.getSingleResult();

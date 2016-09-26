@@ -7,4 +7,5 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="org.moshe.arad" />
+	<import resource="classpath:persistence-context.xml"/>
 </beans>

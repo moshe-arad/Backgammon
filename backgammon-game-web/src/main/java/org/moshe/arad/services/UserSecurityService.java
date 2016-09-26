@@ -18,7 +18,6 @@ public class UserSecurityService implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		GameUser user = userSecurityRepo.loadUserByUsername(userName);
-		return new User(user.getUserName(), user.getPassword(), AuthorityUtils.createAuthorityList(user.getRole()));
+		return userSecurityRepo.loadUserByUsername(userName);
 	}
 }

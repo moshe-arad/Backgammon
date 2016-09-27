@@ -66,14 +66,16 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 	public abstract List<T> findAll();
 
 	@Override
-	public void save(T entity) {
+	public boolean save(T entity) {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
+		boolean isSaved = false;
 		
 		try{
 			tx.begin();
 			session.saveOrUpdate(entity);
 			tx.commit();
+			isSaved = true;
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -83,6 +85,7 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 		finally{
 			session.close();
 		}
+		return isSaved;
 	}
 
 	@Override

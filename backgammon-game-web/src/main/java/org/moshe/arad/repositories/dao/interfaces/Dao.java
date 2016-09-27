@@ -15,7 +15,7 @@ public interface Dao<T, ID> {
 	
 	public List<T> findAll();
 	
-	public void save(T entity);
+	public boolean save(T entity);
 	
 	public void delete(T entity);
 	

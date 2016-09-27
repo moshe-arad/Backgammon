@@ -67,6 +67,14 @@ public class GameUser implements UserDetails{
 		this.createdBy = createdBy;
 	}
 
+	@Override
+	public String toString() {
+		return "GameUser [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", userName=" + userName + ", password=" + password + ", role=" + role + ", lastUpdatedDate="
+				+ lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy="
+				+ createdBy + "]";
+	}
+	
 	public Long getUserId() {
 		return userId;
 	}
@@ -163,7 +171,7 @@ public class GameUser implements UserDetails{
 	@Override
 	public String getUsername() {
 		return this.userName;
-	}
+	}	
 
 	/**
 	 * TODO fill logic the these 4 method of UserDetails.

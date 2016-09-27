@@ -15,8 +15,6 @@
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
 	</head>
 	<body>
-		<c:url value="/home" var="loginVar"/>
-		
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div class="row">
@@ -26,6 +24,7 @@
 					</div>
 					
 					<div class="col-lg-7">
+						<c:url value="/login" var="loginVar"/>
 						<form id="loginForm" class="navbar-form navbar-right" method="POST" action="${loginVar}">
 							
 							<div class="form-group">
@@ -83,34 +82,40 @@
 					<h1>Sign Up.</h1>
 					<br/>
 					
-					<form method="POST" action="${loginVar}">
+					<c:url value="/register" var="registerVar"/>
+					<form method="POST" action="${registerVar}">
 						<div class="form-group">
 							<label for="firstName">First Name:</label>
-							<input type="text" class="form-control" id="firstName" placeholder="Your First Name">							
+							<input type="text" class="form-control" id="firstName" 
+								placeholder="Your First Name" name="firstName">							
 						</div>
 					
 						<div class="form-group">
 							<label for="lastName">Last Name:</label>
-							<input type="text" class="form-control" id="lastName" placeholder="Your Last Name">
+							<input type="text" class="form-control" id="lastName" 
+								placeholder="Your Last Name" name="lastName">
 						</div>
 					
 						<!-- JQuery email validation -->
 						<div class="form-group">
 							<label for="email">Email:</label>
-							<input type="email" class="form-control" id="email" placeholder="Your Email">
+							<input type="email" class="form-control" id="email" 
+								placeholder="Your Email" name="email">
 						</div>
 					
 						<!-- JQuery make sure available user name -->
 						<div class="form-group">
 							<label for="userName">User Name:</label>
-							<input type="text" class="form-control" id="userName" placeholder="User Name">
+							<input type="text" class="form-control" id="userName" 
+								placeholder="User Name" name="userName">
 						</div>
 						
 						<!-- JQuery validate confime password -->
 						<!-- JQuery password validation -->
 						<div class="form-group">
 							<label for="password">Password:</label>
-							<input type="password" class="form-control" id="password" placeholder="Password">
+							<input type="password" class="form-control" id="password" 
+								placeholder="Password" name="password">
 						</div>
 					
 						<div class="form-group">

@@ -8,20 +8,23 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:component-scan base-package="org.moshe.arad.services" />
+	
 	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
+	
 	<security:http auto-config="true" use-expressions="false">
-		<security:form-login login-page="/home" login-processing-url="/home" 
+		<security:form-login login-page="/login" login-processing-url="/login" 
 		username-parameter="userNameLogin" password-parameter="passwordLogin"
-		default-target-url="/game/"
+		default-target-url="/backgammon/"
 		authentication-failure-url="/home?error=true" />
 		
 		<security:logout logout-url="/logout" logout-success-url="/home?logout=true"/>
-		<security:intercept-url pattern="/game" access="ROLE_USER"/>
-		<security:intercept-url pattern="/game/*" access="ROLE_USER"/>
+		<security:intercept-url pattern="/backgammon" access="ROLE_USER"/>
+		<security:intercept-url pattern="/backgammon/*" access="ROLE_USER"/>
 	</security:http>
 	
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="userSecurityService">
 		</security:authentication-provider>
 	</security:authentication-manager>
+	
 </beans>

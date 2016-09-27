@@ -1,5 +1,6 @@
 package org.moshe.arad.repositories.dao.hql;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -117,5 +118,40 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		
 		return user;
 	}
+	
+	@Override
+	public boolean save(GameUser entity) {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		boolean isSaved = false;
+		
+		try{
+			tx.begin();
+			
+			createAndLastUpdate(entity);
+			
+			session.saveOrUpdate(entity);
+			tx.commit();
+			isSaved = true;
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		return isSaved;
+	}
 
+
+	private void createAndLastUpdate(GameUser entity) {
+		entity.setLastUpdatedDate(new Date());
+		entity.setLastUpdatedBy(0L);
+		if(entity.getUserId() == null){
+			entity.setCreatedDate(new Date());
+			entity.setCreatedBy(0L);
+		}
+	}
 }

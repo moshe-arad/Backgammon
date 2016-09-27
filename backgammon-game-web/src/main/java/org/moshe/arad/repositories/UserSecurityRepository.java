@@ -14,4 +14,8 @@ public class UserSecurityRepository {
 	public GameUser loadUserByUsername(String userName){
 		return userDao.findByUserName(userName);
 	}
+
+	public boolean registerNewUser(GameUser gameUser) {
+		return userDao.save(gameUser);
+	}
 }

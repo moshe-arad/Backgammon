@@ -1,5 +1,9 @@
 package org.moshe.arad.repositories;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.moshe.arad.repositories.dao.interfaces.UserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +21,10 @@ public class UserSecurityRepository {
 
 	public boolean registerNewUser(GameUser gameUser) {
 		return userDao.save(gameUser);
+	}
+
+	public Set<String> getAllUserNames() {
+		Collection<String> userNamesCollection = userDao.getAllUserNames();
+		return new HashSet<String>(userNamesCollection);
 	}
 }

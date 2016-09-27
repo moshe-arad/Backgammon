@@ -2,9 +2,11 @@ package org.moshe.arad.repositories.dao.hql;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -153,5 +155,29 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 			entity.setCreatedDate(new Date());
 			entity.setCreatedBy(0L);
 		}
+	}
+	
+	@Override
+	public List<String> getAllUserNames() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<String> userNames = null;
+	
+		try{
+			tx.begin();
+			Query<String> query = session.createQuery("select u.userName from GameUser u", String.class);
+			userNames = query.getResultList();
+			tx.commit();
+			
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		return userNames;
 	}
 }

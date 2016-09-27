@@ -2,6 +2,7 @@ package org.moshe.arad.repositories.dao.criteria;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,6 +98,7 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public GameUser findByUserName(String userName) {
 		Session session = getSession();
@@ -155,5 +157,31 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 			entity.setCreatedDate(new Date());
 			entity.setCreatedBy(0L);
 		}
+	}
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@Override
+	public List<String> getAllUserNames() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<String> userNames = null;
+		List<GameUser> users = null;
+		try{
+			tx.begin();
+			Criteria userNamesCriteria = session.createCriteria(GameUser.class);
+			users = userNamesCriteria.list();
+			tx.commit();
+			
+			userNames =  users.stream().map(user -> user.getUsername()).collect(Collectors.toList());
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		return userNames;
 	}
 }

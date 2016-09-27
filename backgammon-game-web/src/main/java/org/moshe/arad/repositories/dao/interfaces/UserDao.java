@@ -10,4 +10,6 @@ public interface UserDao extends Dao<GameUser,Long> {
 	public List<GameUser> findByFirstName(String firstName);
 	
 	public GameUser findByUserName(String userName);
+	
+	public List<String> getAllUserNames();
 }

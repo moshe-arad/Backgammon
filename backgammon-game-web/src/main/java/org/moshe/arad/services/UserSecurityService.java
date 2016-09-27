@@ -1,5 +1,7 @@
 package org.moshe.arad.services;
 
+import java.util.Set;
+
 import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +34,9 @@ public class UserSecurityService implements UserDetailsService{
 			SecurityContextHolder.getContext().setAuthentication(auth);
 			return true;
 		}
+	}
+	
+	public Set<String> getAllTakenUserNames(){
+		return userSecurityRepo.getAllUserNames();
 	}
 }

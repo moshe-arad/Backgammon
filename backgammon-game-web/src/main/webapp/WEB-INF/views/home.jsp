@@ -13,6 +13,7 @@
 		<link rel="stylesheet" href='<spring:url value="/resources/css/home.css"/>' type="text/css" />
 		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
+		<script src="<spring:url value="/resources/js/registerUser.js" />" /></script>
 	</head>
 	<body>
 		<nav class="navbar navbar-inverse">
@@ -89,7 +90,7 @@
 							<input type="text" class="form-control" id="firstName" 
 								placeholder="Your First Name" name="firstName">							
 						</div>
-					
+						
 						<div class="form-group">
 							<label for="lastName">Last Name:</label>
 							<input type="text" class="form-control" id="lastName" 
@@ -100,9 +101,11 @@
 						<div class="form-group">
 							<label for="email">Email:</label>
 							<input type="email" class="form-control" id="email" 
-								placeholder="Your Email" name="email">
+								placeholder="Your Email" name="email" onkeydown="timeOutCheckEmail();">
 						</div>
-					
+						
+						<p id="invalidEmail" class="hidden text-danger">Invalid email.</p>
+						
 						<!-- JQuery make sure available user name -->
 						<div class="form-group">
 							<label for="userName">User Name:</label>
@@ -115,13 +118,15 @@
 						<div class="form-group">
 							<label for="password">Password:</label>
 							<input type="password" class="form-control" id="password" 
-								placeholder="Password" name="password">
+								placeholder="Password" name="password" onkeydown="clearPasswordMsg()">
 						</div>
 					
 						<div class="form-group">
 							<label for="confirmPassword">Confirm Password:</label>
-							<input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+							<input type="password" class="form-control" id="confirmPassword" 
+								placeholder="Confirm Password" onkeydown="timeOutCheckPassword()">
 						</div>
+						<p id="invalidPassword" class="hidden text-danger">Passwords does not match.</p>
 						<sec:csrfInput/>
 						<button type="submit" class="btn btn-success">Register</button>
 					</form>

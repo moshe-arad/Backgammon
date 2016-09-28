@@ -3,6 +3,7 @@ package org.moshe.arad.repositories;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.moshe.arad.repositories.dao.interfaces.UserDao;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -25,6 +26,6 @@ public class UserSecurityRepository {
 
 	public Set<String> getAllUserNames() {
 		Collection<String> userNamesCollection = userDao.getAllUserNames();
-		return new HashSet<String>(userNamesCollection);
+		return new ConcurrentSkipListSet<String>(userNamesCollection);
 	}
 }

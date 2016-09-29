@@ -101,7 +101,7 @@
 						<div class="form-group">
 							<label for="email">Email:</label>
 							<input type="email" class="form-control" id="email" 
-								placeholder="Your Email" name="email" onkeydown="timeOutCheckEmail();">
+								placeholder="Your Email" name="email" >
 						</div>
 						
 						<p id="invalidEmail" class="hidden text-danger">Invalid email.</p>
@@ -113,19 +113,17 @@
 								placeholder="User Name" name="userName">
 						</div>
 						
-						<!-- JQuery validate confime password -->
-						<!-- JQuery password validation -->
 						<div class="form-group">
 							<label for="password">Password:</label>
 							<input type="password" class="form-control" id="password" 
-								placeholder="Password" name="password" onkeydown="timeOutCheckPassword()">
+								placeholder="Password" name="password" >
 						</div>
 						<p id="invalidPassword" class="hidden text-danger"></p>
 						
 						<div class="form-group">
 							<label for="confirmPassword">Confirm Password:</label>
 							<input type="password" class="form-control" id="confirmPassword" 
-								placeholder="Confirm Password" onkeydown="timeOutCheckConfirmPassword()">
+								placeholder="Confirm Password" >
 						</div>
 						<p id="invalidConfirmPassword" class="hidden text-danger">Passwords does not match.</p>
 						<sec:csrfInput/>

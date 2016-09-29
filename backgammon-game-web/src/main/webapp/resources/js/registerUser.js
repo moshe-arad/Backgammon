@@ -1,3 +1,13 @@
+/***  load DOM events ***/
+
+$(loadDomEvents);
+
+function loadDomEvents(){
+	$("#email").keydown(timeOutCheckEmail);
+	$("#password").keydown(timeOutCheckPassword);
+	$("#confirmPassword").keydown(timeOutCheckConfirmPassword);
+}
+
 /***  email validation ***/
 
 var timeLeftForValidation;

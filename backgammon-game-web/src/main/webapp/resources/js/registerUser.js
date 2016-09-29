@@ -6,6 +6,7 @@ function loadDomEvents(){
 	$("#email").keydown(timeOutCheckEmail);
 	$("#password").keydown(timeOutCheckPassword);
 	$("#confirmPassword").keydown(timeOutCheckConfirmPassword);
+	$("#userName").keydown(timeOutCheckUserName)
 }
 
 /***  email validation ***/
@@ -115,10 +116,30 @@ function threeLowerCaseValidation(password){
 	return pattern.test(password);
 }
 
+/***  user name available ***/
 
+var timeOutUserName;
 
+function timeOutCheckUserName(){
+	var userName = $("#userName").val();
+	var server = "http://localhost:8080";
+	var url = server + $("#userNameUrl").attr("href") + userName;
+	
+	clearTimeout(timeOutUserName);
+	hideElement($("#invalidUserName"));
+	timeOutUserName = setTimeout(function(){
+		checkUserNameAvailable(url, {userName:userName});
+		}, 3000);
+}
 
+function validateUserName(){
+	
+}
 
+function checkUserNameAvailable(url, userName){
+	
+	$("#invalidUserName").load(url, userName, showElement($("#invalidUserName")));
+}
 
 
 

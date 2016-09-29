@@ -39,7 +39,9 @@ public class UserSecurityService implements UserDetailsService{
 		}
 	}
 	
-	public Set<String> getAllTakenUserNames(){
-		return userSecurityRepo.getAllUserNames();
+	public boolean isUserNameAvailable(String userName){
+		if(userNames == null) userNames = userSecurityRepo.getAllUserNames();
+		if(userNames.contains(userName)) return false;
+		else return true;
 	}
 }

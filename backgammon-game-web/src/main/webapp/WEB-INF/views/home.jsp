@@ -113,6 +113,9 @@
 								placeholder="User Name" name="userName">
 						</div>
 						
+						<p id="invalidUserName" class="hidden text-danger"></p>
+						<a id="userNameUrl" href="<spring:url value="/user_name/" />"></a>
+						
 						<div class="form-group">
 							<label for="password">Password:</label>
 							<input type="password" class="form-control" id="password" 

@@ -3,14 +3,14 @@
 var timeLeftForValidation;
 
 function timeOutCheckEmail(){
-	var emailMessage = $("form p.text-danger");
+	clearTimeout(timeLeftForValidation);
+	var emailMessage = $("#invalidEmail");
 	hideElement(emailMessage);
 	timeLeftForValidation = setTimeout(checkEmail, 3000);
 }
 
 function checkEmail(){
-	clearTimeout(timeLeftForValidation);
-	var emailMessage = $("form p.text-danger");
+	var emailMessage = $("#invalidEmail");
 	var emailContent = $("form input[name='email']").val();
 	if(!isValidEmail(emailContent)) showElement(emailMessage);
 }
@@ -33,28 +33,77 @@ function showElement(element){
 /***  password confirm validation ***/
 
 
-var timeOutPassword;
+var timeOutConfirmPassword;
 
-function timeOutCheckPassword(){
-	hideElement($("#invalidPassword"));
-	timeOutPassword = setTimeout(checkConfirmPasswordMatch, 3000);
+function timeOutCheckConfirmPassword(){
+	clearTimeout(timeOutConfirmPassword);
+	hideElement($("#invalidConfirmPassword"));
+	timeOutConfirmPassword = setTimeout(checkConfirmPasswordMatch, 3000);
 }
 
 function checkConfirmPasswordMatch(){
-	clearTimeout(timeOutPassword);
 	var originalPassword = $("form input[name='password']")[0];
 	var confirmPassword = $("form[action$='register'] div:last input")[0];
 	
-	if(originalPassword.value != confirmPassword.value) showElement($("#invalidPassword"));
+	if(originalPassword.value != confirmPassword.value) showElement($("#invalidConfirmPassword"));
 }
 
-function clearPasswordMsg(){
+/***  password constraints validation ***/
+
+var timeOutPassword;
+
+function timeOutCheckPassword(){
+	clearTimeout(timeOutPassword);
+	hideElement($("#invalidConfirmPassword"));
 	hideElement($("#invalidPassword"));
+	timeOutPassword = setTimeout(checkPasswordValidation, 3000);
 }
 
-var  v =$("form[action$='register'] div").last()[0];
+function checkPasswordValidation(){
+	var originalPassword = $("form input[name='password']")[0];
+	
+	var msg = isValidPassword(originalPassword.value);
+	if(msg == "valid"){
+		hideElement($("#invalidPassword"));
+	}
+	else{
+		var pMsg = $("#invalidPassword")[0];
+		$(pMsg).html(msg);
+		showElement($("#invalidPassword"));
+	}
+}
+
+function isValidPassword(password){
+	
+	if(password.length < 8) return "Password length must be at least 8 characters.";
+	if(!twoNumbersValidation(password)) return "Password must contain at least 2 numbers.";
+	if(!oneUpperCaseValidation(password)) return "Password must contain at least 1 upper case letter.";
+	if(!oneUniqueCharacter(password)) return "Password must contain at least 1 unique character.";
+	if(!threeLowerCaseValidation(password)) return "Password must contain at least 3 lower case letters.";
+	
+	return "valid";
+}
+
+function twoNumbersValidation(password){
+	var pattern = /^[^(0-9)]*[0-9]{1}[^(0-9)]*[0-9]{1}.*/;
+	return pattern.test(password);
+}
 
 
+function oneUpperCaseValidation(password){
+	var pattern = /[A-Z]+/;
+	return pattern.test(password);
+}
+
+function oneUniqueCharacter(password){
+	var pattern = /[^(A-Z)|^(a-z)|^(0-9)]+/;
+	return pattern.test(password);
+}
+
+function threeLowerCaseValidation(password){
+	var pattern = /^[^(a-z)]*[a-z]{1}[^(a-z)]*[a-z]{1}[^(a-z)]*[a-z]{1}.*/;
+	return pattern.test(password);
+}
 
 
 

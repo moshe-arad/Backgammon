@@ -118,15 +118,16 @@
 						<div class="form-group">
 							<label for="password">Password:</label>
 							<input type="password" class="form-control" id="password" 
-								placeholder="Password" name="password" onkeydown="clearPasswordMsg()">
+								placeholder="Password" name="password" onkeydown="timeOutCheckPassword()">
 						</div>
-					
+						<p id="invalidPassword" class="hidden text-danger"></p>
+						
 						<div class="form-group">
 							<label for="confirmPassword">Confirm Password:</label>
 							<input type="password" class="form-control" id="confirmPassword" 
-								placeholder="Confirm Password" onkeydown="timeOutCheckPassword()">
+								placeholder="Confirm Password" onkeydown="timeOutCheckConfirmPassword()">
 						</div>
-						<p id="invalidPassword" class="hidden text-danger">Passwords does not match.</p>
+						<p id="invalidConfirmPassword" class="hidden text-danger">Passwords does not match.</p>
 						<sec:csrfInput/>
 						<button type="submit" class="btn btn-success">Register</button>
 					</form>

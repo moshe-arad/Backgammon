@@ -3,10 +3,66 @@
 $(loadDomEvents);
 
 function loadDomEvents(){
+	
+	$("#firstName").keydown(function(){
+		timeOutCheckName($("#invalidFirstName"), $("#firstName"));
+	});
+	$("#firstName").focusout(function(){
+		timeOutCheckName($("#invalidFirstName"), $("#firstName"));
+	});
+	
+	$("#lastName").keydown(function(){
+		timeOutCheckName($("#invalidLastName"), $("#lastName"));
+	});
+	$("#lastName").focusout(function(){
+		timeOutCheckName($("#invalidLastName"), $("#lastName"));
+	});
+	
 	$("#email").keydown(timeOutCheckEmail);
+	$("#email").focusout(timeOutCheckEmail);
+	
 	$("#password").keydown(timeOutCheckPassword);
+	$("#password").focusout(timeOutCheckPassword);
+	
 	$("#confirmPassword").keydown(timeOutCheckConfirmPassword);
-	$("#userName").keydown(timeOutCheckUserName)
+	$("#confirmPassword").focusout(timeOutCheckConfirmPassword);
+	
+	//ajax calls
+	
+	$("#userName").keyup(timeOutCheckUserName);
+	$("#userName").focusout(timeOutCheckUserName);
+	
+	$("#email").keyup(timeOutCheckEmailAvailable);
+	$("#email").focusout(timeOutCheckEmailAvailable);
+	
+	$("#registerBtn").click(submitRegister);
+}
+
+var server = "http://localhost:8080";
+
+/***  first & last names validation ***/
+
+var timeOutNameValidation;
+
+function timeOutCheckName(nameInvalidTag, nameTag){
+	clearTimeout(timeLeftForValidation);
+	hideElement(nameInvalidTag);
+	timeLeftForValidation = setTimeout(function(){
+		checkName(nameInvalidTag, nameTag)
+	}, 3000);
+}
+
+function checkName(nameInvalidTag, nameTag){
+	if(!isValidName(nameTag.val())) {
+		showElement(nameInvalidTag);
+		return false;
+	}
+	else return true;
+}
+
+function isValidName(name){
+	var re = /[^A-Z|a-z| \\-]+/;
+  	return !re.test(name);
 }
 
 /***  email validation ***/
@@ -23,7 +79,12 @@ function timeOutCheckEmail(){
 function checkEmail(){
 	var emailMessage = $("#invalidEmail");
 	var emailContent = $("form input[name='email']").val();
-	if(!isValidEmail(emailContent)) showElement(emailMessage);
+	if(!isValidEmail(emailContent)) {
+		emailMessage.text("Invalid email.");
+		showElement(emailMessage);
+		return false;
+	}
+	else return true;
 }
 
 function isValidEmail(email){
@@ -56,7 +117,11 @@ function checkConfirmPasswordMatch(){
 	var originalPassword = $("form input[name='password']")[0];
 	var confirmPassword = $("form[action$='register'] div:last input")[0];
 	
-	if(originalPassword.value != confirmPassword.value) showElement($("#invalidConfirmPassword"));
+	if(originalPassword.value != confirmPassword.value) {		
+		showElement($("#invalidConfirmPassword"));
+		return false;
+	}
+	else return true;
 }
 
 /***  password constraints validation ***/
@@ -76,11 +141,13 @@ function checkPasswordValidation(){
 	var msg = isValidPassword(originalPassword.value);
 	if(msg == "valid"){
 		hideElement($("#invalidPassword"));
+		return true;
 	}
 	else{
 		var pMsg = $("#invalidPassword")[0];
 		$(pMsg).html(msg);
 		showElement($("#invalidPassword"));
+		return false;
 	}
 }
 
@@ -122,9 +189,9 @@ var timeOutUserName;
 
 function timeOutCheckUserName(){
 	var userName = $("#userName").val();
-	var server = "http://localhost:8080";
-	var url = server + $("#userNameUrl").attr("href") + userName;
+	var url = server + $("#userNameUrl").attr("href"); // + userName;
 	
+	userNameAjaxAnswer=false;
 	clearTimeout(timeOutUserName);
 	hideElement($("#invalidUserName"));
 	timeOutUserName = setTimeout(function(){
@@ -132,20 +199,94 @@ function timeOutCheckUserName(){
 		}, 3000);
 }
 
-function validateUserName(){
-	
-}
 
 function checkUserNameAvailable(url, userName){
-	
-	$("#invalidUserName").load(url, userName, showElement($("#invalidUserName")));
+
+	$.ajax(
+			{
+				url:url, 
+				data:userName,
+				method: "GET",
+				success: userNameCompleteAjaxRequest
+			}
+		);
 }
 
+function userNameCompleteAjaxRequest(text){
+	if(text == "") {
+		userNameAjaxAnswer = true;
+		hideElement($("#invalidUserName"));
+	}
+	else {
+		userNameAjaxAnswer = false;;
+		showElement($("#invalidUserName"));
+	}
+	$("#invalidUserName").text(text);
+	
+}
 
+/***  email available ***/
 
+var timeOutEmail;
 
+function timeOutCheckEmailAvailable(){
+	var email = $("#email").val();
+	var url = server + $("#emailUrl").attr("href"); 
+	
+	if(isValidEmail(email)){
+		emailAjaxAnswer = false;
+		clearTimeout(timeOutEmail);
+		hideElement($("#invalidEmail"));
+		timeOutEmail = setTimeout(function(){
+			checkEmailAvailable(url, {email:email});
+			}, 3000);
+	}
+}
 
+function checkEmailAvailable(url, email){
 
+	$.ajax(
+			{
+				url:url, 
+				data:email,
+				method: "GET",
+				success: emailCompleteAjaxRequest
+			}
+		);
+}
+
+function emailCompleteAjaxRequest(text){
+	$("#invalidEmail").text(text);
+	
+	if(text == "") {
+		emailAjaxAnswer = true;
+		hideElement($("#invalidEmail"));
+	}
+	else {
+		emailAjaxAnswer = false;;
+		showElement($("#invalidEmail"));
+	}
+}
+
+/***  submit register form  ***/
+
+var userNameAjaxAnswer = false;
+var emailAjaxAnswer = false;
+
+function submitRegister(e){
+	e.preventDefault();
+	
+	setTimeout(function(){
+		if(checkName($("#invalidFirstName"), $("#firstName")) &&
+				checkName($("#invalidLastName"), $("#lastName")) &&
+				checkEmail() && 
+				checkConfirmPasswordMatch() && 
+				checkPasswordValidation() &&
+				userNameAjaxAnswer &&
+				emailAjaxAnswer) 
+			$("#registerForm").submit();
+	}, 3000);
+}
 
 
 

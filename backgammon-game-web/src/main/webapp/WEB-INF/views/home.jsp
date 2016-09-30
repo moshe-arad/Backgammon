@@ -84,12 +84,14 @@
 					<br/>
 					
 					<c:url value="/register" var="registerVar"/>
-					<form method="POST" action="${registerVar}">
+					<form id="registerForm" method="POST" action="${registerVar}">
 						<div class="form-group">
 							<label for="firstName">First Name:</label>
 							<input type="text" class="form-control" id="firstName" 
 								placeholder="Your First Name" name="firstName">							
 						</div>
+						
+						<p id="invalidFirstName" class="hidden text-danger">Invalid first name, use letters and spaces only.</p>
 						
 						<div class="form-group">
 							<label for="lastName">Last Name:</label>
@@ -97,6 +99,8 @@
 								placeholder="Your Last Name" name="lastName">
 						</div>
 					
+						<p id="invalidLastName" class="hidden text-danger">Invalid last name, use letters and spaces only.</p>
+						
 						<!-- JQuery email validation -->
 						<div class="form-group">
 							<label for="email">Email:</label>
@@ -104,6 +108,7 @@
 								placeholder="Your Email" name="email" >
 						</div>
 						
+						<a id="emailUrl" href="<spring:url value="/email" />"></a>
 						<p id="invalidEmail" class="hidden text-danger">Invalid email.</p>
 						
 						<!-- JQuery make sure available user name -->
@@ -130,7 +135,7 @@
 						</div>
 						<p id="invalidConfirmPassword" class="hidden text-danger">Passwords does not match.</p>
 						<sec:csrfInput/>
-						<button type="submit" class="btn btn-success">Register</button>
+						<button id="registerBtn" type="submit" class="btn btn-success">Register</button>
 					</form>
 				</div>
 				<div class="col-lg-1"></div>

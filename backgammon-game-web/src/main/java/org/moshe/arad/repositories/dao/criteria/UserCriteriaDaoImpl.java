@@ -134,8 +134,9 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 			tx.begin();
 			
 			createAndLastUpdate(entity);
-			logger.error(entity);
+			logger.info("System is about to save GameUser entity: " +entity);
 			session.saveOrUpdate(entity);
+			
 			tx.commit();
 			isSaved = true;
 		}
@@ -183,5 +184,31 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 			session.close();
 		}
 		return userNames;
+	}
+
+	@Override
+	public List<String> getAllEmails() {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		List<String> emails = null;
+		List<GameUser> users = null;
+		
+		try{
+			tx.begin();
+			Criteria userNamesCriteria = session.createCriteria(GameUser.class);
+			users = userNamesCriteria.list();
+			tx.commit();
+			
+			emails =  users.stream().map(user -> user.getEmail()).collect(Collectors.toList());
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		return emails;
 	}
 }

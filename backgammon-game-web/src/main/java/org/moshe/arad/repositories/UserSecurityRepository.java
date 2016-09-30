@@ -28,4 +28,9 @@ public class UserSecurityRepository {
 		Collection<String> userNamesCollection = userDao.getAllUserNames();
 		return new ConcurrentSkipListSet<String>(userNamesCollection);
 	}
+
+	public Set<String> getAllEmails() {
+		Collection<String> emailsCollection = userDao.getAllEmails();
+		return new ConcurrentSkipListSet<String>(emailsCollection);
+	}
 }

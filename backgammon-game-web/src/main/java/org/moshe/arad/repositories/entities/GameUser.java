@@ -9,11 +9,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="game_users")
 public class GameUser implements UserDetails{
@@ -24,30 +31,43 @@ public class GameUser implements UserDetails{
 	private Long userId;
 	
 	@Column(name="first_name")
+	@NotBlank
+	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String firstName;
 	
 	@Column(name="last_name")
+	@NotBlank
+	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String lastName;
 	
+	@Email
+	@NotBlank
 	private String email;
 	
 	@Column(name="user_name")
+	@NotBlank
 	private String userName;
 	
+	@NotBlank
 	private String password;
 	
+	@NotBlank
 	private String role;
 	
 	@Column(name="last_updated_date")
+	@NotNull
 	private Date lastUpdatedDate;
 	
 	@Column(name="last_updated_by")
+	@NotNull
 	private Long lastUpdatedBy;
 	
 	@Column(name="created_date")
+	@NotNull
 	private Date createdDate;
 	
 	@Column(name="created_by")
+	@NotNull
 	private Long createdBy;
 
 	public GameUser() {

@@ -86,6 +86,20 @@ public class GameUser implements UserDetails{
 		this.createdDate = createdDate;
 		this.createdBy = createdBy;
 	}
+	
+	public GameUser(String firstName, String lastName, String email, String userName, String password,
+			String role) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.userName = userName;
+		this.password = password;
+		this.role = role;
+		this.lastUpdatedDate = new Date();
+		this.lastUpdatedBy = 1L;
+		this.createdDate = new Date();
+		this.createdBy = 1L;
+	}
 
 	@Override
 	public String toString() {

@@ -1,6 +1,7 @@
 package org.moshe.arad.data.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.criteria.UserCriteriaDaoImpl;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -23,30 +25,34 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration("classpath:persistence-context-test.xml")
 public class UserCriteriaDaoTest {
 
+	final Logger logger = LogManager.getLogger(UserCriteriaDaoTest.class);
+	
 	@Autowired
 	UserCriteriaDaoImpl userCriteriaDao;
 	@Autowired
 	SessionFactory sessionFactory;
+	@Autowired
+	ApplicationContext context;
 	Session session;
 	Transaction tx;
-	final Logger logger = LogManager.getLogger(UserCriteriaDaoTest.class);
+	
+	GameUser user1;
+	GameUser user2;
+	GameUser user3;
 	
 	@Before
 	public void setup(){
 		userCriteriaDao.deleteAll();
 		session = userCriteriaDao.getSession();
 		tx = session.getTransaction();
+		
+		user1 = context.getBean("gameUser1", GameUser.class);
+		user2 = context.getBean("gameUser2", GameUser.class);
+		user3 = context.getBean("gameUser3", GameUser.class);
 	}
 	
 	@Test
 	public void findByFirstNameTest(){
-		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
-				"role1", new Date(), 1L, new Date(), 1L);
-		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
-				"role2", new Date(), 2L, new Date(), 2L);
-		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
-				"role3", new Date(), 3L, new Date(), 3L);
-	
 		try{
 			tx.begin();
 			session.save(user1);
@@ -57,7 +63,7 @@ public class UserCriteriaDaoTest {
 			List<GameUser> users = userCriteriaDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
-			assertEquals(2, users.size());
+			assertEquals(1, users.size());
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -71,14 +77,7 @@ public class UserCriteriaDaoTest {
 	}
 	
 	@Test
-	public void findAllTest(){
-		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
-				"role1", new Date(), 1L, new Date(), 1L);
-		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
-				"role2", new Date(), 2L, new Date(), 2L);
-		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
-				"role3", new Date(), 3L, new Date(), 3L);
-	
+	public void findAllTest(){	
 		try{
 			tx.begin();
 			session.save(user1);
@@ -103,13 +102,6 @@ public class UserCriteriaDaoTest {
 	
 	@Test
 	public void findByUserNameTest(){
-		GameUser user1 = new GameUser("Moshe", "lastName1", "email1", "userName1", "password1",
-				"role1", new Date(), 1L, new Date(), 1L);
-		GameUser user2 = new GameUser("Jimi", "lastName2", "email2", "userName2", "password2",
-				"role2", new Date(), 2L, new Date(), 2L);
-		GameUser user3 = new GameUser("Moshe", "lastName3", "email3", "userName3", "password3",
-				"role3", new Date(), 3L, new Date(), 3L);
-	
 		try{
 			tx.begin();
 			session.save(user1);
@@ -120,6 +112,60 @@ public class UserCriteriaDaoTest {
 			GameUser user = userCriteriaDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+			throw ex;
+		}
+		finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void getAllUserNamesTest(){	
+		try{
+			tx.begin();
+			session.save(user1);
+			session.save(user2);
+			session.save(user3);
+			tx.commit();
+			
+			List<String> userNames = userCriteriaDao.getAllUserNames();
+			
+			assertEquals(3, userNames.size());
+			assertTrue(userNames.contains(user1.getUsername()));
+			assertTrue(userNames.contains(user2.getUsername()));
+			assertTrue(userNames.contains(user3.getUsername()));
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+			throw ex;
+		}
+		finally {
+			session.close();
+		}
+	}
+	
+	@Test
+	public void getAllEmailsTest(){
+		try{
+			tx.begin();
+			session.save(user1);
+			session.save(user2);
+			session.save(user3);
+			tx.commit();
+			
+			List<String> emails = userCriteriaDao.getAllEmails();
+			
+			assertEquals(3, emails.size());
+			assertTrue(emails.contains(user1.getEmail()));
+			assertTrue(emails.contains(user2.getEmail()));
+			assertTrue(emails.contains(user3.getEmail()));
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());

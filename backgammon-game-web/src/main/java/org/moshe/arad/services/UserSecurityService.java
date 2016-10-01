@@ -1,7 +1,8 @@
 package org.moshe.arad.services;
 
 import java.util.Set;
-import java.util.concurrent.ConcurrentSkipListSet;
+
+import javax.annotation.PostConstruct;
 
 import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -32,6 +33,8 @@ public class UserSecurityService implements UserDetailsService{
 		boolean isSuccessfulSaved = userSecurityRepo.registerNewUser(gameUser);
 		if(!isSuccessfulSaved) return false;
 		else{
+			initVirtualRepo();
+			
 			userNames.add(gameUser.getUserName());
 			emails.add(gameUser.getEmail());
 			
@@ -43,15 +46,20 @@ public class UserSecurityService implements UserDetailsService{
 	}
 	
 	public boolean isUserNameAvailable(String userName){
-		if(userNames == null) userNames = userSecurityRepo.getAllUserNames();
+		initVirtualRepo();
 		if(userNames.contains(userName)) return false;
 		else return true;
 	}
 	
 	public boolean isEmailAvailable(String email){
-		if(emails == null) emails = userSecurityRepo.getAllEmails();
+		initVirtualRepo();
 		if(emails.contains(email)) return false;
 		else return true;
+	}
+	
+	private void initVirtualRepo() {
+		if(userNames == null) userNames = userSecurityRepo.getAllUserNames();
+		if(emails == null) emails = userSecurityRepo.getAllEmails();
 	}
 }
 

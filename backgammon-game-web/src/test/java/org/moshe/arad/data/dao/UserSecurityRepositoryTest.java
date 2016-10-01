@@ -1,12 +1,18 @@
 package org.moshe.arad.data.dao;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,8 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml", 
@@ -37,13 +41,15 @@ public class UserSecurityRepositoryTest {
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
-
-		userDao.deleteAll(); 
-//		GameUser u1 = context.getBean("gameUser1", GameUser.class);
-//		logger.info("******************" +u1);
+ 
 		userDao.save(context.getBean("gameUser1", GameUser.class));
 		userDao.save(context.getBean("gameUser2", GameUser.class));
 		userDao.save(context.getBean("gameUser3", GameUser.class));
+	}
+	
+	@After
+	public void cleanup(){
+		userDao.deleteAll();
 	}
 	
 	@Test
@@ -59,5 +65,57 @@ public class UserSecurityRepositoryTest {
 		GameUser actual = userSecurityRepo.loadUserByUsername("userNotInDB");
 		
 		assertNull(actual);
+	}
+	
+	@Test
+	public void registerNewUserTest(){
+		userDao.deleteAll();
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		assertTrue(userSecurityRepo.registerNewUser(gameUser));
+		List<GameUser> users = userDao.findAll();
+		
+		assertEquals(1, users.size());
+		assertEquals(gameUser.getUsername(), users.get(0).getUserName());
+	}
+	
+	@Test
+	public void registerNewUserNullValueTest(){
+		assertFalse(userSecurityRepo.registerNewUser(null));
+	}
+	
+	@Test
+	public void getAllUserNamesTest(){
+		Set<String> userNames = userSecurityRepo.getAllUserNames();
+		
+		assertTrue(userNames.contains(context.getBean("gameUser1", GameUser.class).getUsername()));
+		assertTrue(userNames.contains(context.getBean("gameUser2", GameUser.class).getUsername()));
+		assertTrue(userNames.contains(context.getBean("gameUser3", GameUser.class).getUsername()));
+		assertEquals(3, userNames.size());
+	}
+	
+	@Test
+	public void getAllUserNamesEmptySetTest(){
+		userDao.deleteAll();
+		Set<String> userNames = userSecurityRepo.getAllUserNames();
+		
+		assertEquals(0, userNames.size());
+	}
+	
+	@Test
+	public void getAllEmailsTest(){
+		Set<String> emails = userSecurityRepo.getAllEmails();
+		
+		assertTrue(emails.contains(context.getBean("gameUser1", GameUser.class).getEmail()));
+		assertTrue(emails.contains(context.getBean("gameUser2", GameUser.class).getEmail()));
+		assertTrue(emails.contains(context.getBean("gameUser3", GameUser.class).getEmail()));
+		assertEquals(3, emails.size());
+	}
+	
+	@Test
+	public void getAllEmailsEmptySetTest(){
+		userDao.deleteAll();
+		Set<String> emails = userSecurityRepo.getAllEmails();
+		
+		assertEquals(0, emails.size());
 	}
 }

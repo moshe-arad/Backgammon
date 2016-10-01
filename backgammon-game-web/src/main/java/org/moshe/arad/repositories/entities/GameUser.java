@@ -93,6 +93,10 @@ public class GameUser implements UserDetails{
 				+ createdBy + "]";
 	}
 	
+	public void init(){
+		this.userId = null;
+	}
+	
 	public Long getUserId() {
 		return userId;
 	}

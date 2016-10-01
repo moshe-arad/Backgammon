@@ -147,7 +147,6 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 			tx.begin();
 			
 			createAndLastUpdate(entity);
-			logger.info("*********************" + session.contains(entity));
 			session.saveOrUpdate(entity);
 			
 			tx.commit();

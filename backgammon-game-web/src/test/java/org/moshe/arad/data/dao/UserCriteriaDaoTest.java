@@ -3,7 +3,6 @@ package org.moshe.arad.data.dao;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +21,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:persistence-context-test.xml")
+@ContextConfiguration({"classpath:persistence-context-test.xml", 
+						"classpath:user-security-context-test.xml"})
 public class UserCriteriaDaoTest {
 
 	final Logger logger = LogManager.getLogger(UserCriteriaDaoTest.class);

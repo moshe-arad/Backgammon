@@ -29,34 +29,4 @@
 			</props>
 		</property>
 	</bean>
-	
-	<bean class="org.moshe.arad.repositories.dao.criteria.UserCriteriaDaoImpl" />
-	<bean class="org.moshe.arad.repositories.dao.hql.UserHqlDaoImpl" />
-				
-	<bean id="gameUser1" class="org.moshe.arad.repositories.entities.GameUser">
-		<constructor-arg name="firstName" value="Moshe"/>
-		<constructor-arg name="lastName" value="Arad"/>
-		<constructor-arg name="email" value="email1@walla.com"/>
-		<constructor-arg name="userName" value="userName1"/>
-		<constructor-arg name="password" value="password1"/>
-		<constructor-arg name="role" value="role1"/>
-	</bean>
-	
-	<bean id="gameUser2" class="org.moshe.arad.repositories.entities.GameUser">
-		<constructor-arg name="firstName" value="Bob"/>
-		<constructor-arg name="lastName" value="Scholes"/>
-		<constructor-arg name="email" value="email2@walla.com"/>
-		<constructor-arg name="userName" value="userName2"/>
-		<constructor-arg name="password" value="password2"/>
-		<constructor-arg name="role" value="role2"/>
-	</bean>
-	
-	<bean id="gameUser3" class="org.moshe.arad.repositories.entities.GameUser">
-		<constructor-arg name="firstName" value="John"/>
-		<constructor-arg name="lastName" value="Terry"/>
-		<constructor-arg name="email" value="email3@walla.com"/>
-		<constructor-arg name="userName" value="userName3"/>
-		<constructor-arg name="password" value="password3"/>
-		<constructor-arg name="role" value="role3"/>
-	</bean>
 </beans>

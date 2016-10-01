@@ -29,16 +29,19 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		List<GameUser> users = null;
 				
 		try{
+			logger.info("Try to find users with this first name = " + firstName);
 			tx.begin();
 			Criterion firstNameCriterion = Restrictions.eq("firstName", firstName);			
 			Criteria firstNameCriteria = session.createCriteria(GameUser.class).addOrder(Order.asc("firstName"));
 			firstNameCriteria.add(firstNameCriterion);
 			users = firstNameCriteria.list();
 			tx.commit();
+			logger.info("Found " + users.size() + " users with this first name = " + firstName);
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
+			logger.info("Users with this first name = " + firstName  + " was not found.");
 			tx.rollback();
 		}
 		finally{
@@ -56,15 +59,18 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		List<GameUser> users = null;
 		
 		try{
+			logger.info("Try to retrieve all users from DB.");
 			tx.begin();
 			Criteria usersCriteria = session.createCriteria(GameUser.class);
 			users = usersCriteria.list();
 			tx.commit();
+			logger.info("Retrieved " + users.size() + " users from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve all users from DB.");
 		}
 		finally {
 			session.close();
@@ -79,6 +85,7 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		Transaction tx = session.getTransaction();
 		
 		try{
+			logger.info("Try to delete all users from DB.");
 			tx.begin();
 			Criteria usersCriteria = session.createCriteria(GameUser.class);
 			List<GameUser> usersToDelete = usersCriteria.list();
@@ -87,11 +94,13 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 				session.delete(user);
 			
 			tx.commit();
+			logger.info(usersToDelete.size() + "users were delete from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to delete all users from DB.");
 		}
 		finally {
 			session.close();
@@ -106,16 +115,19 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		GameUser user = null;
 		
 		try{
+			logger.info("Try to specific user by its user name = " + userName + ".");
 			tx.begin();
 			Criterion userNameCriterion = Restrictions.eq("userName", userName);
 			Criteria userNameCriteria = session.createCriteria(GameUser.class).add(userNameCriterion);
-			user = (GameUser) userNameCriteria.list().get(0);
+			user = userNameCriteria.list().size() > 0 ? (GameUser)userNameCriteria.list().get(0) : null;
 			tx.commit();
+			logger.info("User with user name = " + userName + " , was found in DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to find user with user name = " + userName + ".");
 		}
 		finally {
 			session.close();
@@ -131,19 +143,22 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		boolean isSaved = false;
 		
 		try{
+			logger.info("Trying to save user = " + entity);
 			tx.begin();
 			
 			createAndLastUpdate(entity);
-			logger.info("System is about to save GameUser entity: " +entity);
+			logger.info("*********************" + session.contains(entity));
 			session.saveOrUpdate(entity);
 			
 			tx.commit();
 			isSaved = true;
+			logger.info("User = " + entity + " was saved.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Falied to save User = " + entity + ".");
 		}
 		finally{
 			session.close();
@@ -167,18 +182,22 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		Transaction tx = session.getTransaction();
 		List<String> userNames = null;
 		List<GameUser> users = null;
+		
 		try{
+			logger.info("Try to retrieve all user names from DB.");
 			tx.begin();
 			Criteria userNamesCriteria = session.createCriteria(GameUser.class);
 			users = userNamesCriteria.list();
 			tx.commit();
 			
 			userNames =  users.stream().map(user -> user.getUsername()).collect(Collectors.toList());
+			logger.info("Retrieved " + userNames.size() + " user names from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve user names from DB.");
 		}
 		finally{
 			session.close();
@@ -186,6 +205,7 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		return userNames;
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
 	public List<String> getAllEmails() {
 		Session session = getSession();
@@ -194,17 +214,20 @@ public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements 
 		List<GameUser> users = null;
 		
 		try{
+			logger.info("Try to retrieve all emails from DB.");
 			tx.begin();
 			Criteria userNamesCriteria = session.createCriteria(GameUser.class);
 			users = userNamesCriteria.list();
 			tx.commit();
 			
 			emails =  users.stream().map(user -> user.getEmail()).collect(Collectors.toList());
+			logger.info("Retrieved " + emails.size() + " emails from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve emails from DB.");
 		}
 		finally{
 			session.close();

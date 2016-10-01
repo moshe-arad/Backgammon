@@ -1,19 +1,19 @@
 package org.moshe.arad.repositories;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import javax.annotation.Resource;
+
 import org.moshe.arad.repositories.dao.interfaces.UserDao;
 import org.moshe.arad.repositories.entities.GameUser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserSecurityRepository {
 
-	@Autowired
+	@Resource
 	UserDao userDao;
 	
 	public GameUser loadUserByUsername(String userName){

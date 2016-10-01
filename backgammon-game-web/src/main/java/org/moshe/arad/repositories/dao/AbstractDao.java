@@ -119,6 +119,5 @@ public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, 
 	@Override
 	public void clear() {
 		getSession().clear();
-		
 	}	
 }

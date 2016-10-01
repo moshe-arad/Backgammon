@@ -11,11 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -71,20 +69,6 @@ public class GameUser implements UserDetails{
 	private Long createdBy;
 
 	public GameUser() {
-	}
-	
-	public GameUser(String firstName, String lastName, String email, String userName, String password,
-			String role, Date lastUpdatedDate, Long lastUpdatedBy, Date createdDate, Long createdBy) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.userName = userName;
-		this.password = password;
-		this.role = role;
-		this.lastUpdatedDate = lastUpdatedDate;
-		this.lastUpdatedBy = lastUpdatedBy;
-		this.createdDate = createdDate;
-		this.createdBy = createdBy;
 	}
 	
 	public GameUser(String firstName, String lastName, String email, String userName, String password,
@@ -229,4 +213,48 @@ public class GameUser implements UserDetails{
 	public boolean isEnabled() {
 		return true;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameUser other = (GameUser) obj;
+		if (email == null) {
+			if (other.email != null)
+				return false;
+		} else if (!email.equals(other.email))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		if (password == null) {
+			if (other.password != null)
+				return false;
+		} else if (!password.equals(other.password))
+			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (userName == null) {
+			if (other.userName != null)
+				return false;
+		} else if (!userName.equals(other.userName))
+			return false;
+		return true;
+	}
+	
+	
 }

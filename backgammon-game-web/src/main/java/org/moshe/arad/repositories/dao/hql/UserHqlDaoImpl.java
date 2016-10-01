@@ -15,7 +15,7 @@ import org.moshe.arad.repositories.entities.GameUser;
 
 public class UserHqlDaoImpl extends AbstractDao<GameUser, Long> implements UserDao {
 
-private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
+	private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 	
 	@Override
 	public List<GameUser> findByFirstName(String firstName) {
@@ -24,6 +24,7 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		Transaction tx = session.getTransaction();
 		
 		try{
+			logger.info("Try to find users with this first name = " + firstName);
 			tx.begin();
 			@SuppressWarnings("unchecked")
 			Query<GameUser> query = session.createQuery("select u from GameUser u" +
@@ -33,11 +34,13 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 			
 			usersByFirstName = query.getResultList();
 			tx.commit();
+			logger.info("Found " + usersByFirstName.size() + " users with this first name = " + firstName);
 		}
 		catch (Exception e) {
 			logger.error(e.getMessage());
 			logger.error(e);
 			tx.rollback();
+			logger.info("Users with this first name = " + firstName  + " was not found.");
 		}
 		finally{
 			session.close();
@@ -54,15 +57,18 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		List<GameUser> users = null;
 		
 		try{
+			logger.info("Try to retrieve all users from DB.");
 			tx.begin();
 			Query<GameUser> query = session.createQuery("select u from GameUser u", GameUser.class);
 			users = query.list();
 			tx.commit();
+			logger.info("Retrieved " + users.size() + " users from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve all users from DB.");
 		}
 		finally {
 			session.close();
@@ -77,16 +83,18 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		Transaction tx = session.getTransaction();
 		
 		try{
+			logger.info("Try to delete all users from DB.");
 			tx.begin();
 			Query query = session.createQuery("delete from GameUser");
 			int rows = query.executeUpdate();
 			tx.commit();
-			logger.info(rows + " rows affected, and deleted.");
+			logger.info(rows + "users were delete from DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to delete all users from DB.");
 		}
 		finally {
 			session.close();
@@ -100,17 +108,20 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		GameUser user = null;
 		
 		try{
+			logger.info("Try to specific user by its user name = " + userName + ".");
 			tx.begin();
-			Query query = session.createQuery("select u from GameUser u "
-					+ "where u.userName = ?");
+			Query<GameUser> query = session.createQuery("select u from GameUser u "
+					+ "where u.userName = ?", GameUser.class);
 			query.setParameter(0, userName);
 			user = (GameUser) query.getSingleResult();
 			tx.commit();
+			logger.info("User with user name = " + userName + " , was found in DB.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to find user with user name = " + userName + ".");
 		}
 		finally {
 			session.close();
@@ -126,6 +137,7 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		boolean isSaved = false;
 		
 		try{
+			logger.info("Trying to save user = " + entity);
 			tx.begin();
 			
 			createAndLastUpdate(entity);
@@ -133,11 +145,13 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 			session.saveOrUpdate(entity);
 			tx.commit();
 			isSaved = true;
+			logger.info("User = " + entity + " was saved.");
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Falied to save User = " + entity + ".");
 		}
 		finally{
 			session.close();
@@ -162,16 +176,19 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 		List<String> userNames = null;
 	
 		try{
+			logger.info("Try to retrieve all user names from DB.");
 			tx.begin();
 			Query<String> query = session.createQuery("select u.userName from GameUser u", String.class);
 			userNames = query.getResultList();
 			tx.commit();
+			logger.info("Retrieved " + userNames.size() + " user names from DB.");
 			
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve user names from DB.");
 		}
 		finally{
 			session.close();
@@ -183,24 +200,27 @@ private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
 	public List<String> getAllEmails() {
 		Session session = getSession();
 		Transaction tx = session.getTransaction();
-		List<String> userNames = null;
+		List<String> emails = null;
 	
 		try{
+			logger.info("Try to retrieve all emails from DB.");
 			tx.begin();
 			Query<String> query = session.createQuery("select u.email from GameUser u", String.class);
-			userNames = query.getResultList();
+			emails = query.getResultList();
 			tx.commit();
+			logger.info("Retrieved " + emails.size() + " emails from DB.");
 			
 		}
 		catch(Exception ex){
 			logger.error(ex.getMessage());
 			logger.error(ex);
 			tx.rollback();
+			logger.info("Failed to retrieve emails from DB.");
 		}
 		finally{
 			session.close();
 		}
-		return userNames;
+		return emails;
 	}
 }
 

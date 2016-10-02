@@ -17,7 +17,7 @@
 		<constructor-arg name="email" value="email1@walla.com"/>
 		<constructor-arg name="userName" value="userName1"/>
 		<constructor-arg name="password" value="password1"/>
-		<constructor-arg name="role" value="role1"/>
+		<constructor-arg name="role" value="ROLE_USER"/>
 	</bean>
 	
 	<bean id="gameUser2" class="org.moshe.arad.repositories.entities.GameUser" scope="prototype">
@@ -26,7 +26,7 @@
 		<constructor-arg name="email" value="email2@walla.com"/>
 		<constructor-arg name="userName" value="userName2"/>
 		<constructor-arg name="password" value="password2"/>
-		<constructor-arg name="role" value="role2"/>
+		<constructor-arg name="role" value="ROLE_USER"/>
 	</bean>
 	
 	<bean id="gameUser3" class="org.moshe.arad.repositories.entities.GameUser" scope="prototype">
@@ -35,6 +35,6 @@
 		<constructor-arg name="email" value="email3@walla.com"/>
 		<constructor-arg name="userName" value="userName3"/>
 		<constructor-arg name="password" value="password3"/>
-		<constructor-arg name="role" value="role3"/>
+		<constructor-arg name="role" value="ROLE_USER"/>
 	</bean>
 </beans>

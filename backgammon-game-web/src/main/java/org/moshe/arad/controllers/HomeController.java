@@ -1,11 +1,22 @@
 package org.moshe.arad.controllers;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.entities.GameUser;
+import org.moshe.arad.repositories.validators.GameUserValidator;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +40,23 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@ModelAttribute GameUser gameUser){
+	public String doRegister(@Valid @ModelAttribute GameUser gameUser, Errors errors){
+		if(errors.hasErrors()){
+			logger.info("Some errors occured while trying to bind game user");
+			logger.info("There are " + errors.getErrorCount() + " errors.");
+			
+			for(FieldError error:errors.getFieldErrors()){
+				logger.warn("Field name:  " + error.getField());
+				logger.warn(error.getDefaultMessage());
+			}
+			
+			if(!GameUserValidator.acceptableErrors(errors)){
+				logger.info("Routing for home page.");
+				return "home";
+			}
+		}
+		
+		
 		logger.info("The GameUser bind result: " + gameUser);
 		boolean isSuccessfulRegister = userSecurityService.registerNewUser(gameUser, "ROLE_USER");
 		if(isSuccessfulRegister){
@@ -43,7 +70,7 @@ public class HomeController {
 			return "home";
 		}
 	}
-	
+
 	@RequestMapping(value="/user_name", method = RequestMethod.GET)
 	@ResponseBody
 	public String userNameAvailable(@RequestParam String userName){
@@ -70,5 +97,10 @@ public class HomeController {
 			logger.info("Email not available can't register.");
 			return "Email is not availbale.";
 		}
+	}
+	
+	@InitBinder
+	public void initBinder(WebDataBinder binder){
+		binder.addValidators(new GameUserValidator());
 	}
 }

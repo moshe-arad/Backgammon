@@ -129,7 +129,10 @@ public class HomeControllerTest {
 	
 	@Test
 	public void userNameAvailableInValidTest() throws Exception{
+		logger.info("*************** userNameAvailableInValidTest ***************");
 		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		
+		logger.info("############## " + user1);
 		
 		mockMvc.perform(post("/register")
 				.param("firstName", user1.getFirstName())
@@ -147,6 +150,7 @@ public class HomeControllerTest {
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
 		.andExpect(content().string("User name is not availbale."));
+		logger.info("*************** end of userNameAvailableInValidTest ***************");
 	}
 	
 	@Test

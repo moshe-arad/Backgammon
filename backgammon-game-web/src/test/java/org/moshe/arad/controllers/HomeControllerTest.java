@@ -1,14 +1,12 @@
 package org.moshe.arad.controllers;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.xpath;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +24,6 @@ import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -129,10 +126,7 @@ public class HomeControllerTest {
 	
 	@Test
 	public void userNameAvailableInValidTest() throws Exception{
-		logger.info("*************** userNameAvailableInValidTest ***************");
 		GameUser user1 = context.getBean("gameUser1", GameUser.class);
-		
-		logger.info("############## " + user1);
 		
 		mockMvc.perform(post("/register")
 				.param("firstName", user1.getFirstName())
@@ -150,7 +144,6 @@ public class HomeControllerTest {
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
 		.andExpect(content().string("User name is not availbale."));
-		logger.info("*************** end of userNameAvailableInValidTest ***************");
 	}
 	
 	@Test

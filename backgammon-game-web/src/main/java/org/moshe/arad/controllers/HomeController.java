@@ -1,8 +1,5 @@
 package org.moshe.arad.controllers;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,12 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -56,8 +50,8 @@ public class HomeController {
 			}
 		}
 		
-		
 		logger.info("The GameUser bind result: " + gameUser);
+		
 		boolean isSuccessfulRegister = userSecurityService.registerNewUser(gameUser, "ROLE_USER");
 		if(isSuccessfulRegister){
 			logger.info("User was successfuly register.");

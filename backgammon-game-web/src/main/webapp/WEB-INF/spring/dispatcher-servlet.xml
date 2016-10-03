@@ -9,6 +9,7 @@
 
 	<mvc:annotation-driven />
 	<context:component-scan base-package="org.moshe.arad.controllers" />
+	<context:component-scan base-package="org.moshe.arad.resolvers" />
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />

@@ -53,7 +53,7 @@
 								<p>Invalid Username or Password.</p>
 							</c:if>
 							
-							<c:if test="${param.logout != null}">
+							<c:if test='${param.logout.equals("true")}'>
 								<p>You have successfully logged out.</p>
 							</c:if>
 							<sec:csrfInput/>

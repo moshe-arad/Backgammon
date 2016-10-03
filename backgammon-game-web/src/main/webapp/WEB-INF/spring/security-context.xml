@@ -8,6 +8,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:component-scan base-package="org.moshe.arad.services" />
+	<context:component-scan base-package="org.moshe.arad.general" />
 	
 	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 	
@@ -17,7 +18,7 @@
 		default-target-url="/backgammon/"
 		authentication-failure-url="/home?error=true" />
 		
-		<security:logout logout-url="/logout" logout-success-url="/home?logout=true"/>
+		<security:logout logout-url="/logout" success-handler-ref="logoutHandler"/>
 		<security:intercept-url pattern="/backgammon" access="ROLE_USER"/>
 		<security:intercept-url pattern="/backgammon/*" access="ROLE_USER"/>
 	</security:http>

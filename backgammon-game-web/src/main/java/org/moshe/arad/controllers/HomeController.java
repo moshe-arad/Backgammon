@@ -68,29 +68,45 @@ public class HomeController {
 	@RequestMapping(value="/user_name", method = RequestMethod.GET)
 	@ResponseBody
 	public String userNameAvailable(@RequestParam String userName){
-		logger.info("User name bind result: " + userName);
-		if(userSecurityService.isUserNameAvailable(userName)){
-			logger.info("User name available for registeration.");
-			return "";
+		try{
+			logger.info("User name bind result: " + userName);
+			if(userSecurityService.isUserNameAvailable(userName)){
+				logger.info("User name available for registeration.");
+				return "";
+			}
+			else {
+				logger.info("User name not available can't register.");
+				return "User name is not availbale.";
+			}
 		}
-		else {
-			logger.info("User name not available can't register.");
-			return "User name is not availbale.";
+		catch (Exception ex) {
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			return "Ajax call encountred a server error.";
 		}
+		
 	}
 	
 	@RequestMapping(value="/email", method = RequestMethod.GET)
 	@ResponseBody
 	public String emailAvailable(@RequestParam String email){
-		logger.info("Email bind result: " + email);
-		if(userSecurityService.isEmailAvailable(email)){
-			logger.info("Email available for registeration.");
-			return "";
+		try{
+			logger.info("Email bind result: " + email);
+			if(userSecurityService.isEmailAvailable(email)){
+				logger.info("Email available for registeration.");
+				return "";
+			}
+			else{
+				logger.info("Email not available can't register.");
+				return "Email is not availbale.";
+			}
 		}
-		else{
-			logger.info("Email not available can't register.");
-			return "Email is not availbale.";
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			return "Ajax call encountred a server error.";
 		}
+		
 	}
 	
 	@InitBinder

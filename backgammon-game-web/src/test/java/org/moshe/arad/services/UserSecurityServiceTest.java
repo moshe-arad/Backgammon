@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,7 +28,7 @@ public class UserSecurityServiceTest {
 	@Autowired
 	UserSecurityService userSecurityService;
 	@Autowired
-	UserDao userDao;
+	HibernateGameUserDao userDao;
 	
 	@Before
 	public void setup(){

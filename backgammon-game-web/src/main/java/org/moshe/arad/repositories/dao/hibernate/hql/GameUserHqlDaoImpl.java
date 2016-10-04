@@ -1,4 +1,4 @@
-package org.moshe.arad.repositories.dao.hql;
+package org.moshe.arad.repositories.dao.hibernate.hql;
 
 import java.util.Date;
 import java.util.List;
@@ -8,14 +8,14 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.moshe.arad.repositories.dao.AbstractDao;
-import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateAbstractDao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 
 
-public class UserHqlDaoImpl extends AbstractDao<GameUser, Long> implements UserDao {
+public class GameUserHqlDaoImpl extends HibernateAbstractDao<GameUser, Long> implements HibernateGameUserDao {
 
-	private final Logger logger = LogManager.getLogger(UserHqlDaoImpl.class);
+	private final Logger logger = LogManager.getLogger(GameUserHqlDaoImpl.class);
 	
 	@Override
 	public List<GameUser> findByFirstName(String firstName) {

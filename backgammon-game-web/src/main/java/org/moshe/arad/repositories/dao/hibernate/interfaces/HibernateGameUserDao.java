@@ -1,12 +1,11 @@
-package org.moshe.arad.repositories.dao.interfaces;
+package org.moshe.arad.repositories.dao.hibernate.interfaces;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.moshe.arad.repositories.entities.GameUser;
 
 
-public interface UserDao extends Dao<GameUser,Long> {
+public interface HibernateGameUserDao extends HibernateDao<GameUser,Long> {
 
 	public List<GameUser> findByFirstName(String firstName);
 	

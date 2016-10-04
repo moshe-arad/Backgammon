@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import javax.annotation.Resource;
 
-import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public class UserSecurityRepository {
 
 	@Resource
-	UserDao userDao;
+	HibernateGameUserDao userDao;
 	
 	public GameUser loadUserByUsername(String userName){
 		return userDao.findByUserName(userName);

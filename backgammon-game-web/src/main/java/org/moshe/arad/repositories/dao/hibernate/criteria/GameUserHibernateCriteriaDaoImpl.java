@@ -1,4 +1,4 @@
-package org.moshe.arad.repositories.dao.criteria;
+package org.moshe.arad.repositories.dao.hibernate.criteria;
 
 import java.util.Date;
 import java.util.List;
@@ -12,14 +12,14 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.moshe.arad.repositories.dao.AbstractDao;
-import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateAbstractDao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 
 
-public class UserCriteriaDaoImpl extends AbstractDao<GameUser, Long> implements UserDao {
+public class GameUserHibernateCriteriaDaoImpl extends HibernateAbstractDao<GameUser, Long> implements HibernateGameUserDao {
 
-	private final Logger logger = LogManager.getLogger(UserCriteriaDaoImpl.class);
+	private final Logger logger = LogManager.getLogger(GameUserHibernateCriteriaDaoImpl.class);
 	
 	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override

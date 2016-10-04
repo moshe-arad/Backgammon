@@ -1,4 +1,4 @@
-package org.moshe.arad.repositories.dao;
+package org.moshe.arad.repositories.dao.hibernate;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
@@ -9,18 +9,19 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.moshe.arad.repositories.dao.interfaces.Dao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateDao;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public abstract class AbstractDao<T, ID extends Serializable> implements Dao<T, ID> {
+public abstract class HibernateAbstractDao<T, ID extends Serializable> implements HibernateDao<T, ID> {
 
-	private final Logger logger = LogManager.getLogger(AbstractDao.class);
+	private final Logger logger = LogManager.getLogger(HibernateAbstractDao.class);
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	private Class<T> persistentClass;
 	
 	@SuppressWarnings("unchecked")
-	public AbstractDao(){
+	public HibernateAbstractDao(){
 		this.persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 	

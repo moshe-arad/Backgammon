@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao;
+package org.moshe.arad.repositories;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.UserSecurityRepository;
-import org.moshe.arad.repositories.dao.interfaces.UserDao;
+import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -36,7 +36,7 @@ public class UserSecurityRepositoryTest {
 	@Autowired
 	UserSecurityRepository userSecurityRepo;
 	@Resource
-	UserDao userDao;
+	HibernateGameUserDao userDao;
 	
 	@Before
 	public void setup(){

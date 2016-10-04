@@ -5,8 +5,9 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 		
-	<bean id="userDao" class="org.moshe.arad.repositories.dao.criteria.UserCriteriaDaoImpl" />
-	<bean id="hqlDaoImpl" class="org.moshe.arad.repositories.dao.hql.UserHqlDaoImpl" />
+	<bean id="userDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
+	<bean id="hqlDaoImpl" class="org.moshe.arad.repositories.dao.hibernate.hql.GameUserHqlDaoImpl" />
+	<bean id="jpaCriteria" class="org.moshe.arad.repositories.dao.jpa.criteria.JpaUserCriteriaDaoImpl" />
 	
 	<bean class="org.moshe.arad.repositories.UserSecurityRepository" />
 	<bean class="org.moshe.arad.services.UserSecurityService"/>

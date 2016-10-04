@@ -1,4 +1,4 @@
-package org.moshe.arad.data.dao;
+package org.moshe.arad.repositories.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -13,7 +13,7 @@ import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.dao.hql.UserHqlDaoImpl;
+import org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -23,12 +23,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml", 
 						"classpath:user-security-context-test.xml"})
-public class UserHqlDaoTest {
+public class GameUserHibernateCriteriaDaoTest {
 
-	final Logger logger = LogManager.getLogger(UserHqlDaoTest.class);
+	final Logger logger = LogManager.getLogger(GameUserHibernateCriteriaDaoTest.class);
 	
 	@Autowired
-	UserHqlDaoImpl userHqlDao;
+	GameUserHibernateCriteriaDaoImpl userCriteriaDao;
 	@Autowired
 	SessionFactory sessionFactory;
 	@Autowired
@@ -42,8 +42,8 @@ public class UserHqlDaoTest {
 	
 	@Before
 	public void setup(){
-		userHqlDao.deleteAll();
-		session = userHqlDao.getSession();
+		userCriteriaDao.deleteAll();
+		session = userCriteriaDao.getSession();
 		tx = session.getTransaction();
 		
 		user1 = context.getBean("gameUser1", GameUser.class);
@@ -60,7 +60,7 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = userHqlDao.findByFirstName("Moshe");
+			List<GameUser> users = userCriteriaDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(1, users.size());
@@ -77,7 +77,7 @@ public class UserHqlDaoTest {
 	}
 	
 	@Test
-	public void findAllTest(){
+	public void findAllTest(){	
 		try{
 			tx.begin();
 			session.save(user1);
@@ -85,7 +85,7 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = userHqlDao.findAll();
+			List<GameUser> users = userCriteriaDao.findAll();
 			
 			assertEquals(3, users.size());
 		}
@@ -109,7 +109,7 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			GameUser user = userHqlDao.findByUserName("userName2");
+			GameUser user = userCriteriaDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
 		}
@@ -125,7 +125,7 @@ public class UserHqlDaoTest {
 	}
 	
 	@Test
-	public void getAllUserNamesTest(){
+	public void getAllUserNamesTest(){	
 		try{
 			tx.begin();
 			session.save(user1);
@@ -133,7 +133,7 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> userNames = userHqlDao.getAllUserNames();
+			List<String> userNames = userCriteriaDao.getAllUserNames();
 			
 			assertEquals(3, userNames.size());
 			assertTrue(userNames.contains(user1.getUsername()));
@@ -160,7 +160,7 @@ public class UserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> emails = userHqlDao.getAllEmails();
+			List<String> emails = userCriteriaDao.getAllEmails();
 			
 			assertEquals(3, emails.size());
 			assertTrue(emails.contains(user1.getEmail()));

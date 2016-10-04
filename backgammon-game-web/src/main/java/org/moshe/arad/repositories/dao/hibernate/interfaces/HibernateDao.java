@@ -1,11 +1,11 @@
-package org.moshe.arad.repositories.dao.interfaces;
+package org.moshe.arad.repositories.dao.hibernate.interfaces;
 
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-public interface Dao<T, ID> {
+public interface HibernateDao<T, ID> {
 	
 	public Session getSession();
 	

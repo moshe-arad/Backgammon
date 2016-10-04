@@ -14,23 +14,23 @@ import org.springframework.stereotype.Repository;
 public class UserSecurityRepository {
 
 	@Resource
-	HibernateGameUserDao userDao;
+	HibernateGameUserDao hibernateCriteriaDao;
 	
 	public GameUser loadUserByUsername(String userName){
-		return userDao.findByUserName(userName);
+		return hibernateCriteriaDao.findByUserName(userName);
 	}
 
 	public boolean registerNewUser(GameUser gameUser) {
-		return userDao.save(gameUser);
+		return hibernateCriteriaDao.save(gameUser);
 	}
 
 	public Set<String> getAllUserNames() {
-		Collection<String> userNamesCollection = userDao.getAllUserNames();
+		Collection<String> userNamesCollection = hibernateCriteriaDao.getAllUserNames();
 		return new ConcurrentSkipListSet<String>(userNamesCollection);
 	}
 
 	public Set<String> getAllEmails() {
-		Collection<String> emailsCollection = userDao.getAllEmails();
+		Collection<String> emailsCollection = hibernateCriteriaDao.getAllEmails();
 		return new ConcurrentSkipListSet<String>(emailsCollection);
 	}
 }

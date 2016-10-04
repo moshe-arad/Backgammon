@@ -6,17 +6,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.moshe.arad.repositories.dao.jpa.JpaAbstractDao;
 import org.moshe.arad.repositories.dao.jpa.interfaces.JpaGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -26,14 +22,63 @@ public class JpaUserCriteriaDaoImpl extends JpaAbstractDao<GameUser, Long> imple
 	private final Logger logger = LogManager.getLogger(JpaUserCriteriaDaoImpl.class);
 	@Override
 	public List<GameUser> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		List<GameUser> users = null;
+				
+		try{
+			logger.info("Try to retrieve all users from DB.");
+			tx.begin();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<GameUser> criteriaQuery = cb.createQuery(GameUser.class);
+			
+			Root<GameUser> fromGameUser = criteriaQuery.from(GameUser.class);
+			criteriaQuery.select(fromGameUser);
+			
+			TypedQuery<GameUser> query = em.createQuery(criteriaQuery);
+			users = query.getResultList();
+			
+			tx.commit();
+			logger.info("Retrieved " + users.size() + " users from DB.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			logger.info("Failed to retrieve all users from DB.");
+			tx.rollback();
+		}
+		finally{
+			em.close();
+		}
+		return users;
 	}
 
 	@Override
 	public void deleteAll() {
-		// TODO Auto-generated method stub
-		
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+				
+		try{
+			logger.info("Try to delete all users from DB.");
+			tx.begin();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaDelete<GameUser> criteriaQuery = cb.createCriteriaDelete(GameUser.class);
+			
+			criteriaQuery.from(GameUser.class);
+			int rows = em.createQuery(criteriaQuery).executeUpdate();
+			
+			tx.commit();
+			logger.info(rows + "users were delete from DB.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			logger.info("Failed to delete all users from DB.");
+			tx.rollback();
+		}
+		finally{
+			em.close();
+		}	
 	}
 
 	@Override
@@ -48,8 +93,11 @@ public class JpaUserCriteriaDaoImpl extends JpaAbstractDao<GameUser, Long> imple
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<GameUser> criteriaQuery = cb.createQuery(GameUser.class);
 			
-			Root<GameUser> root = criteriaQuery.from(GameUser.class);
-			criteriaQuery.select(root);
+			Root<GameUser> fromGameUser = criteriaQuery.from(GameUser.class);
+			criteriaQuery.select(fromGameUser)
+				.where(new Predicate[]{
+						cb.equal(fromGameUser.get("firstName"), firstName)
+				});
 			
 			TypedQuery<GameUser> query = em.createQuery(criteriaQuery);
 			
@@ -72,20 +120,111 @@ public class JpaUserCriteriaDaoImpl extends JpaAbstractDao<GameUser, Long> imple
 
 	@Override
 	public GameUser findByUserName(String userName) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		GameUser user = null;
+		
+		try{
+			logger.info("Try to specific user by its user name = " + userName + ".");
+			tx.begin();
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<GameUser> criteriaQuery = cb.createQuery(GameUser.class);
+			
+			Root<GameUser> fromGameUser = criteriaQuery.from(GameUser.class);
+			
+			criteriaQuery.select(fromGameUser)
+				.where(new Predicate[]{
+						cb.equal(fromGameUser.get("userName"), userName)
+						});
+			
+			TypedQuery<GameUser> typedQuery = em.createQuery(criteriaQuery);
+			user = typedQuery.getSingleResult();
+			
+			tx.commit();
+			logger.info("User with user name = " + userName + " , was found in DB.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			logger.info("Failed to find user with user name = " + userName + ".");
+			tx.rollback();
+		}
+		finally {
+			em.close();
+		}
+		return user;
 	}
 
 	@Override
 	public List<String> getAllUserNames() {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		List<String> userNames = null;
+		
+		
+		try{
+			logger.info("Try to retrieve all user names from DB.");
+			tx.begin();
+			
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<String> criteriaQuery = cb.createQuery(String.class);
+			
+			Root<GameUser> gameUserFrom = criteriaQuery.from(GameUser.class);
+			criteriaQuery.select(gameUserFrom.get("userName"));
+			
+			TypedQuery<String> query = em.createQuery(criteriaQuery);
+			userNames = query.getResultList();
+			
+			tx.commit();
+			logger.info("Retrieved " + userNames.size() + " user names from DB.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			logger.info("Failed to retrieve user names from DB.");
+			tx.rollback();
+		}
+		finally {
+			em.close();
+		}
+		
+		return userNames;
 	}
 
 	@Override
 	public List<String> getAllEmails() {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		List<String> emails = null;
+		
+		
+		try{
+			logger.info("Try to retrieve all emails from DB.");
+			tx.begin();
+			
+			CriteriaBuilder cb = em.getCriteriaBuilder();
+			CriteriaQuery<String> criteriaQuery = cb.createQuery(String.class);
+			
+			Root<GameUser> gameUserFrom = criteriaQuery.from(GameUser.class);
+			criteriaQuery.select(gameUserFrom.get("email"));
+			
+			TypedQuery<String> query = em.createQuery(criteriaQuery);
+			emails = query.getResultList();
+			
+			tx.commit();
+			logger.info("Retrieved " + emails.size() + " emails from DB.");
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			logger.info("Failed to retrieve emails from DB.");
+			tx.rollback();
+		}
+		finally {
+			em.close();
+		}
+		
+		return emails;
 	}
 
 }

@@ -36,20 +36,20 @@ public class UserSecurityRepositoryTest {
 	@Autowired
 	UserSecurityRepository userSecurityRepo;
 	@Resource
-	HibernateGameUserDao userDao;
+	HibernateGameUserDao hibernateCriteriaDao;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
  
-		userDao.save(context.getBean("gameUser1", GameUser.class));
-		userDao.save(context.getBean("gameUser2", GameUser.class));
-		userDao.save(context.getBean("gameUser3", GameUser.class));
+		hibernateCriteriaDao.save(context.getBean("gameUser1", GameUser.class));
+		hibernateCriteriaDao.save(context.getBean("gameUser2", GameUser.class));
+		hibernateCriteriaDao.save(context.getBean("gameUser3", GameUser.class));
 	}
 	
 	@After
 	public void cleanup(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 	}
 	
 	@Test
@@ -69,10 +69,10 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void registerNewUserTest(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
 		assertTrue(userSecurityRepo.registerNewUser(gameUser));
-		List<GameUser> users = userDao.findAll();
+		List<GameUser> users = hibernateCriteriaDao.findAll();
 		
 		assertEquals(1, users.size());
 		assertEquals(gameUser.getUsername(), users.get(0).getUserName());
@@ -95,7 +95,7 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void getAllUserNamesEmptySetTest(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 		Set<String> userNames = userSecurityRepo.getAllUserNames();
 		
 		assertEquals(0, userNames.size());
@@ -113,7 +113,7 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void getAllEmailsEmptySetTest(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 		Set<String> emails = userSecurityRepo.getAllEmails();
 		
 		assertEquals(0, emails.size());

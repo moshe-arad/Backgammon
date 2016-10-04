@@ -3,6 +3,8 @@ package org.moshe.arad.services;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import javax.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -27,19 +29,19 @@ public class UserSecurityServiceTest {
 	ApplicationContext context;
 	@Autowired
 	UserSecurityService userSecurityService;
-	@Autowired
-	HibernateGameUserDao userDao;
+	@Resource
+	HibernateGameUserDao hibernateCriteriaDao;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
 
-		userDao.deleteAll(); 
+		hibernateCriteriaDao.deleteAll(); 
 	}
 	
 	@After
 	public void cleanup(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 	}
 	
 	@Test

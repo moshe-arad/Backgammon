@@ -8,6 +8,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import javax.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -44,18 +46,18 @@ public class HomeControllerTest {
 	ApplicationContext context;
 	@Autowired
 	WebApplicationContext wac;
-	@Autowired
-	HibernateGameUserDao userDao;
+	@Resource
+	HibernateGameUserDao hibernateCriteriaDao;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 	}
 	
 	@After
 	public void cleanup(){
-		userDao.deleteAll();
+		hibernateCriteriaDao.deleteAll();
 	}
 	
 	@Test
@@ -104,8 +106,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, userDao.findAll().size());
-		assertEquals(user1, userDao.findAll().get(0));
+		assertEquals(1, hibernateCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
 				
 	}
 	
@@ -138,8 +140,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, userDao.findAll().size());
-		assertEquals(user1, userDao.findAll().get(0));
+		assertEquals(1, hibernateCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
@@ -167,8 +169,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, userDao.findAll().size());
-		assertEquals(user1, userDao.findAll().get(0));
+		assertEquals(1, hibernateCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
 		
 		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
 		.andExpect(status().isOk())

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -11,13 +12,12 @@ import javax.persistence.EntityTransaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.dao.jpa.interfaces.JpaDao;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class JpaAbstractDao <T, ID extends Serializable> implements JpaDao<T, ID>{
 
 	private final Logger logger = LogManager.getLogger(JpaAbstractDao.class);
 	
-	@Autowired
+	@Resource
 	private EntityManagerFactory emf;
 	private Class<T> persistentClass;
 	

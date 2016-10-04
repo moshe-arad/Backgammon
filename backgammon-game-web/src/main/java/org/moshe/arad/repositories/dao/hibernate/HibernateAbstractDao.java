@@ -4,20 +4,21 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateDao;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class HibernateAbstractDao<T, ID extends Serializable> implements HibernateDao<T, ID> {
 
 	private final Logger logger = LogManager.getLogger(HibernateAbstractDao.class);
 	
-	@Autowired
-	private SessionFactory sessionFactory;
+	@Resource
+	private SessionFactory mySessionFactory;
 	private Class<T> persistentClass;
 	
 	@SuppressWarnings("unchecked")
@@ -28,10 +29,10 @@ public abstract class HibernateAbstractDao<T, ID extends Serializable> implement
 	@Override
 	public Session getSession() {
 		try{
-			return sessionFactory.getCurrentSession();
+			return mySessionFactory.getCurrentSession();
 		}
 		catch(Exception ex){
-			return sessionFactory.openSession();
+			return mySessionFactory.openSession();
 		}
 		
 	}

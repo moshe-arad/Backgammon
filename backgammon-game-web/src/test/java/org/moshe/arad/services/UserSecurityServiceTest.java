@@ -11,7 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,18 +30,18 @@ public class UserSecurityServiceTest {
 	@Autowired
 	UserSecurityService userSecurityService;
 	@Resource
-	HibernateGameUserDao hibernateCriteriaDao;
+	HibernateGameUserDao hibernateGameUserCriteriaDao;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
 
-		hibernateCriteriaDao.deleteAll(); 
+		hibernateGameUserCriteriaDao.deleteAll(); 
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 	}
 	
 	@Test

@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,17 +47,17 @@ public class HomeControllerTest {
 	@Autowired
 	WebApplicationContext wac;
 	@Resource
-	HibernateGameUserDao hibernateCriteriaDao;
+	HibernateGameUserDao hibernateGameUserCriteriaDao;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 	}
 	
 	@Test
@@ -106,8 +106,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, hibernateCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
+		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
 				
 	}
 	
@@ -140,8 +140,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, hibernateCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
+		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
@@ -169,8 +169,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("backgammon"))
 		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
 		
-		assertEquals(1, hibernateCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateCriteriaDao.findAll().get(0));
+		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
+		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
 		
 		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
 		.andExpect(status().isOk())

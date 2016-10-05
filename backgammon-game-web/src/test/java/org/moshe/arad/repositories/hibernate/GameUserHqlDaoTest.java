@@ -30,7 +30,7 @@ public class GameUserHqlDaoTest {
 	final Logger logger = LogManager.getLogger(GameUserHqlDaoTest.class);
 	
 	@Resource
-	GameUserHqlDaoImpl hqlDao;
+	GameUserHqlDaoImpl hqlGameUserDao;
 	@Autowired
 	SessionFactory sessionFactory;
 	@Autowired
@@ -44,8 +44,8 @@ public class GameUserHqlDaoTest {
 	
 	@Before
 	public void setup(){
-		hqlDao.deleteAll();
-		session = hqlDao.getSession();
+		hqlGameUserDao.deleteAll();
+		session = hqlGameUserDao.getSession();
 		tx = session.getTransaction();
 		
 		user1 = context.getBean("gameUser1", GameUser.class);
@@ -62,7 +62,7 @@ public class GameUserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = hqlDao.findByFirstName("Moshe");
+			List<GameUser> users = hqlGameUserDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(1, users.size());
@@ -87,7 +87,7 @@ public class GameUserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = hqlDao.findAll();
+			List<GameUser> users = hqlGameUserDao.findAll();
 			
 			assertEquals(3, users.size());
 		}
@@ -111,7 +111,7 @@ public class GameUserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			GameUser user = hqlDao.findByUserName("userName2");
+			GameUser user = hqlGameUserDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
 		}
@@ -135,7 +135,7 @@ public class GameUserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> userNames = hqlDao.getAllUserNames();
+			List<String> userNames = hqlGameUserDao.getAllUserNames();
 			
 			assertEquals(3, userNames.size());
 			assertTrue(userNames.contains(user1.getUsername()));
@@ -162,7 +162,7 @@ public class GameUserHqlDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> emails = hqlDao.getAllEmails();
+			List<String> emails = hqlGameUserDao.getAllEmails();
 			
 			assertEquals(3, emails.size());
 			assertTrue(emails.contains(user1.getEmail()));

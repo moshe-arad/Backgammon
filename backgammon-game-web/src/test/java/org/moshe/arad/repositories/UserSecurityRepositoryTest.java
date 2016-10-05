@@ -16,8 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.UserSecurityRepository;
-import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -25,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"classpath:persistence-context-test.xml", 
+@ContextConfiguration({"classpath:persistence-context-test.xml",
 						"classpath:user-security-context-test.xml"})
 public class UserSecurityRepositoryTest {
 	
@@ -36,20 +35,20 @@ public class UserSecurityRepositoryTest {
 	@Autowired
 	UserSecurityRepository userSecurityRepo;
 	@Resource
-	HibernateGameUserDao hibernateCriteriaDao;
+	HibernateGameUserDao hibernateGameUserCriteriaDao;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
  
-		hibernateCriteriaDao.save(context.getBean("gameUser1", GameUser.class));
-		hibernateCriteriaDao.save(context.getBean("gameUser2", GameUser.class));
-		hibernateCriteriaDao.save(context.getBean("gameUser3", GameUser.class));
+		hibernateGameUserCriteriaDao.save(context.getBean("gameUser1", GameUser.class));
+		hibernateGameUserCriteriaDao.save(context.getBean("gameUser2", GameUser.class));
+		hibernateGameUserCriteriaDao.save(context.getBean("gameUser3", GameUser.class));
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 	}
 	
 	@Test
@@ -69,10 +68,10 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void registerNewUserTest(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
 		assertTrue(userSecurityRepo.registerNewUser(gameUser));
-		List<GameUser> users = hibernateCriteriaDao.findAll();
+		List<GameUser> users = hibernateGameUserCriteriaDao.findAll();
 		
 		assertEquals(1, users.size());
 		assertEquals(gameUser.getUsername(), users.get(0).getUserName());
@@ -95,7 +94,7 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void getAllUserNamesEmptySetTest(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 		Set<String> userNames = userSecurityRepo.getAllUserNames();
 		
 		assertEquals(0, userNames.size());
@@ -113,7 +112,7 @@ public class UserSecurityRepositoryTest {
 	
 	@Test
 	public void getAllEmailsEmptySetTest(){
-		hibernateCriteriaDao.deleteAll();
+		hibernateGameUserCriteriaDao.deleteAll();
 		Set<String> emails = userSecurityRepo.getAllEmails();
 		
 		assertEquals(0, emails.size());

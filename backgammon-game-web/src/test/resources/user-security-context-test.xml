@@ -5,10 +5,10 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 		
-	<bean id="hibernateCriteriaDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
-	<bean id="hqlDao" class="org.moshe.arad.repositories.dao.hibernate.hql.GameUserHqlDaoImpl" />
-	<bean id="jpaCriteriaDao" class="org.moshe.arad.repositories.dao.jpa.criteria.JpaUserCriteriaDaoImpl" />
-	<bean id="jpqlDao" class="org.moshe.arad.repositories.dao.jpa.jpql.GameUserJpqlDaoImpl" />
+	<bean id="hibernateGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
+	<bean id="hqlGameUserDao" class="org.moshe.arad.repositories.dao.hibernate.hql.GameUserHqlDaoImpl" />
+	<bean id="jpaGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.jpa.criteria.JpaUserCriteriaDaoImpl" />
+	<bean id="jpqlGameUserDao" class="org.moshe.arad.repositories.dao.jpa.jpql.GameUserJpqlDaoImpl" />
 	
 	<bean class="org.moshe.arad.repositories.UserSecurityRepository" />
 	<bean class="org.moshe.arad.services.UserSecurityService"/>

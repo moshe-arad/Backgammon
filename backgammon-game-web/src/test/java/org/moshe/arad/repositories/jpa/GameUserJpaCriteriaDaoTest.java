@@ -31,9 +31,9 @@ public class GameUserJpaCriteriaDaoTest {
 	final Logger logger = LogManager.getLogger(GameUserJpaCriteriaDaoTest.class);
 	
 	@Resource
-	JpaUserCriteriaDaoImpl jpaCriteriaDao;
+	JpaUserCriteriaDaoImpl jpaGameUserCriteriaDao;
 	@Resource
-	EntityManagerFactory emf;
+	EntityManagerFactory entityManagerFactory;
 	@Autowired
 	ApplicationContext context;
 	EntityManager entityManager;
@@ -45,8 +45,8 @@ public class GameUserJpaCriteriaDaoTest {
 	
 	@Before
 	public void setup(){
-		jpaCriteriaDao.deleteAll();
-		entityManager = jpaCriteriaDao.getEntityManager();
+		jpaGameUserCriteriaDao.deleteAll();
+		entityManager = jpaGameUserCriteriaDao.getEntityManager();
 		tx = entityManager.getTransaction();
 		
 		user1 = context.getBean("gameUser1", GameUser.class);
@@ -56,7 +56,7 @@ public class GameUserJpaCriteriaDaoTest {
 	
 	@After
 	public void cleanup(){
-		jpaCriteriaDao.deleteAll();
+		jpaGameUserCriteriaDao.deleteAll();
 	}
 	
 	@Test
@@ -68,7 +68,7 @@ public class GameUserJpaCriteriaDaoTest {
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<GameUser> users = jpaCriteriaDao.findByFirstName("Moshe");
+			List<GameUser> users = jpaGameUserCriteriaDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(1, users.size());
@@ -93,7 +93,7 @@ public class GameUserJpaCriteriaDaoTest {
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<GameUser> users = jpaCriteriaDao.findAll();
+			List<GameUser> users = jpaGameUserCriteriaDao.findAll();
 			
 			assertEquals(3, users.size());
 		}
@@ -117,7 +117,7 @@ public class GameUserJpaCriteriaDaoTest {
 			entityManager.persist(user3);
 			tx.commit();
 			
-			GameUser user = jpaCriteriaDao.findByUserName("userName2");
+			GameUser user = jpaGameUserCriteriaDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
 		}
@@ -141,7 +141,7 @@ public class GameUserJpaCriteriaDaoTest {
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<String> userNames = jpaCriteriaDao.getAllUserNames();
+			List<String> userNames = jpaGameUserCriteriaDao.getAllUserNames();
 			
 			assertEquals(3, userNames.size());
 			assertTrue(userNames.contains(user1.getUsername()));
@@ -168,7 +168,7 @@ public class GameUserJpaCriteriaDaoTest {
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<String> emails = jpaCriteriaDao.getAllEmails();
+			List<String> emails = jpaGameUserCriteriaDao.getAllEmails();
 			
 			assertEquals(3, emails.size());
 			assertTrue(emails.contains(user1.getEmail()));

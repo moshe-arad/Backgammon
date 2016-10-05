@@ -31,9 +31,9 @@ public class GameUserJpqlDaoTest {
 final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 	
 	@Resource
-	GameUserJpqlDaoImpl jpqlDao;
+	GameUserJpqlDaoImpl jpqlGameUserDao;
 	@Resource
-	EntityManagerFactory emf;
+	EntityManagerFactory entityManagerFactory;
 	@Autowired
 	ApplicationContext context;
 	EntityManager entityManager;
@@ -45,8 +45,8 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 	
 	@Before
 	public void setup(){
-		jpqlDao.deleteAll();
-		entityManager = jpqlDao.getEntityManager();
+		jpqlGameUserDao.deleteAll();
+		entityManager = jpqlGameUserDao.getEntityManager();
 		tx = entityManager.getTransaction();
 		
 		user1 = context.getBean("gameUser1", GameUser.class);
@@ -56,7 +56,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 	
 	@After
 	public void cleanup(){
-		jpqlDao.deleteAll();
+		jpqlGameUserDao.deleteAll();
 	}
 	
 	@Test
@@ -68,7 +68,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<GameUser> users = jpqlDao.findByFirstName("Moshe");
+			List<GameUser> users = jpqlGameUserDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(1, users.size());
@@ -93,7 +93,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<GameUser> users = jpqlDao.findAll();
+			List<GameUser> users = jpqlGameUserDao.findAll();
 			
 			assertEquals(3, users.size());
 		}
@@ -117,7 +117,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 			entityManager.persist(user3);
 			tx.commit();
 			
-			GameUser user = jpqlDao.findByUserName("userName2");
+			GameUser user = jpqlGameUserDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
 		}
@@ -141,7 +141,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<String> userNames = jpqlDao.getAllUserNames();
+			List<String> userNames = jpqlGameUserDao.getAllUserNames();
 			
 			assertEquals(3, userNames.size());
 			assertTrue(userNames.contains(user1.getUsername()));
@@ -168,7 +168,7 @@ final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 			entityManager.persist(user3);
 			tx.commit();
 			
-			List<String> emails = jpqlDao.getAllEmails();
+			List<String> emails = jpqlGameUserDao.getAllEmails();
 			
 			assertEquals(3, emails.size());
 			assertTrue(emails.contains(user1.getEmail()));

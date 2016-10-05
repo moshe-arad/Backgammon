@@ -4,22 +4,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
-import org.moshe.arad.repositories.dao.hibernate.HibernateAbstractDao;
-import org.moshe.arad.repositories.dao.hibernate.interfaces.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 
 
-public class GameUserHibernateCriteriaDaoImpl extends HibernateAbstractDao<GameUser, Long> implements HibernateGameUserDao {
+public class GameUserHibernateCriteriaDaoImpl implements HibernateGameUserDao {
 
 	private final Logger logger = LogManager.getLogger(GameUserHibernateCriteriaDaoImpl.class);
+	
+	@Resource
+	private SessionFactory mySessionFactory;
 	
 	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override
@@ -232,5 +237,73 @@ public class GameUserHibernateCriteriaDaoImpl extends HibernateAbstractDao<GameU
 			session.close();
 		}
 		return emails;
+	}
+
+	@Override
+	public Session getSession() {
+		try{
+			return mySessionFactory.getCurrentSession();
+		}
+		catch(Exception ex){
+			return mySessionFactory.openSession();
+		}
+		
+	}
+
+	@Override
+	public Transaction getTransaction() {
+		return getSession().getTransaction();
+	}
+
+	@Override
+	public GameUser findById(Long id) {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		GameUser item = null;
+		
+		try{
+			tx.begin();
+			item  = session.load(GameUser.class, id);
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+		return item;
+	}
+
+	@Override
+	public void delete(GameUser entity) {
+		Session session = getSession();
+		Transaction tx = session.getTransaction();
+		
+		try{
+			tx.begin();
+			session.delete(entity);
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			session.close();
+		}
+	}
+
+	@Override
+	public void flush() {
+		getSession().flush();
+	}
+
+	@Override
+	public void clear() {
+		getSession().clear();
 	}
 }

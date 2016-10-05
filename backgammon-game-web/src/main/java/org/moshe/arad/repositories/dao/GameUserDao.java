@@ -1,4 +1,4 @@
-package org.moshe.arad.repositories.dao.general;
+package org.moshe.arad.repositories.dao;
 
 import java.util.List;
 

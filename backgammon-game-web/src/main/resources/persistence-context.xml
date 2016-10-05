@@ -33,7 +33,7 @@
 	
 	<!-- JPA -->
 	
-	<bean id="myEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="myDataSource" />
 		<property name="packagesToScan" value="org.moshe.arad.repositories.entities" />
 		<property name="jpaVendorAdapter">
@@ -49,5 +49,5 @@
 		</property>
 	</bean>
 	
-	<!-- <bean class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />	 -->
+	<bean id="hibernateGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
 </beans>

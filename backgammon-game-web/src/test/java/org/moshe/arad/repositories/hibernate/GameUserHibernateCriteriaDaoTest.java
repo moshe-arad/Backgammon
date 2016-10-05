@@ -30,7 +30,7 @@ public class GameUserHibernateCriteriaDaoTest {
 	final Logger logger = LogManager.getLogger(GameUserHibernateCriteriaDaoTest.class);
 	
 	@Resource
-	GameUserHibernateCriteriaDaoImpl hibernateCriteriaDao;
+	GameUserHibernateCriteriaDaoImpl hibernateGameUserCriteriaDao;
 	@Resource
 	SessionFactory mySessionFactory;
 	@Autowired
@@ -44,8 +44,8 @@ public class GameUserHibernateCriteriaDaoTest {
 	
 	@Before
 	public void setup(){
-		hibernateCriteriaDao.deleteAll();
-		session = hibernateCriteriaDao.getSession();
+		hibernateGameUserCriteriaDao.deleteAll();
+		session = hibernateGameUserCriteriaDao.getSession();
 		tx = session.getTransaction();
 		
 		user1 = context.getBean("gameUser1", GameUser.class);
@@ -62,7 +62,7 @@ public class GameUserHibernateCriteriaDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = hibernateCriteriaDao.findByFirstName("Moshe");
+			List<GameUser> users = hibernateGameUserCriteriaDao.findByFirstName("Moshe");
 			for(GameUser user:users)
 				assertEquals("Moshe", user.getFirstName());
 			assertEquals(1, users.size());
@@ -87,7 +87,7 @@ public class GameUserHibernateCriteriaDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<GameUser> users = hibernateCriteriaDao.findAll();
+			List<GameUser> users = hibernateGameUserCriteriaDao.findAll();
 			
 			assertEquals(3, users.size());
 		}
@@ -111,7 +111,7 @@ public class GameUserHibernateCriteriaDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			GameUser user = hibernateCriteriaDao.findByUserName("userName2");
+			GameUser user = hibernateGameUserCriteriaDao.findByUserName("userName2");
 			
 			assertEquals("userName2", user.getUserName());
 		}
@@ -135,7 +135,7 @@ public class GameUserHibernateCriteriaDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> userNames = hibernateCriteriaDao.getAllUserNames();
+			List<String> userNames = hibernateGameUserCriteriaDao.getAllUserNames();
 			
 			assertEquals(3, userNames.size());
 			assertTrue(userNames.contains(user1.getUsername()));
@@ -162,7 +162,7 @@ public class GameUserHibernateCriteriaDaoTest {
 			session.save(user3);
 			tx.commit();
 			
-			List<String> emails = hibernateCriteriaDao.getAllEmails();
+			List<String> emails = hibernateGameUserCriteriaDao.getAllEmails();
 			
 			assertEquals(3, emails.size());
 			assertTrue(emails.contains(user1.getEmail()));

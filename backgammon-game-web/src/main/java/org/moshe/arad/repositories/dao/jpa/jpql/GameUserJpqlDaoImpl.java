@@ -2,20 +2,24 @@ package org.moshe.arad.repositories.dao.jpa.jpql;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.repositories.dao.jpa.JpaAbstractDao;
-import org.moshe.arad.repositories.dao.jpa.interfaces.JpaGameUserDao;
+import org.moshe.arad.repositories.dao.jpa.JpaGameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 
-public class GameUserJpqlDaoImpl extends JpaAbstractDao<GameUser, Long> implements JpaGameUserDao {
+public class GameUserJpqlDaoImpl implements JpaGameUserDao {
 
 	private final Logger logger = LogManager.getLogger(GameUserJpqlDaoImpl.class);
+	
+	@Resource
+	private EntityManagerFactory entityManagerFactory;
 	
 	@Override
 	public List<GameUser> findByFirstName(String firstName) {
@@ -177,6 +181,91 @@ public class GameUserJpqlDaoImpl extends JpaAbstractDao<GameUser, Long> implemen
 		finally{
 			em.close();
 		}	
+	}
+
+	@Override
+	public EntityManager getEntityManager() {
+		return entityManagerFactory.createEntityManager();
+	}
+
+	@Override
+	public EntityTransaction getTransaction() {
+		return getEntityManager().getTransaction();
+	}
+
+	@Override
+	public GameUser findById(Long id) {
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		GameUser item = null;
+		
+		try{
+			tx.begin();
+			item  = em.find(GameUser.class, id);
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			em.close();
+		}
+		return item;
+	}
+
+	@Override
+	public boolean save(GameUser entity) {
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		boolean isSaved = false;
+		
+		try{
+			tx.begin();
+			em.merge(entity);
+			tx.commit();
+			isSaved = true;
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			em.close();
+		}
+		return isSaved;
+	}
+
+	@Override
+	public void delete(GameUser entity) {
+		EntityManager em = getEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		
+		try{
+			tx.begin();
+			em.remove(entity);
+			tx.commit();
+		}
+		catch(Exception ex){
+			logger.error(ex.getMessage());
+			logger.error(ex);
+			tx.rollback();
+		}
+		finally{
+			em.close();
+		}
+	}
+
+	@Override
+	public void flush() {
+		getEntityManager().flush();
+	}
+
+	@Override
+	public void clear() {
+		getEntityManager().clear();
 	}
 
 }

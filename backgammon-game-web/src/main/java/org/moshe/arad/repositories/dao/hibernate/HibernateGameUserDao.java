@@ -1,6 +1,7 @@
-package org.moshe.arad.repositories.dao.hibernate.interfaces;
+package org.moshe.arad.repositories.dao.hibernate;
 
-import org.moshe.arad.repositories.dao.general.GameUserDao;
+
+import org.moshe.arad.repositories.dao.GameUserDao;
 import org.moshe.arad.repositories.entities.GameUser;
 
 

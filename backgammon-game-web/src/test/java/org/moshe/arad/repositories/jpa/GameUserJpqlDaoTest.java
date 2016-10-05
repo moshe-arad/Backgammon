@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.jpa.jpql.GameUserJpqlDaoImpl;
 import org.moshe.arad.repositories.entities.GameUser;
-import org.moshe.arad.repositories.hibernate.GameUserHqlDaoTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
@@ -29,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 						"classpath:user-security-context-test.xml"})
 public class GameUserJpqlDaoTest {
 
-final Logger logger = LogManager.getLogger(GameUserHqlDaoTest.class);
+final Logger logger = LogManager.getLogger(GameUserJpqlDaoTest.class);
 	
 	@Resource
 	GameUserJpqlDaoImpl jpqlDao;

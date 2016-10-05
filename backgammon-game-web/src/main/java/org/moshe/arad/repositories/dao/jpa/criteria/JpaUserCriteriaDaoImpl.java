@@ -20,6 +20,7 @@ import org.moshe.arad.repositories.entities.GameUser;
 public class JpaUserCriteriaDaoImpl extends JpaAbstractDao<GameUser, Long> implements JpaGameUserDao{
 
 	private final Logger logger = LogManager.getLogger(JpaUserCriteriaDaoImpl.class);
+	
 	@Override
 	public List<GameUser> findAll() {
 		EntityManager em = getEntityManager();

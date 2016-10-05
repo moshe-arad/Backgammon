@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.UserSecurityRepositoryHibernate;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class UserSecurityService implements UserDetailsService{
 
 	@Autowired
-	private UserSecurityRepository userSecurityRepo;
+	private UserSecurityRepositoryHibernate userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
 	

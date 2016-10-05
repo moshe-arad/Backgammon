@@ -1,38 +1,43 @@
 package org.moshe.arad.repositories;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.stream.Collectors;
 
-import javax.annotation.Resource;
-import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserSecurityRepository {
 
-	@Resource
-	HibernateGameUserDao hibernateGameUserCriteriaDao;
-	
-//	@Autowired
-//	GameUserDataDao gameUserDataDao;
-	
+	@Autowired
+	GameUserRepository gameUserRepository;
+
 	public GameUser loadUserByUsername(String userName){
-		return hibernateGameUserCriteriaDao.findByUserName(userName);
+		return gameUserRepository.findByUserName(userName);
 	}
 
-	public boolean registerNewUser(GameUser gameUser) {
-		return hibernateGameUserCriteriaDao.save(gameUser);
+	public void registerNewUser(GameUser gameUser) {
+		try{
+			if(gameUser == null) throw new NullPointerException();
+			gameUserRepository.save(gameUser);
+		}
+		catch (NullPointerException e) {
+		}
 	}
-
+	
 	public Set<String> getAllUserNames() {
-		Collection<String> userNamesCollection = hibernateGameUserCriteriaDao.getAllUserNames();
-		return new ConcurrentSkipListSet<String>(userNamesCollection);
+		List<GameUser> users = gameUserRepository.findAll();
+		List<String> userNames = users.parallelStream().map(user->user.getUsername()).collect(Collectors.toList());
+		return new ConcurrentSkipListSet<String>(userNames);
 	}
-
+	
 	public Set<String> getAllEmails() {
-		Collection<String> emailsCollection = hibernateGameUserCriteriaDao.getAllEmails();
-		return new ConcurrentSkipListSet<String>(emailsCollection);
-	}
+		List<GameUser> users = gameUserRepository.findAll();
+		List<String> emails = users.parallelStream().map(user->user.getEmail()).collect(Collectors.toList());
+		return new ConcurrentSkipListSet<String>(emails);
+	}	
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
-import org.moshe.arad.repositories.UserSecurityRepositoryHibernate;
+import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,7 +19,8 @@ import org.springframework.stereotype.Service;
 public class UserSecurityService implements UserDetailsService{
 
 	@Autowired
-	private UserSecurityRepositoryHibernate userSecurityRepo;
+	private UserSecurityRepository userSecurityRepo;
+//	private UserSecurityRepositoryHibernate userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
 	
@@ -28,21 +29,18 @@ public class UserSecurityService implements UserDetailsService{
 		return userSecurityRepo.loadUserByUsername(userName);
 	}
 
-	public boolean registerNewUser(GameUser gameUser, String role) {
+	public void registerNewUser(GameUser gameUser, String role) {
 		gameUser.setRole(role);
-		boolean isSuccessfulSaved = userSecurityRepo.registerNewUser(gameUser);
-		if(!isSuccessfulSaved) return false;
-		else{
-			initVirtualRepo();
-			
-			userNames.add(gameUser.getUserName());
-			emails.add(gameUser.getEmail());
-			
-			Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
-					gameUser.getPassword(), gameUser.getAuthorities()); 
-			SecurityContextHolder.getContext().setAuthentication(auth);
-			return true;
-		}
+		userSecurityRepo.registerNewUser(gameUser);
+		
+		initVirtualRepo();
+		
+		userNames.add(gameUser.getUserName());
+		emails.add(gameUser.getEmail());
+		
+		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
+				gameUser.getPassword(), gameUser.getAuthorities()); 
+		SecurityContextHolder.getContext().setAuthentication(auth);
 	}
 	
 	public boolean isUserNameAvailable(String userName){

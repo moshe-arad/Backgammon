@@ -46,25 +46,25 @@ public class UserSecurityServiceTest {
 	
 	@Test
 	public void isUserNameAvailableNotAvailableTest(){
-		assertTrue(userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test"));
+		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
 		assertFalse(userSecurityService.isUserNameAvailable(context.getBean("gameUser1", GameUser.class).getUserName()));
 	}
 	
 	@Test
 	public void isUserNameAvailableTest(){
-		assertTrue(userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test"));
+		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
 		assertTrue(userSecurityService.isUserNameAvailable("userName2"));
 	}
 	
 	@Test
 	public void isEmailAvailableNotAvailableTest(){
-		assertTrue(userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test"));
+		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
 		assertFalse(userSecurityService.isEmailAvailable(context.getBean("gameUser1", GameUser.class).getEmail()));
 	}
 	
 	@Test
 	public void isEmailAvailableTest(){
-		assertTrue(userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test"));
+		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
 		assertTrue(userSecurityService.isEmailAvailable("email2@walla.com"));
 	}
 }

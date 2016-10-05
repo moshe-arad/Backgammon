@@ -9,14 +9,13 @@
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
-	<context:component-scan base-package="org.moshe.arad.repositories.dao.data" />
-	<jpa:repositories base-package="org.moshe.arad.repositories.dao.data" />
-	<tx:annotation-driven/>
-	
 	<import resource="classpath:persistence-context.xml"/>
 	
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-		<property name="entityManagerFactory" ref="myEntityManagerFactory" />
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
+	<context:component-scan base-package="org.moshe.arad.repositories" />
+	<jpa:repositories base-package="org.moshe.arad.repositories.dao.data" />
+	<tx:annotation-driven/>
 </beans>

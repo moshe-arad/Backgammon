@@ -52,15 +52,17 @@ public class HomeController {
 		
 		logger.info("The GameUser bind result: " + gameUser);
 		
-		boolean isSuccessfulRegister = userSecurityService.registerNewUser(gameUser, "ROLE_USER");
-		if(isSuccessfulRegister){
+		try{
+			userSecurityService.registerNewUser(gameUser, "ROLE_USER");
 			logger.info("User was successfuly register.");
 			logger.info("Routing for board page.");
 			return "backgammon";
 		}
-		else{
+		catch(Exception ex){
 			logger.info("User register failed.");
 			logger.info("Routing for home page.");
+			logger.error(ex.getMessage());
+			logger.error(ex);
 			return "home";
 		}
 	}

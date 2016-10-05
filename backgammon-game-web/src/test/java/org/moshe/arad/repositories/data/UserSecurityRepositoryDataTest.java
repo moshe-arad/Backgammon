@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.UserSecurityRepository;
-import org.moshe.arad.repositories.UserSecurityRepositoryHibernateTest;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 						"classpath:user-security-context-test.xml"})
 public class UserSecurityRepositoryDataTest {
 
-private final Logger logger = LogManager.getLogger(UserSecurityRepositoryHibernateTest.class);
+private final Logger logger = LogManager.getLogger(UserSecurityRepositoryDataTest.class);
 	
 //	@Autowired
 //	ApplicationContext context;

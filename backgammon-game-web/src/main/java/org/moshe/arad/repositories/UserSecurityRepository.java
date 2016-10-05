@@ -1,5 +1,6 @@
 package org.moshe.arad.repositories;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -23,10 +24,18 @@ public class UserSecurityRepository {
 	public void registerNewUser(GameUser gameUser) {
 		try{
 			if(gameUser == null) throw new NullPointerException();
+			setCreateAndUpdateDbInfo(gameUser);
 			gameUserRepository.save(gameUser);
 		}
 		catch (NullPointerException e) {
 		}
+	}
+
+	private void setCreateAndUpdateDbInfo(GameUser gameUser) {
+		gameUser.setCreatedBy(1L);
+		gameUser.setCreatedDate(new Date());
+		gameUser.setLastUpdatedBy(1L);
+		gameUser.setLastUpdatedDate(new Date());
 	}
 	
 	public Set<String> getAllUserNames() {

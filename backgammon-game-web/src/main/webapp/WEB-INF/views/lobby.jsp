@@ -1,10 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Arad's Backgammon Game</title>
+		<link rel="stylesheet" href='<spring:url value="/resources/bootstrap/bootstrap.min.css"/>' type="text/css" />
+		<link rel="stylesheet" href='<spring:url value="/resources/css/home.css"/>' type="text/css" />
 		<link rel="stylesheet" href='<spring:url value="/resources/css/lobby.css"/>' type="text/css" />
+		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
+		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
+		<script src="<spring:url value="/resources/js/logout.js" />"></script>
 	</head>
 	<body>
 		
@@ -19,15 +29,93 @@
 				<div class="col-lg-5"> </div>
 			</div>
 			<div class="row">
-				<div class="col-lg-5"> </div>
-				<div class="col-lg-2"> 
-					<a class="btn btn-primary btn-lg btn-block" href='<spring:url value="/backgammon" />' role="button">
-						Play
+				<div class="col-lg-4"> </div>
+				<div class="col-lg-4"> 
+					<a class="btn btn-primary btn-lg btn-block" href="#" role="button">
+						Open New Game Room
 					</a>
+					<br/>
 				</div>
-				<div class="col-lg-5"> </div>
+				<div class="col-lg-4"> </div>
+			</div>
+			
+			<div id="avialableRoomsRow" class="row">
+				<div class="col-lg-4"> </div>
+				<div class="col-lg-4"> 
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Room Name</th>
+								<th>Private Room</th>
+								<th>Game Speed</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach var="i" begin="0" end="${gameRooms.size() - 1}">
+								<tr>
+									<th scope="row"><c:out value="${i+1}"></c:out></th>
+									<td>${gameRooms.get(i).getGameRoomName()}</td>
+									<c:choose>
+										<c:when test="${gameRooms.get(i).getIsPrivateRoom().equals(true)}">
+											<td>Yes</td>
+										</c:when>
+										<c:otherwise>
+											<td>No</td>
+										</c:otherwise>
+									</c:choose>
+									
+									<c:choose>
+										<c:when test="${gameRooms.get(i).getSpeed().equals(0)}">
+											<td>High - 30 sec</td>
+										</c:when>
+										<c:when test="${gameRooms.get(i).getSpeed().equals(1)}">
+											<td>Medium - 45 sec</td>
+										</c:when>
+										<c:otherwise>
+											<td>Low - 60 sec</td>
+										</c:otherwise>
+									</c:choose>
+								</tr>
+							</c:forEach>
+						</tbody>	
+					</table>
+				</div>
+				<div class="col-lg-4"> </div>
+			</div>
+			
+			<div id="openRoomRow" class="row hidden">
+				<div class="col-lg-4"></div>
+				<div class="col-lg-4">
+					<spring:url value="/lobby/open" var="openRoom"/>
+					<form:form method="POST" action="${openRoom}" modelAttribute="newGameRoom">
+						<div class="form-group">
+    						<label for="gameRoomName">Game Room Name</label>
+    						<form:input type="text" path="gameRoomName" cssClass="form-control" id="gameRoomName" placeholder="Email" />
+  						</div>
+  						
+  						<div class="form-group">
+  							<label for="gameRoomName">Private Game Room</label>
+  							<form:select path="isPrivateRoom" cssClass="form-control selectpicker">
+  								<form:option value="0"><c:out value="${privateRoomOptions.get(0)}" /></form:option>
+  								<form:option value="1"><c:out value="${privateRoomOptions.get(1)}" /></form:option>
+  							</form:select>
+  						</div>
+  						
+  						<div class="form-group">
+  							<label for="speed">Game Speed</label>
+  							<form:select path="speed" cssClass="form-control selectpicker" >
+  								<form:option value="0"><c:out value="${speedOptions.get(0)}"></c:out></form:option>
+  								<form:option value="1"><c:out value="${speedOptions.get(1)}"></c:out></form:option>
+  								<form:option value="2"><c:out value="${speedOptions.get(2)}"></c:out></form:option>
+  							</form:select>
+  						</div>
+  						
+  						 <button type="submit" class="btn btn-primary">Ok</button>
+					</form:form>
+				</div>
+				<div class="col-lg-4"> </div>
 			</div>
 		</div>
-		
 	</body>
 </html>

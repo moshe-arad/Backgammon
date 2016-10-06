@@ -21,6 +21,8 @@
 		<security:logout logout-url="/logout" success-handler-ref="logoutHandler"/>
 		<security:intercept-url pattern="/backgammon" access="ROLE_USER"/>
 		<security:intercept-url pattern="/backgammon/*" access="ROLE_USER"/>
+		<security:intercept-url pattern="/lobby" access="ROLE_USER"/>
+		<security:intercept-url pattern="/lobby/*" access="ROLE_USER"/>
 	</security:http>
 	
 	<security:authentication-manager>

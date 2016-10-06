@@ -14,6 +14,7 @@
 		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
 		<script src="<spring:url value="/resources/js/registerUser.js" />" /></script>
+		<script src="<spring:url value="/resources/js/logout.js" />"></script>
 	</head>
 	<body>
 		

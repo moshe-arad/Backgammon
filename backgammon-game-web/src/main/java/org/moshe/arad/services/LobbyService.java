@@ -1,0 +1,59 @@
+package org.moshe.arad.services;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicLong;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.moshe.arad.repositories.entities.GameRoom;
+import org.springframework.stereotype.Service;
+
+@Service
+public class LobbyService {
+
+	private final Logger logger = LogManager.getLogger(LobbyService.class);
+	
+	private List<GameRoom> gameRooms = new CopyOnWriteArrayList<GameRoom>();
+	private static AtomicLong roomlabel = new AtomicLong(1);
+	
+	@PostConstruct
+	public void init(){
+		createDummyGameRooms();
+		logger.info("Dummy game rooms were added successfully.");
+	}
+	
+	public void addNewGameRoom(GameRoom gameRoom) {
+		logger.info("New game room was opened, details: " + gameRoom);
+		gameRooms.add(gameRoom);
+		logger.info("game room was added successfully.");
+	}
+	
+	public void setDefaultValues(GameRoom gameRoom){
+		logger.info("Setting default values for game room.");
+		gameRoom.setGameRoomName("Backgammon_" + LobbyService.roomlabel.getAndIncrement());
+		gameRoom.setIsPrivateRoom(false);
+		gameRoom.setSpeed(1);
+		logger.info("Default values were set with: " + gameRoom);
+	}
+	
+	private void createDummyGameRooms(){
+		GameRoom gameRoom1 = new GameRoom("Dummy_Room_1", new Boolean(false), null, null, null, 0);
+		GameRoom gameRoom2 = new GameRoom("Dummy_Room_2", new Boolean(false), null, null, null, 1);
+		GameRoom gameRoom3 = new GameRoom("Dummy_Room_3", new Boolean(false), null, null, null, 2);
+		GameRoom gameRoom4 = new GameRoom("Dummy_Room_4", new Boolean(true), null, null, null, 1);
+		GameRoom gameRoom5 = new GameRoom("Dummy_Room_5", new Boolean(true), null, null, null, 2);
+		
+		gameRooms.add(gameRoom1);
+		gameRooms.add(gameRoom2);
+		gameRooms.add(gameRoom3);
+		gameRooms.add(gameRoom4);
+		gameRooms.add(gameRoom5);
+	}
+
+	public List<GameRoom> getAllGameRooms() {
+		return gameRooms;
+	}
+}

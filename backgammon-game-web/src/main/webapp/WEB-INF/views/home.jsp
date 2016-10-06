@@ -16,54 +16,8 @@
 		<script src="<spring:url value="/resources/js/registerUser.js" />" /></script>
 	</head>
 	<body>
-		<nav class="navbar navbar-inverse">
-			<div class="container">
-				<div class="row">
-				
-					<div class="col-lg-5">
-						<div class="navbar-header"><h1>Arad's Backgammon Game</h1></div>
-					</div>
-					
-					<div class="col-lg-7">
-						<c:url value="/login" var="loginVar"/>
-						<form id="loginForm" class="navbar-form navbar-right" method="POST" action="${loginVar}">
-							
-							<div class="form-group">
-								<label for="userNameLogin">User Name:</label>
-								<br/>
-								<input type="text" class="form-control" name="userNameLogin" placeholder="User Name">
-							</div>
-							
-							<span>&nbsp;&nbsp;&nbsp;</span>
-							
-							<div class="form-group">
-								<label for="password">Password:</label>
-								<br/>
-								<input type="password" class="form-control" name="passwordLogin" placeholder="Password">
-							</div>
-							
-							<span>&nbsp;&nbsp;&nbsp;</span>
-							
-							<div class="form-group">
-								<br/>
-								<button type="submit" class="btn btn-primary">Log In</button>
-							</div>
-							
-							<c:if test="${param.error != null}">
-								<p>Invalid Username or Password.</p>
-							</c:if>
-							
-							<c:if test='${param.logout.equals("true")}'>
-								<p>You have successfully logged out.</p>
-							</c:if>
-							<sec:csrfInput/>
-						</form>
-						
-					</div>
-					
-				</div>
-			</div>
-		</nav>
+		
+		<jsp:include page="header.jsp"></jsp:include>
 		
 		<div class="container">
 			<div class="row">

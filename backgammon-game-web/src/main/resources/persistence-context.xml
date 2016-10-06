@@ -48,6 +48,5 @@
 			</props>
 		</property>
 	</bean>
-	
-	<bean id="hibernateGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
+
 </beans>

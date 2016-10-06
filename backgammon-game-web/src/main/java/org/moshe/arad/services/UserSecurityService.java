@@ -20,7 +20,6 @@ public class UserSecurityService implements UserDetailsService{
 
 	@Autowired
 	private UserSecurityRepository userSecurityRepo;
-//	private UserSecurityRepositoryHibernate userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
 	

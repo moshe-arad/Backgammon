@@ -55,8 +55,8 @@ public class HomeController {
 		try{
 			userSecurityService.registerNewUser(gameUser, "ROLE_USER");
 			logger.info("User was successfuly register.");
-			logger.info("Routing for board page.");
-			return "backgammon";
+			logger.info("Routing for Lobby page.");
+			return "lobby";
 		}
 		catch(Exception ex){
 			logger.info("User register failed.");

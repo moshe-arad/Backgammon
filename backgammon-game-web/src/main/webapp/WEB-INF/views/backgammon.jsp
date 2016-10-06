@@ -17,7 +17,31 @@
 		<script src="<spring:url value="/resources/js/logout.js" />"></script>
 	</head>
 	<body>
-		<jsp:include page="header.jsp"></jsp:include>
+		<nav class="navbar navbar-inverse">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-1 col-md-1"></div>
+					<div class="col-lg-10 col-md-10">
+						<div class="navbar-header"><h1>Arad's Backgammon Game</h1></div>
+						<sec:authorize access="authenticated" var="authenticated">
+							<c:if test="${authenticated}">
+								<div class="navbar-right">
+									<p class="lead">Welcome 
+									<sec:authentication property="name"/>
+										&nbsp;|&nbsp; 
+										<a id="logoutLink" href="#">Logout</a>
+										<form id="logoutForm" method="POST" action='<c:url value="/logout"/>'>
+											<sec:csrfInput/>
+										</form>
+									</p>										
+								</div>
+							</c:if>
+						</sec:authorize>
+					</div>
+					<div class="col-lg-1 col-md-1"></div>
+				</div>
+			</div>
+		</nav>
 		
 		<div class="container">
 			<div class="row">

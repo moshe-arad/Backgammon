@@ -15,7 +15,7 @@
 	<security:http auto-config="true" use-expressions="false">
 		<security:form-login login-page="/login" login-processing-url="/login" 
 		username-parameter="userNameLogin" password-parameter="passwordLogin"
-		default-target-url="/backgammon/"
+		default-target-url="/lobby/"
 		authentication-failure-url="/home?error=true" />
 		
 		<security:logout logout-url="/logout" success-handler-ref="logoutHandler"/>

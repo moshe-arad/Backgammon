@@ -15,6 +15,7 @@
 		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
 		<script src="<spring:url value="/resources/js/logout.js" />"></script>
+		<script src="<spring:url value="/resources/js/lobby.js" />"></script>
 	</head>
 	<body>
 		
@@ -31,9 +32,9 @@
 			<div class="row">
 				<div class="col-lg-4"> </div>
 				<div class="col-lg-4"> 
-					<a class="btn btn-primary btn-lg btn-block" href="#" role="button">
+					<button id="openNewRoomBtn" type="button" class="btn btn-primary btn-lg btn-block">
 						Open New Game Room
-					</a>
+					</button>
 					<br/>
 				</div>
 				<div class="col-lg-4"> </div>
@@ -112,6 +113,7 @@
   						</div>
   						
   						 <button type="submit" class="btn btn-primary">Ok</button>
+  						 <button type="button" class="btn btn-primary">Cancel</button>
 					</form:form>
 				</div>
 				<div class="col-lg-4"> </div>

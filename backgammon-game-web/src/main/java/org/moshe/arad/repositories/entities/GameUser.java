@@ -2,12 +2,16 @@ package org.moshe.arad.repositories.entities;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -38,6 +42,9 @@ public class GameUser implements UserDetails{
 	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String lastName;
 	
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
+	private Set<GameRoom> gameRooms = new HashSet<>(1000);
+	
 	@Email
 	@NotBlank
 	private String email;
@@ -60,11 +67,11 @@ public class GameUser implements UserDetails{
 	@NotNull
 	private Long lastUpdatedBy;
 	
-	@Column(name="created_date")
+	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
-	@Column(name="created_by")
+	@Column(name="created_by", updatable=false)
 	@NotNull
 	private Long createdBy;
 
@@ -194,6 +201,15 @@ public class GameUser implements UserDetails{
 	public String getUsername() {
 		return this.userName;
 	}	
+	
+	
+	public Set<GameRoom> getGameRooms() {
+		return gameRooms;
+	}
+
+	public void setGameRooms(Set<GameRoom> gameRooms) {
+		this.gameRooms = gameRooms;
+	}
 
 	/**
 	 * TODO fill logic the these 4 method of UserDetails.

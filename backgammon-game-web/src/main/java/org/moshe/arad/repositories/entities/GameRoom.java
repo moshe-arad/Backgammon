@@ -32,7 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  *  
  */
 @Entity
-@Table(name ="game_users")
+@Table(name ="game_rooms")
 public class GameRoom {
 
 	@Id
@@ -49,23 +49,20 @@ public class GameRoom {
 	@NotNull
 	private Boolean isPrivateRoom;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_in_game_room", 
-		joinColumns = @JoinColumn(name = "game_room_id"),
-		inverseJoinColumns = @JoinColumn(name = "user_id"))
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
 	private Set<GameUser> users = new HashSet<>(1000);
 	
 	@Column(name = "opened_by")
 	@NotNull
 	private GameUser openedBy;
 	
-	@Column
+	@Column(name = "white")
 	private GameUser white;
 	
-	@Column
+	@Column(name = "black")
 	private GameUser black;
 	
-	@Column
+	@Column(name = "speed")
 	@Range(min=0, max=2)
 	private Integer speed;
 	

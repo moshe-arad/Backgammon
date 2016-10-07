@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -42,7 +44,10 @@ public class GameUser implements UserDetails{
 	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String lastName;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "users")
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_in_game_room", 
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
 	private Set<GameRoom> gameRooms = new HashSet<>(1000);
 	
 	@Email

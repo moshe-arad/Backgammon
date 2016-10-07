@@ -103,8 +103,8 @@ public class HomeControllerTest {
 				.param("userName", user1.getUserName())
 				.param("password", user1.getPassword())
 				.param("role", user1.getRole())).andExpect(status().isOk())
-		.andExpect(view().name("backgammon"))
-		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
+		.andExpect(view().name("lobby"))
+		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
 		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
@@ -137,8 +137,8 @@ public class HomeControllerTest {
 				.param("userName", user1.getUserName())
 				.param("password", user1.getPassword())
 				.param("role", user1.getRole())).andExpect(status().isOk())
-		.andExpect(view().name("backgammon"))
-		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
+		.andExpect(view().name("lobby"))
+		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
 		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
@@ -166,8 +166,8 @@ public class HomeControllerTest {
 				.param("userName", user1.getUserName())
 				.param("password", user1.getPassword())
 				.param("role", user1.getRole())).andExpect(status().isOk())
-		.andExpect(view().name("backgammon"))
-		.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"));
+		.andExpect(view().name("lobby"))
+		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
 		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));

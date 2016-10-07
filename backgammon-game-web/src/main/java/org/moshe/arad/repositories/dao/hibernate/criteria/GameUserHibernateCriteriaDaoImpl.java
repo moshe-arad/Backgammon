@@ -95,6 +95,8 @@ public class GameUserHibernateCriteriaDaoImpl implements HibernateGameUserDao {
 			Criteria usersCriteria = session.createCriteria(GameUser.class);
 			List<GameUser> usersToDelete = usersCriteria.list();
 			
+			logger.info(usersToDelete.get(0).getGameRooms().size());
+			
 			for(GameUser user:usersToDelete)
 				session.delete(user);
 			

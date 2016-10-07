@@ -21,6 +21,7 @@
 		<property name="annotatedClasses">
 			<list>			
 				<value>org.moshe.arad.repositories.entities.GameUser</value>
+				<value>org.moshe.arad.repositories.entities.GameRoom</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">

@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,6 +52,11 @@ public class GameUserHibernateCriteriaDaoTest {
 		user1 = context.getBean("gameUser1", GameUser.class);
 		user2 = context.getBean("gameUser2", GameUser.class);
 		user3 = context.getBean("gameUser3", GameUser.class);
+	}
+	
+	@After
+	public void cleanup(){
+		hibernateGameUserCriteriaDao.deleteAll();
 	}
 	
 	@Test

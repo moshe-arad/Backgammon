@@ -1,14 +1,20 @@
 package org.moshe.arad.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.validators.GameUserValidator;
+import org.moshe.arad.services.LobbyService;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
@@ -26,6 +32,8 @@ public class HomeController {
 	
 	@Autowired
 	UserSecurityService userSecurityService;
+	@Autowired
+	LobbyService lobbyService;
 	
 	@RequestMapping(value={"/", "/home", "/login", "/register"}, method=RequestMethod.GET)
 	public String goHome(){
@@ -34,7 +42,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@Valid @ModelAttribute GameUser gameUser, Errors errors){
+	public String doRegister(@Valid @ModelAttribute GameUser gameUser, Errors errors, Model model){
 		if(errors.hasErrors()){
 			logger.info("Some errors occured while trying to bind game user");
 			logger.info("There are " + errors.getErrorCount() + " errors.");
@@ -56,6 +64,10 @@ public class HomeController {
 			userSecurityService.registerNewUser(gameUser, "ROLE_USER");
 			logger.info("User was successfuly register.");
 			logger.info("Routing for Lobby page.");
+			model.addAttribute("gameRooms", lobbyService.getAllGameRooms());
+			model.addAttribute("newGameRoom", new GameRoom());
+			model.addAttribute("speedOptions", getSpeedOptions());
+			model.addAttribute("privateRoomOptions", getPrivateRoomOptions());
 			return "lobby";
 		}
 		catch(Exception ex){
@@ -111,8 +123,23 @@ public class HomeController {
 		
 	}
 	
-	@InitBinder
+	@InitBinder("gameUser")
 	public void initBinder(WebDataBinder binder){
 		binder.addValidators(new GameUserValidator());
+	}
+	
+	public List<String> getSpeedOptions(){
+		List<String> options = new ArrayList<>();
+		options.add("High - 30 sec");
+		options.add("Medium - 45 sec");
+		options.add("Low - 60 sec");
+		return options;
+	}
+	
+	public List<String> getPrivateRoomOptions(){
+		List<String> options = new ArrayList<>();
+		options.add("No");
+		options.add("Yes");
+		return options;
 	}
 }

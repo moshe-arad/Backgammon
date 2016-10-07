@@ -32,9 +32,9 @@ public class UserSecurityRepository {
 	}
 
 	private void setCreateAndUpdateDbInfo(GameUser gameUser) {
-		gameUser.setCreatedBy(1L);
+		gameUser.setCreatedBy(-1L);
 		gameUser.setCreatedDate(new Date());
-		gameUser.setLastUpdatedBy(1L);
+		gameUser.setLastUpdatedBy(-1L);
 		gameUser.setLastUpdatedDate(new Date());
 	}
 	

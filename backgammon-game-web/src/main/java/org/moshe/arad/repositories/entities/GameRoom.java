@@ -54,13 +54,13 @@ public class GameRoom {
 	
 	@Column(name = "opened_by")
 	@NotNull
-	private GameUser openedBy;
+	private Long openedBy;
 	
 	@Column(name = "white")
-	private GameUser white;
+	private Long white;
 	
 	@Column(name = "black")
-	private GameUser black;
+	private Long black;
 	
 	@Column(name = "speed")
 	@Range(min=0, max=2)
@@ -89,8 +89,8 @@ public class GameRoom {
 	public GameRoom() {
 	}
 	
-	public GameRoom(String gameRoomName, Boolean isPrivateRoom, GameUser openedBy,
-			GameUser white, GameUser black, Integer speed) {
+	public GameRoom(String gameRoomName, Boolean isPrivateRoom, Long openedBy,
+			Long white, Long black, Integer speed) {
 		this.gameRoomName = gameRoomName;
 		this.isPrivateRoom = isPrivateRoom;
 		this.users  = new HashSet<>(1000);
@@ -132,27 +132,27 @@ public class GameRoom {
 		this.users = users;
 	}
 
-	public GameUser getOpenedBy() {
+	public Long getOpenedBy() {
 		return openedBy;
 	}
 
-	public void setOpenedBy(GameUser openedBy) {
+	public void setOpenedBy(Long openedBy) {
 		this.openedBy = openedBy;
 	}
 
-	public GameUser getWhite() {
+	public Long getWhite() {
 		return white;
 	}
 
-	public void setWhite(GameUser white) {
+	public void setWhite(Long white) {
 		this.white = white;
 	}
 
-	public GameUser getBlack() {
+	public Long getBlack() {
 		return black;
 	}
 
-	public void setBlack(GameUser black) {
+	public void setBlack(Long black) {
 		this.black = black;
 	}
 

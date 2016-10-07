@@ -62,7 +62,8 @@
 								<th>Game Speed</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody>	
+							
 							<c:forEach var="i" begin="0" end="${gameRooms.size() - 1}">
 								<tr>
 									<th scope="row"><c:out value="${i+1}"></c:out></th>
@@ -102,7 +103,7 @@
 					<form:form method="POST" action="${openRoom}" modelAttribute="newGameRoom">
 						<div class="form-group">
     						<label for="gameRoomName">Game Room Name</label>
-    						<form:input type="text" path="gameRoomName" cssClass="form-control" id="gameRoomName" placeholder="Email" />
+    						<form:input type="text" path="gameRoomName" cssClass="form-control" id="gameRoomName" placeholder="Game Room Name" />
   						</div>
   						
   						<div class="form-group">

@@ -1,10 +1,7 @@
 package org.moshe.arad.controllers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.validators.GameRoomValidator;
-import org.moshe.arad.repositories.validators.GameUserValidator;
 import org.moshe.arad.services.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -70,15 +66,18 @@ public class LobbyController {
 		
 		if(errors.hasErrors()){
 			logger.error("Binding game room has errors.");
-			logger.info("Setting default value");
-			lobbyService.setDefaultValues(gameRoom);
+			
+			if(!GameRoomValidator.acceptableErrors(errors)){
+				logger.info("Setting default value");
+				lobbyService.setDefaultValues(gameRoom);
+			}
 		}
 		
 		lobbyService.addNewGameRoom(gameRoom);
 		return "backgammon";
 	}
 	
-	@InitBinder
+	@InitBinder("gameRoom")
 	public void initBinder(WebDataBinder binder){
 		binder.addValidators(new GameRoomValidator());
 	}

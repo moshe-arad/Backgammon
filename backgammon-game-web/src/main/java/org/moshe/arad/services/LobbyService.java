@@ -8,7 +8,9 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.repositories.LobbyRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,16 +21,22 @@ public class LobbyService {
 	private List<GameRoom> gameRooms = new CopyOnWriteArrayList<GameRoom>();
 	private static AtomicLong roomlabel = new AtomicLong(1);
 	
+	@Autowired
+	LobbyRepository lobbyRepository;
+	
 	@PostConstruct
 	public void init(){
 		createDummyGameRooms();
+		gameRooms.addAll(lobbyRepository.getAllGameRooms());
 		logger.info("Dummy game rooms were added successfully.");
 	}
 	
 	public void addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
-		gameRooms.add(gameRoom);
-		logger.info("game room was added successfully.");
+		GameRoom roomInDb = lobbyRepository.createAndSaveNewGameRoom(gameRoom);
+		logger.info("New game room was added to DB, details: " + gameRoom);
+		gameRooms.add(roomInDb);
+		logger.info("game room was added successfully, details: " + gameRoom);
 	}
 	
 	public void setDefaultValues(GameRoom gameRoom){
@@ -39,6 +47,7 @@ public class LobbyService {
 		logger.info("Default values were set with: " + gameRoom);
 	}
 	
+	@Deprecated
 	private void createDummyGameRooms(){
 		GameRoom gameRoom1 = new GameRoom("Dummy_Room_1", new Boolean(false), null, null, null, 0);
 		GameRoom gameRoom2 = new GameRoom("Dummy_Room_2", new Boolean(false), null, null, null, 1);

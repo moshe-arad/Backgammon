@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 
 public class GameUserValidator implements Validator, EntityValidator {
@@ -20,6 +21,13 @@ public class GameUserValidator implements Validator, EntityValidator {
 	}
 	
 	public static boolean acceptableErrors(Errors errors) {
-		return EntityValidator.acceptableErrors(errors);
+		for(FieldError error:errors.getFieldErrors()){
+			if(!error.getField().equals("role") && !ignore.contains(error.getField())){
+				logger.info("This error couldn't be ignore " + error);
+				return false;
+			}
+			else logger.info("Ignoring error " + error);
+		}
+		return true;
 	}
 }

@@ -7,11 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 
-public class GameRoomValidator implements Validator{
+public class GameRoomValidator implements Validator, EntityValidator{
 
 	private final Logger logger = LogManager.getLogger(GameRoomValidator.class);
+	private static final Logger staticLogger = LogManager.getLogger(GameRoomValidator.class);
 	
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -21,11 +23,22 @@ public class GameRoomValidator implements Validator{
 	@Override
 	public void validate(Object target, Errors errors) {
 		GameRoom gameRoom = (GameRoom)target;
-		validateRoomNameByRegEx(gameRoom);
 		
 		validateRoomName(errors, gameRoom);	
 		validatePrivateRoom(errors, gameRoom);
 		validateSpeed(errors, gameRoom);
+	}
+
+	public static boolean acceptableErrors(Errors errors) {
+		
+		for(FieldError error:errors.getFieldErrors()){
+			if(!error.getField().equals("openedBy") && !ignore.contains(error.getField())){
+				staticLogger.info("This error couldn't be ignore " + error);
+				return false;
+			}
+			else staticLogger.info("Ignoring error " + error);
+		}
+		return true;
 	}
 
 	private void validateSpeed(Errors errors, GameRoom gameRoom) {

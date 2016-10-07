@@ -24,7 +24,7 @@
 			<div class="row">
 				<div class="col-lg-7">
 					<div class="jumbotron">
-						<h1>Hello & Welocme to Arad's Arcade Games.</h1>
+						<h1>Hello & Welcome to Arad's Arcade Games.</h1>
 						<p>This is an demo project, 
 						which gives you the ability to play backgammon against 
 						other players online.</p>

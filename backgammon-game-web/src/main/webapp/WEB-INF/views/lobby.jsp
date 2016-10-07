@@ -41,8 +41,18 @@
 			</div>
 			
 			<div id="avialableRoomsRow" class="row">
-				<div class="col-lg-4"> </div>
-				<div class="col-lg-4"> 
+				<div class="col-lg-3"> </div>
+				<div class="col-lg-6">
+					<div id="joinBtn" class="row hidden">
+						<div class="col-lg-2"> </div>
+						<div class="col-lg-4">
+							<button type="button" class="btn btn-success btn-lg btn-block">Join</button>
+						</div>
+						<div class="col-lg-4">
+							<button type="button" class="btn btn-danger btn-lg btn-block">Cancel</button>
+						</div>
+						<div class="col-lg-2"> </div>
+					</div>
 					<table class="table">
 						<thead>
 							<tr>
@@ -67,10 +77,10 @@
 									</c:choose>
 									
 									<c:choose>
-										<c:when test="${gameRooms.get(i).getSpeed().equals(0)}">
+										<c:when test="${gameRooms.get(i).getSpeed() == 0}">
 											<td>High - 30 sec</td>
 										</c:when>
-										<c:when test="${gameRooms.get(i).getSpeed().equals(1)}">
+										<c:when test="${gameRooms.get(i).getSpeed() == 1}">
 											<td>Medium - 45 sec</td>
 										</c:when>
 										<c:otherwise>
@@ -82,7 +92,7 @@
 						</tbody>	
 					</table>
 				</div>
-				<div class="col-lg-4"> </div>
+				<div class="col-lg-3"> </div>
 			</div>
 			
 			<div id="openRoomRow" class="row hidden">

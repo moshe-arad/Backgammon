@@ -104,7 +104,9 @@ public class HomeControllerTest {
 				.param("email", user1.getEmail())
 				.param("userName", user1.getUserName())
 				.param("password", user1.getPassword())
-				.param("role", user1.getRole())).andExpect(status().isOk())
+				.param("role", user1.getRole()))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("gameUser", user1))
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
@@ -114,40 +116,26 @@ public class HomeControllerTest {
 	}
 	
 	@Test
-	public void doRegisterTest2() throws Exception{
-//		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+	public void doRegisterHasErrorsTest() throws Exception{
+		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		user1.setEmail("not an email");
 		
-		GameUser gameUser = new GameUser("John", "Terry", "john.terry@gmail.com", "john.terry", "Jpz2bc31#", "ROLE_USER");
-		mockMvc.perform(post("/register"))
-				.andExpect(model().attribute("gameUser", gameUser))
-				.andExpect(status().isOk())
-		.andExpect(view().name("lobby"))
-		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
+		mockMvc.perform(post("/register")
+				.param("firstName", user1.getFirstName())
+				.param("lastName", user1.getLastName())
+				.param("email", "not an email")
+				.param("userName", user1.getUserName())
+				.param("password", user1.getPassword())
+				.param("role", user1.getRole()))
+		.andExpect(status().isOk())
+		.andExpect(model().attribute("gameUser", user1))
+		.andExpect(model().hasErrors())
+		.andExpect(model().errorCount(5))
+		.andExpect(view().name("home"))
+		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(gameUser, hibernateGameUserCriteriaDao.findAll().get(0));
-				
+		assertEquals(0, hibernateGameUserCriteriaDao.findAll().size());
 	}
-	
-//	@Test
-//	public void doRegisterHasErrorsTest() throws Exception{
-//		GameUser user1 = context.getBean("gameUser1", GameUser.class);
-//		
-//		mockMvc.perform(post("/register")
-//				.param("firstName", user1.getFirstName())
-//				.param("lastName", user1.getLastName())
-//				.param("email", user1.getEmail())
-//				.param("userName", user1.getUserName())
-//				.param("password", user1.getPassword())
-//				.param("role", user1.getRole())).andExpect(status().isOk())
-//		.andExpect(model().hasErrors());
-//		//		.andExpect(view().name("lobby"))
-////		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
-//		
-//		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-//		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
-//				
-//	}
 	
 	@Test
 	public void doRegisterFailedToRegisterTest() throws Exception{

@@ -60,6 +60,7 @@
 								<th>Room Name</th>
 								<th>Private Room</th>
 								<th>Game Speed</th>
+								<th class="hidden"></th>
 							</tr>
 						</thead>
 						<tbody>	
@@ -88,6 +89,11 @@
 											<td>Low - 60 sec</td>
 										</c:otherwise>
 									</c:choose>
+									<spring:url value="/lobby/join" var="joinRoom"/>
+									<form:form id="joinForm" method="POST" action="${joinRoom}" >
+										<c:set var="room" value="${gameRooms.get(i)}"></c:set>
+										<td class="hidden"><c:out value="${room.getGameRoomId()}"></c:out></td>
+									</form:form>
 								</tr>
 							</c:forEach>
 						</tbody>	

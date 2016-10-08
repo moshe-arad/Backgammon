@@ -11,6 +11,7 @@ function loadDomEvents(){
 	$("tr").bind("mouseleave", removeSuccess);
 	$("tr").bind("click",chooseRoom);
 	$("#joinBtn button:last").bind("click", cancelSelection);
+	$("#joinBtn button:first").bind("click", joinRoom);
 }
 
 
@@ -48,4 +49,8 @@ function cancelSelection(){
 	$("tr").bind("mouseleave", removeSuccess);
 	$("tr").bind("click",chooseRoom);
 	$("#joinBtn").addClass("hidden");
+}
+
+function joinRoom(){
+	$("#joinForm").submit();
 }

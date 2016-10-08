@@ -8,4 +8,21 @@
 	<context:annotation-config />
 	<context:component-scan base-package="org.moshe.arad" />
 	
+	<bean id="loggedIn1" class="org.moshe.arad.repositories.entities.GameUser">
+		<constructor-arg value="Robret" />
+		<constructor-arg value="Levandovski" />
+		<constructor-arg value="robert.lev@gmail.com" />
+		<constructor-arg value="robertLev" />
+		<constructor-arg value="Jpz2bc31#"/>
+		<constructor-arg value="ROLE_USER"/>
+	</bean>
+	
+	<bean id="loggedIn2" class="org.moshe.arad.repositories.entities.GameUser">
+		<constructor-arg value="David" />
+		<constructor-arg value="Luiz" />
+		<constructor-arg value="david.luiz@gmail.com" />
+		<constructor-arg value="daviLuiz" />
+		<constructor-arg value="Jpz2bc31#"/>
+		<constructor-arg value="ROLE_USER"/>
+	</bean>
 </beans>

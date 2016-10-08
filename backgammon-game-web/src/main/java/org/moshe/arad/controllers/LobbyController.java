@@ -17,8 +17,10 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequestMapping(value = "/lobby")
 public class LobbyController {
 
 	private final Logger logger = LogManager.getLogger(LobbyController.class);
@@ -26,7 +28,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	
-	@RequestMapping(value="/lobby")
+	@RequestMapping(value="/enter")
 	public String goLobby(){
 		logger.info("Routing to lobby page.");
 		return "lobby";
@@ -59,7 +61,7 @@ public class LobbyController {
 		return new GameRoom();
 	}
 	
-	@RequestMapping(value="/lobby/open")
+	@RequestMapping(value="/open")
 	public String openNewGameRoom(@ModelAttribute @Valid GameRoom gameRoom, Errors errors){
 		logger.info("Try to open a new game room.");
 		logger.info("The game room bind result is: " + gameRoom);
@@ -75,6 +77,11 @@ public class LobbyController {
 		
 		lobbyService.addNewGameRoom(gameRoom);
 		return "backgammon";
+	}
+	
+	@RequestMapping(value = "/join")
+	public String joinGameRoom(@RequestParam Long roomId){
+		return "backgammom";
 	}
 	
 	@InitBinder("gameRoom")

@@ -7,6 +7,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -46,7 +49,7 @@ public class LobbyControllerTest {
 	@Autowired
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
-	GameUserRepository gameUserRepository;
+	private GameUserRepository gameUserRepository;
 	
 	@Before
 	public void setup(){
@@ -66,10 +69,6 @@ public class LobbyControllerTest {
 	@Test
 	@WithMockUser
 	public void openNewGameRoomTest() throws Exception{
-		GameUser user = gameUserRepository.findByUserName("user");
-		
-		GameRoom gameRoom = new GameRoom("Arad room123",
-				new Boolean(false), user.getUserId(), user.getUserId(), null, 2);
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Arad room123")
 				.param("isPrivateRoom", "false")
@@ -77,8 +76,45 @@ public class LobbyControllerTest {
 			.andExpect(view().name("backgammon"))
 			.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"))
 			.andExpect(model().hasErrors())
-			.andExpect(model().errorCount(5));
+			.andExpect(model().errorCount(5))
+			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
+			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
+			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));
 		
 		assertEquals(1,gameRoomRepository.findAll().size());
+	}
+	
+	@Test
+	@WithMockUser
+	public void openNewGameRoomWithErrorsTest() throws Exception{
+		mockMvc.perform(get("/lobby/open")
+				.param("gameRoomName", "Ara$$$$$d room123")
+				.param("isPrivateRoom", "false")
+				.param("speed", "2")).andExpect(status().isOk())
+			.andExpect(view().name("backgammon"))
+			.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"))
+			.andExpect(model().hasErrors())
+			.andExpect(model().errorCount(7))
+			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
+			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
+			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));		
+		
+		assertEquals(1,gameRoomRepository.findAll().size());
+		assertEquals("Backgammon 1", gameRoomRepository.findAll().get(0).getGameRoomName());
+	}
+	
+	private List<String> getSpeedOptions(){
+		List<String> options = new ArrayList<>();
+		options.add("High - 30 sec");
+		options.add("Medium - 45 sec");
+		options.add("Low - 60 sec");
+		return options;
+	}
+	
+	private List<String> getPrivateRoomOptions(){
+		List<String> options = new ArrayList<>();
+		options.add("No");
+		options.add("Yes");
+		return options;
 	}
 }

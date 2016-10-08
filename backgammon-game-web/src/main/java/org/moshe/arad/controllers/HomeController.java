@@ -68,7 +68,7 @@ public class HomeController {
 			model.addAttribute("newGameRoom", new GameRoom());
 			model.addAttribute("speedOptions", getSpeedOptions());
 			model.addAttribute("privateRoomOptions", getPrivateRoomOptions());
-			return "lobby";
+			return "/lobby/enter";
 		}
 		catch(Exception ex){
 			logger.info("User register failed.");

@@ -26,9 +26,9 @@ public class LobbyService {
 	
 	@PostConstruct
 	public void init(){
-		createDummyGameRooms();
+//		createDummyGameRooms();
 		gameRooms.addAll(lobbyRepository.getAllGameRooms());
-		logger.info("Dummy game rooms were added successfully.");
+//		logger.info("Dummy game rooms were added successfully.");
 	}
 	
 	public void addNewGameRoom(GameRoom gameRoom) {
@@ -41,7 +41,7 @@ public class LobbyService {
 	
 	public void setDefaultValues(GameRoom gameRoom){
 		logger.info("Setting default values for game room.");
-		gameRoom.setGameRoomName("Backgammon_" + LobbyService.roomlabel.getAndIncrement());
+		gameRoom.setGameRoomName("Backgammon " + LobbyService.roomlabel.getAndIncrement());
 		gameRoom.setIsPrivateRoom(false);
 		gameRoom.setSpeed(1);
 		logger.info("Default values were set with: " + gameRoom);
@@ -64,5 +64,9 @@ public class LobbyService {
 
 	public List<GameRoom> getAllGameRooms() {
 		return gameRooms;
+	}
+
+	public void joinGameRoom() {
+		
 	}
 }

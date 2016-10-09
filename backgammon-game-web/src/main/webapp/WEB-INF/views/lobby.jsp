@@ -68,8 +68,7 @@
 								</tr>
 							</thead>
 							<tbody>	
-								
-								<c:forEach var="i" begin="0" end="${gameRooms.size() - 1}">
+								<c:forEach var="i" begin="0" end="${gameRooms.size() -1}">
 									<tr>
 										<th scope="row"><c:out value="${i+1}"></c:out></th>
 										<td>${gameRooms.get(i).getGameRoomName()}</td>
@@ -98,7 +97,7 @@
 												<c:out value="${room.getGameRoomId()}"></c:out>																							
 											</td>												
 									</tr>
-								</c:forEach>
+								</c:forEach>														
 							</tbody>	
 						</table>
 						<input id="roomInput" class="hidden" name="roomId" />

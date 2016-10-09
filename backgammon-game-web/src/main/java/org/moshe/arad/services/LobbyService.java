@@ -26,9 +26,7 @@ public class LobbyService {
 	
 	@PostConstruct
 	public void init(){
-//		createDummyGameRooms();
 		gameRooms.addAll(lobbyRepository.getAllGameRooms());
-//		logger.info("Dummy game rooms were added successfully.");
 	}
 	
 	public void addNewGameRoom(GameRoom gameRoom) {

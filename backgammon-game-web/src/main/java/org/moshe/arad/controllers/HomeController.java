@@ -38,7 +38,7 @@ public class HomeController {
 	
 	@RequestMapping(value={"/", "/home", "/login", "/register"}, method=RequestMethod.GET)
 	public String goHome(){
-		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null){
+		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser"){
 			logger.info("Routing for lobby page.");
 			return "redirect:/lobby/";
 		}

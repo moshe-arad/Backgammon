@@ -34,6 +34,7 @@ public class LobbyRepository {
 		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
 		GameRoom gameRoom = gameRoomRepository.findOne(roomId);
 		gameRoom.setBlack(userId);
+		setUpdateCreateInfo(gameRoom);
 		gameRoomRepository.save(gameRoom);
 	}
 	
@@ -47,8 +48,8 @@ public class LobbyRepository {
 	private void setUpdateCreateInfo(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);
-		gameRoom.setCreatedBy(loggedUser.getUserId());
-		gameRoom.setLastUpdatedBy(loggedUser.getUserId());
+		if(gameRoom.getCreatedBy() == null)	gameRoom.setCreatedBy(loggedUser.getUserId());
+		if(gameRoom.getLastUpdatedBy() == null)	gameRoom.setLastUpdatedBy(loggedUser.getUserId());
 		Date now = new Date();
 		gameRoom.setCreatedDate(now);
 		gameRoom.setLastUpdatedDate(now);

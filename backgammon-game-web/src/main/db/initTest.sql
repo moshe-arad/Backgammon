@@ -35,6 +35,7 @@ CREATE TABLE `game_rooms`
     `last_updated_by` BIGINT NOT NULL,
     `created_date` DATETIME NOT NULL,
     `created_by` BIGINT NOT NULL,
+    `token` VARCHAR(255) AS (SHA1(CONCAT(`name`, "This is a qwe secret 123", `created_by`, `created_date`))),
     PRIMARY KEY(`game_room_id`)
 );
 

@@ -3,6 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<head>
@@ -53,51 +54,56 @@
 						</div>
 						<div class="col-lg-2"> </div>
 					</div>
-					<table class="table">
-						<thead>
-							<tr>
-								<th>#</th>
-								<th>Room Name</th>
-								<th>Private Room</th>
-								<th>Game Speed</th>
-								<th class="hidden"></th>
-							</tr>
-						</thead>
-						<tbody>	
-							
-							<c:forEach var="i" begin="0" end="${gameRooms.size() - 1}">
+					
+					<spring:url value="/lobby/join" var="joinRoom"/>
+					<form id="joinForm" method="POST" action="${joinRoom}" >
+						<table class="table">
+							<thead>
 								<tr>
-									<th scope="row"><c:out value="${i+1}"></c:out></th>
-									<td>${gameRooms.get(i).getGameRoomName()}</td>
-									<c:choose>
-										<c:when test="${gameRooms.get(i).getIsPrivateRoom().equals(true)}">
-											<td>Yes</td>
-										</c:when>
-										<c:otherwise>
-											<td>No</td>
-										</c:otherwise>
-									</c:choose>
-									
-									<c:choose>
-										<c:when test="${gameRooms.get(i).getSpeed() == 0}">
-											<td>High - 30 sec</td>
-										</c:when>
-										<c:when test="${gameRooms.get(i).getSpeed() == 1}">
-											<td>Medium - 45 sec</td>
-										</c:when>
-										<c:otherwise>
-											<td>Low - 60 sec</td>
-										</c:otherwise>
-									</c:choose>
-									<spring:url value="/lobby/join" var="joinRoom"/>
-									<form:form id="joinForm" method="POST" action="${joinRoom}" >
-										<c:set var="room" value="${gameRooms.get(i)}"></c:set>
-										<td class="hidden"><c:out value="${room.getGameRoomId()}"></c:out></td>
-									</form:form>
+									<th>#</th>
+									<th>Room Name</th>
+									<th>Private Room</th>
+									<th>Game Speed</th>
+									<th class="hidden"></th>
 								</tr>
-							</c:forEach>
-						</tbody>	
-					</table>
+							</thead>
+							<tbody>	
+								
+								<c:forEach var="i" begin="0" end="${gameRooms.size() - 1}">
+									<tr>
+										<th scope="row"><c:out value="${i+1}"></c:out></th>
+										<td>${gameRooms.get(i).getGameRoomName()}</td>
+										<c:choose>
+											<c:when test="${gameRooms.get(i).getIsPrivateRoom().equals(true)}">
+												<td>Yes</td>
+											</c:when>
+											<c:otherwise>
+												<td>No</td>
+											</c:otherwise>
+										</c:choose>
+										
+										<c:choose>
+											<c:when test="${gameRooms.get(i).getSpeed() == 0}">
+												<td>High - 30 sec</td>
+											</c:when>
+											<c:when test="${gameRooms.get(i).getSpeed() == 1}">
+												<td>Medium - 45 sec</td>
+											</c:when>
+											<c:otherwise>
+												<td>Low - 60 sec</td>
+											</c:otherwise>
+										</c:choose>								
+											<c:set var="room" value="${gameRooms.get(i)}"></c:set>
+											<td class="hidden">
+												<c:out value="${room.getGameRoomId()}"></c:out>																							
+											</td>												
+									</tr>
+								</c:forEach>
+							</tbody>	
+						</table>
+						<input id="roomInput" class="hidden" name="roomId" />
+						<sec:csrfInput/>
+					</form>
 				</div>
 				<div class="col-lg-3"> </div>
 			</div>

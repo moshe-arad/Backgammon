@@ -28,7 +28,7 @@ public class LobbyController {
 	@Autowired
 	LobbyService lobbyService;
 	
-	@RequestMapping(value="/enter")
+	@RequestMapping(value = "/")
 	public String goLobby(){
 		logger.info("Routing to lobby page.");
 		return "lobby";
@@ -81,7 +81,16 @@ public class LobbyController {
 	
 	@RequestMapping(value = "/join")
 	public String joinGameRoom(@RequestParam Long roomId){
-		return "backgammom";
+		try{
+			logger.info("adding current logged user to game room with id of: " + roomId);
+			lobbyService.joinGameRoom(roomId);
+			logger.info("routing for backgammon board page");
+			return "backgammon";
+		}
+		catch (Exception e) {
+			logger.error("Error occured while trying to add current logged user to game room with id of: " + roomId);
+			return "lobby";
+		}
 	}
 	
 	@InitBinder("gameRoom")

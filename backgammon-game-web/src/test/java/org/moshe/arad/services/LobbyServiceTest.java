@@ -62,11 +62,16 @@ public class LobbyServiceTest {
 		GameRoom gameRoom = new GameRoom("Arad room123",
 				new Boolean(false), null, null, null, 2);
 		
+		GameUser user1 = context.getBean("loggedIn1", GameUser.class);
+		user1.setUserName("user");
+		
+		gameUserRepository.save(user1);
+		
 		lobbyService.addNewGameRoom(gameRoom);
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());
-		assertEquals(6, lobbyService.getAllGameRooms().size());
+		assertEquals(2, lobbyService.getAllGameRooms().size());
 	}
 	
 	@Test
@@ -93,8 +98,8 @@ public class LobbyServiceTest {
 		
 		SecurityContextHolder.getContext().setAuthentication(auth2);
 		
-		lobbyService.joinGameRoom();
+		lobbyService.joinGameRoom(gameRoomId);
 		
-//		assertTrue(joinActual);
+		assertEquals(user2.getUserId(), gameRoomRepository.findOne(gameRoomId).getBlack());
 	}
 }

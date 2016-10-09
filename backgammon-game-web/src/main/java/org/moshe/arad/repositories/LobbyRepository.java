@@ -29,7 +29,14 @@ public class LobbyRepository {
 	public List<GameRoom> getAllGameRooms(){
 		return gameRoomRepository.findAll();
 	}
-
+	
+	public void addSecondPlayer(Long roomId){
+		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
+		GameRoom gameRoom = gameRoomRepository.findOne(roomId);
+		gameRoom.setBlack(userId);
+		gameRoomRepository.save(gameRoom);
+	}
+	
 	private void setOpenedByAndWhite(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);

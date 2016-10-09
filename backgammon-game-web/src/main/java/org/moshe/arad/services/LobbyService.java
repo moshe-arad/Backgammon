@@ -66,7 +66,7 @@ public class LobbyService {
 		return gameRooms;
 	}
 
-	public void joinGameRoom() {
-		
+	public void joinGameRoom(Long roomId) {
+		lobbyRepository.addSecondPlayer(roomId);
 	}
 }

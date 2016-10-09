@@ -7,8 +7,10 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
 
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -48,5 +50,10 @@ public class UserSecurityRepository {
 		List<GameUser> users = gameUserRepository.findAll();
 		List<String> emails = users.parallelStream().map(user->user.getEmail()).collect(Collectors.toList());
 		return new ConcurrentSkipListSet<String>(emails);
-	}	
+	}
+	
+	public boolean isHasLoggedInUser() {
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		return gameUserRepository.findByUserName(userName) != null ? true : false;
+	}
 }

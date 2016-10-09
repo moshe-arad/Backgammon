@@ -1,6 +1,7 @@
-package org.moshe.arad.repositories.data;
+package org.moshe.arad.repositories;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -20,15 +21,17 @@ import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
 						"classpath:user-security-context-test.xml"})
-public class UserSecurityRepositoryDataTest {
+public class UserSecurityRepositoryTest {
 
-private final Logger logger = LogManager.getLogger(UserSecurityRepositoryDataTest.class);
+private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
 	
 //	@Autowired
 //	ApplicationContext context;
@@ -132,5 +135,19 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryDataTes
 		Set<String> emails = userSecurityRepo.getAllEmails();
 		
 		assertEquals(0, emails.size());
+	}
+	
+	@Test
+	@WithMockUser(username = "userName1", password = "password1")
+	public void isHasLoggedInUserTest(){
+		gameUserRepository.save(gameUser1);
+		
+		assertTrue(userSecurityRepo.isHasLoggedInUser());
+	}
+	
+	@Test
+	@WithAnonymousUser
+	public void isHasLoggedInUserAnonymousTest(){
+		assertFalse(userSecurityRepo.isHasLoggedInUser());
 	}
 }

@@ -14,6 +14,7 @@ import org.moshe.arad.services.LobbyService;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -35,10 +36,10 @@ public class HomeController {
 	UserSecurityService userSecurityService;
 	@Autowired
 	LobbyService lobbyService;
-	
+
 	@RequestMapping(value={"/", "/home", "/login", "/register"}, method=RequestMethod.GET)
 	public String goHome(){
-		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() != "anonymousUser"){
+		if(lobbyService.isHasLoggedInUser()){
 			logger.info("Routing for lobby page.");
 			return "redirect:/lobby/";
 		}

@@ -48,10 +48,11 @@ public class LobbyRepository {
 	private void setUpdateCreateInfo(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);
-		if(gameRoom.getCreatedBy() == null)	gameRoom.setCreatedBy(loggedUser.getUserId());
-		if(gameRoom.getLastUpdatedBy() == null)	gameRoom.setLastUpdatedBy(loggedUser.getUserId());
 		Date now = new Date();
-		gameRoom.setCreatedDate(now);
-		gameRoom.setLastUpdatedDate(now);
+		if(gameRoom.getCreatedBy() == null)	gameRoom.setCreatedBy(loggedUser.getUserId());
+		if(gameRoom.getCreatedDate() == null)	gameRoom.setCreatedDate(now);
+		
+		gameRoom.setLastUpdatedBy(loggedUser.getUserId());
+		gameRoom.setLastUpdatedDate(now);		
 	}
 }

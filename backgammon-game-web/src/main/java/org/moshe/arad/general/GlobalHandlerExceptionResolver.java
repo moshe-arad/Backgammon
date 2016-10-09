@@ -1,4 +1,4 @@
-package org.moshe.arad.resolvers;
+package org.moshe.arad.general;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

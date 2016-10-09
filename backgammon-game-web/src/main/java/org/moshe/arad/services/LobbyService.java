@@ -9,6 +9,8 @@ import javax.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.LobbyRepository;
+import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class LobbyService {
 	
 	@Autowired
 	LobbyRepository lobbyRepository;
+	@Autowired
+	UserSecurityRepository userSecurityRepository;
 	
 	@PostConstruct
 	public void init(){
@@ -66,5 +70,9 @@ public class LobbyService {
 
 	public void joinGameRoom(Long roomId) {
 		lobbyRepository.addSecondPlayer(roomId);
+	}
+
+	public boolean isHasLoggedInUser() {
+		return userSecurityRepository.isHasLoggedInUser();
 	}
 }

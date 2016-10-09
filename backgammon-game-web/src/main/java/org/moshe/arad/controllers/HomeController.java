@@ -13,6 +13,7 @@ import org.moshe.arad.repositories.validators.GameUserValidator;
 import org.moshe.arad.services.LobbyService;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -37,8 +38,14 @@ public class HomeController {
 	
 	@RequestMapping(value={"/", "/home", "/login", "/register"}, method=RequestMethod.GET)
 	public String goHome(){
-		logger.info("Routing for home page.");
-		return "home";
+		if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() != null){
+			logger.info("Routing for lobby page.");
+			return "redirect:/lobby/";
+		}
+		else{
+			logger.info("Routing for home page.");
+			return "home";
+		}
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)

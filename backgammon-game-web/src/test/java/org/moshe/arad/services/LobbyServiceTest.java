@@ -94,16 +94,17 @@ public class LobbyServiceTest {
 		
 		lobbyService.addNewGameRoom(gameRoom);
 		
-		Long gameRoomId = gameRoom.getGameRoomId();
+		String gameRoomToken = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getToken();
+		String encryptedToken = desEncryption.encrypt(gameRoomToken);
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());
 		
 		SecurityContextHolder.getContext().setAuthentication(auth2);
 		
-		lobbyService.joinGameRoom(gameRoomId);
+		lobbyService.joinGameRoom(encryptedToken);
 		
-		assertEquals(user2.getUserId(), gameRoomRepository.findOne(gameRoomId).getBlack());
+		assertEquals(user2.getUserId(), gameRoomRepository.findByToken(gameRoomToken).getBlack());
 	}
 	
 	@Test

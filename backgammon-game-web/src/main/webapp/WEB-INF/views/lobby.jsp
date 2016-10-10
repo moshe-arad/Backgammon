@@ -68,39 +68,42 @@
 								</tr>
 							</thead>
 							<tbody>	
-								<c:forEach var="i" begin="0" end="${gameRooms.size() -1}">
-									<tr>
-										<th scope="row"><c:out value="${i+1}"></c:out></th>
-										<td>${gameRooms.get(i).getGameRoomName()}</td>
-										<c:choose>
-											<c:when test="${gameRooms.get(i).getIsPrivateRoom().equals(true)}">
-												<td>Yes</td>
-											</c:when>
-											<c:otherwise>
-												<td>No</td>
-											</c:otherwise>
-										</c:choose>
-										
-										<c:choose>
-											<c:when test="${gameRooms.get(i).getSpeed() == 0}">
-												<td>High - 30 sec</td>
-											</c:when>
-											<c:when test="${gameRooms.get(i).getSpeed() == 1}">
-												<td>Medium - 45 sec</td>
-											</c:when>
-											<c:otherwise>
-												<td>Low - 60 sec</td>
-											</c:otherwise>
-										</c:choose>								
-											<c:set var="room" value="${gameRooms.get(i)}"></c:set>
+								<c:set var="roomsSize" value="${gameRooms.size()}" />
+								<c:if test="${roomsSize > 0}">
+									<c:forEach var="i" begin="0" end="">
+										<tr>
+											<th scope="row"><c:out value="${i+1}"></c:out></th>
+											<td>${gameRooms.get(i).getGameRoomName()}</td>
+											<c:choose>
+												<c:when test="${gameRooms.get(i).getIsPrivateRoom().equals(true)}">
+													<td>Yes</td>
+												</c:when>
+												<c:otherwise>
+													<td>No</td>
+												</c:otherwise>
+											</c:choose>
+											
+											<c:choose>
+												<c:when test="${gameRooms.get(i).getSpeed() == 0}">
+													<td>High - 30 sec</td>
+												</c:when>
+												<c:when test="${gameRooms.get(i).getSpeed() == 1}">
+													<td>Medium - 45 sec</td>
+												</c:when>
+												<c:otherwise>
+													<td>Low - 60 sec</td>
+												</c:otherwise>
+											</c:choose>								
+																				
 											<td class="hidden">
-												<c:out value="${room.getGameRoomId()}"></c:out>																							
+												<c:out value="${tokens.get(i)}" />																							
 											</td>												
-									</tr>
-								</c:forEach>														
+										</tr>
+									</c:forEach>
+								</c:if>																																		
 							</tbody>	
 						</table>
-						<input id="roomInput" class="hidden" name="roomId" />
+						<input id="roomInput" class="hidden" name="token" />
 						<sec:csrfInput/>
 					</form>
 				</div>

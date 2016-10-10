@@ -38,6 +38,11 @@ public class LobbyRepository {
 		gameRoomRepository.save(gameRoom);
 	}
 	
+	public Long getRoomIdByDecrypedToken(String decrypedToken)
+	{
+		return gameRoomRepository.findByToken(decrypedToken).getGameRoomId();
+	}
+	
 	private void setOpenedByAndWhite(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);

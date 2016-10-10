@@ -39,6 +39,11 @@ public class LobbyController {
 		return lobbyService.getAllGameRooms();
 	}
 	
+	@ModelAttribute("tokens")
+	public List<String> getTokens(){
+		return lobbyService.encryptAllGameRoomsTokens();
+	}
+	
 	@ModelAttribute("speedOptions")
 	public List<String> getSpeedOptions(){
 		List<String> options = new ArrayList<>();
@@ -80,15 +85,15 @@ public class LobbyController {
 	}
 	
 	@RequestMapping(value = "/join")
-	public String joinGameRoom(@RequestParam Long roomId){
+	public String joinGameRoom(@RequestParam String token){
 		try{
-			logger.info("adding current logged user to game room with id of: " + roomId);
-			lobbyService.joinGameRoom(roomId);
+			logger.info("adding current logged user to game room with token of: " + token);
+			lobbyService.joinGameRoom(token);
 			logger.info("routing for backgammon board page");
 			return "backgammon";
 		}
 		catch (Exception e) {
-			logger.error("Error occured while trying to add current logged user to game room with id of: " + roomId);
+			logger.error("Error occured while trying to add current logged user to game room with token of: " + token);
 			return "lobby";
 		}
 	}

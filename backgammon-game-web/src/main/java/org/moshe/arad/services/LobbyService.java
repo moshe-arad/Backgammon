@@ -1,5 +1,6 @@
 package org.moshe.arad.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
@@ -71,7 +72,9 @@ public class LobbyService {
 		return gameRooms;
 	}
 
-	public void joinGameRoom(Long roomId) {
+	public void joinGameRoom(String token) {
+		String decryptedToken = desEncryption.decrypt(token);
+		Long roomId = lobbyRepository.getRoomIdByDecrypedToken(decryptedToken);
 		lobbyRepository.addSecondPlayer(roomId);
 	}
 
@@ -81,6 +84,8 @@ public class LobbyService {
 
 	@SuppressWarnings("static-access")
 	public List<String> encryptAllGameRoomsTokens() {
-		return gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
+		List<String> ans = gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
+		if(ans == null) ans = new ArrayList<>();
+		return ans;
 	}
 }

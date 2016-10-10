@@ -3,14 +3,15 @@ package org.moshe.arad.services;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.general.DesEncryption;
 import org.moshe.arad.repositories.LobbyRepository;
 import org.moshe.arad.repositories.UserSecurityRepository;
-import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,8 @@ public class LobbyService {
 	LobbyRepository lobbyRepository;
 	@Autowired
 	UserSecurityRepository userSecurityRepository;
+	@Autowired
+	DesEncryption desEncryption;
 	
 	@PostConstruct
 	public void init(){
@@ -74,5 +77,10 @@ public class LobbyService {
 
 	public boolean isHasLoggedInUser() {
 		return userSecurityRepository.isHasLoggedInUser();
+	}
+
+	@SuppressWarnings("static-access")
+	public List<String> encryptAllGameRoomsTokens() {
+		return gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
 	}
 }

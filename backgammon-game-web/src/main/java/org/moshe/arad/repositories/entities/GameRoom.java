@@ -86,6 +86,9 @@ public class GameRoom {
 	@NotNull
 	private Long createdBy;
 	
+	@Column(name = "token", updatable = false, insertable = false)
+	private String token;
+
 	public GameRoom() {
 	}
 	
@@ -205,10 +208,20 @@ public class GameRoom {
 		this.createdBy = createdBy;
 	}
 
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
 	@Override
 	public String toString() {
 		return "GameRoom [gameRoomId=" + gameRoomId + ", gameRoomName=" + gameRoomName + ", isPrivateRoom="
 				+ isPrivateRoom + ", users=" + users + ", openedBy=" + openedBy + ", white=" + white + ", black="
-				+ black + ", speed=" + speed + ", game=" + game + "]";
+				+ black + ", speed=" + speed + ", game=" + game + ", lastUpdatedDate=" + lastUpdatedDate
+				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
+				+ ", token=" + token + "]";
 	}
 }

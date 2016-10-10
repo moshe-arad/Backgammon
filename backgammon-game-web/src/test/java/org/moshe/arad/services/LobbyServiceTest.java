@@ -1,9 +1,10 @@
 package org.moshe.arad.services;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.general.DesEncryption;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
@@ -24,7 +26,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextHierarchy({
@@ -43,6 +44,8 @@ public class LobbyServiceTest {
 	private LobbyService lobbyService;
 	@Autowired
 	private ApplicationContext context;
+	@Autowired
+	private DesEncryption desEncryption; 
 	
 	@Before
 	public void setup(){
@@ -101,5 +104,21 @@ public class LobbyServiceTest {
 		lobbyService.joinGameRoom(gameRoomId);
 		
 		assertEquals(user2.getUserId(), gameRoomRepository.findOne(gameRoomId).getBlack());
+	}
+	
+	@Test
+	public void encryptAllGameRoomsTokensTest(){
+		List<GameRoom> rooms = gameRoomRepository.findAll();
+		
+		if(rooms.size() > 0){
+			List<String> tokens = rooms.stream().map(room -> room.getToken()).collect(Collectors.toList());
+
+			List<String> encryptedTokens = lobbyService.encryptAllGameRoomsTokens();
+			
+			for(int i=0; i<encryptedTokens.size(); i++){
+				assertEquals(tokens.get(i), desEncryption.decrypt(encryptedTokens.get(i)));
+			}
+
+		}
 	}
 }

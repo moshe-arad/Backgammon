@@ -1,10 +1,14 @@
 package org.moshe.arad.repositories.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -38,6 +42,12 @@ public class BasicUser {
 	@NotNull
 	private Long createdBy;
 	
+	@OneToOne(mappedBy = "basicUser")
+	private GameUser gameUser;
+	
+	@OneToMany(mappedBy = "basicUser")
+	private List<Authority> authorities = new ArrayList<>(100);
+
 	public BasicUser() {
 	}
 
@@ -50,9 +60,9 @@ public class BasicUser {
 	public String toString() {
 		return "BasicUser [userName=" + userName + ", password=" + password + ", lastUpdatedDate=" + lastUpdatedDate
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ "]";
+				+ ", gameUser=" + gameUser + ", authorities=" + authorities + "]";
 	}
-
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -99,5 +109,21 @@ public class BasicUser {
 
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
+	}
+	
+	public GameUser getGameUser() {
+		return gameUser;
+	}
+
+	public void setGameUser(GameUser gameUser) {
+		this.gameUser = gameUser;
+	}
+
+	public List<Authority> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(List<Authority> authorities) {
+		this.authorities = authorities;
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -44,25 +46,10 @@ public class GameUser implements UserDetails{
 	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String lastName;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_in_game_room", 
-		joinColumns = @JoinColumn(name = "user_id"),
-		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
-	private Set<GameRoom> gameRooms = new HashSet<>(1000);
-	
 	@Email
 	@NotBlank
+	@Column
 	private String email;
-	
-	@Column(name="user_name")
-	@NotBlank
-	private String userName;
-	
-	@NotBlank
-	private String password;
-	
-	@NotBlank
-	private String role;
 	
 	@Column(name="last_updated_date")
 	@NotNull
@@ -80,17 +67,23 @@ public class GameUser implements UserDetails{
 	@NotNull
 	private Long createdBy;
 
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_in_game_room", 
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
+	private Set<GameRoom> gameRooms = new HashSet<>(1000);
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "username")
+	private BasicUser basicUser;
+	
 	public GameUser() {
 	}
 	
-	public GameUser(String firstName, String lastName, String email, String userName, String password,
-			String role) {
+	public GameUser(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.userName = userName;
-		this.password = password;
-		this.role = role;
 		this.lastUpdatedDate = new Date();
 		this.lastUpdatedBy = 1L;
 		this.createdDate = new Date();
@@ -100,9 +93,9 @@ public class GameUser implements UserDetails{
 	@Override
 	public String toString() {
 		return "GameUser [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", userName=" + userName + ", password=" + password + ", role=" + role + ", lastUpdatedDate="
-				+ lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy="
-				+ createdBy + "]";
+				+ ", lastUpdatedDate=" + lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate="
+				+ createdDate + ", createdBy=" + createdBy + ", gameRooms=" + gameRooms + ", basicUser=" + basicUser
+				+ "]";
 	}
 	
 	public void init(){
@@ -141,30 +134,6 @@ public class GameUser implements UserDetails{
 		this.email = email;
 	}
 
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
 	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
@@ -197,16 +166,13 @@ public class GameUser implements UserDetails{
 		this.createdBy = createdBy;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList(this.role);
+	public BasicUser getBasicUser() {
+		return basicUser;
 	}
 
-	@Override
-	public String getUsername() {
-		return this.userName;
-	}	
-	
+	public void setBasicUser(BasicUser basicUser) {
+		this.basicUser = basicUser;
+	}
 	
 	public Set<GameRoom> getGameRooms() {
 		return gameRooms;
@@ -215,7 +181,23 @@ public class GameUser implements UserDetails{
 	public void setGameRooms(Set<GameRoom> gameRooms) {
 		this.gameRooms = gameRooms;
 	}
+	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		String[] authList = (String[]) this.basicUser.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList()).toArray();
+		return AuthorityUtils.createAuthorityList(authList);
+	}
 
+	@Override
+	public String getUsername() {
+		return this.basicUser.getUserName();
+	}	
+
+	@Override
+	public String getPassword() {
+		return this.basicUser.getPassword();
+	}
+	
 	/**
 	 * TODO fill logic the these 4 method of UserDetails.
 	 */
@@ -263,23 +245,6 @@ public class GameUser implements UserDetails{
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		if (userName == null) {
-			if (other.userName != null)
-				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
 		return true;
 	}
-	
-	
 }

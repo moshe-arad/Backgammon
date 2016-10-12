@@ -2,10 +2,14 @@ package org.moshe.arad.repositories.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -38,6 +42,10 @@ public class Authority {
 	@NotNull
 	private Long createdBy;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "username")
+	private BasicUser basicUser;
+
 	public Authority() {
 	}
 
@@ -50,7 +58,7 @@ public class Authority {
 	public String toString() {
 		return "Authority [userName=" + userName + ", authority=" + authority + ", lastUpdatedDate=" + lastUpdatedDate
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ "]";
+				+ ", basicUser=" + basicUser + "]";
 	}
 
 	public String getUserName() {
@@ -99,5 +107,13 @@ public class Authority {
 
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
+	}
+	
+	public BasicUser getBasicUser() {
+		return basicUser;
+	}
+
+	public void setBasicUser(BasicUser basicUser) {
+		this.basicUser = basicUser;
 	}
 }

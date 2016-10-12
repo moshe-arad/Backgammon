@@ -1,4 +1,5 @@
-CREATE SCHEMA IF NOT EXISTS `backgammon_test_2`;
+DROP SCHEMA IF EXISTS `backgammon_test_2`;
+CREATE SCHEMA `backgammon_test_2`;
 USE `backgammon_test_2`;
 
 DROP TABLE IF EXISTS `user_in_game_room`;
@@ -18,10 +19,9 @@ DROP TABLE IF EXISTS `groups`;
 /********** from spring docs **********/
 
 create table users(
-	`u_id` BIGINT NOT NULL AUTO_INCREMENT primary key,
-	username varchar(50) not null unique,
-	password varchar(50) not null,
-	enabled boolean not null,
+	`username` varchar(50) not null primary key,
+	`password` varchar(50) not null,
+	`enabled` boolean not null,
 	`last_updated_date` DATETIME NOT NULL,
     `last_updated_by` BIGINT NOT NULL,
     `created_date` DATETIME NOT NULL,
@@ -29,8 +29,8 @@ create table users(
 );
 
 create table authorities (
-	username varchar(50) not null,
-	authority varchar(50) not null,
+	`username` varchar(50) not null,
+	`authority` varchar(50) not null,
 	`last_updated_date` DATETIME NOT NULL,
     `last_updated_by` BIGINT NOT NULL,
     `created_date` DATETIME NOT NULL,
@@ -41,7 +41,7 @@ create table authorities (
 create unique index ix_auth_username on authorities (username,authority);
 
 create table groups (
-	id bigint NOT NULL AUTO_INCREMENT primary key,
+	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	group_name varchar(50) not null,
 	`last_updated_date` DATETIME NOT NULL,
     `last_updated_by` BIGINT NOT NULL,
@@ -60,7 +60,7 @@ create table group_authorities (
 );
 
 create table group_members (
-	id bigint NOT NULL AUTO_INCREMENT primary key,
+	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	username varchar(50) not null,
 	group_id bigint not null,
 	`last_updated_date` DATETIME NOT NULL,
@@ -78,14 +78,13 @@ CREATE TABLE `game_users`
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL UNIQUE,
-    `role` VARCHAR(255) NOT NULL,
     `last_updated_date` DATETIME NOT NULL,
     `last_updated_by` BIGINT NOT NULL,
     `created_date` DATETIME NOT NULL,
     `created_by` BIGINT NOT NULL,
-    `u_id` BIGINT NOT NULL,
+    `username` varchar(50) not null,
     PRIMARY KEY(`user_id`),
-    FOREIGN KEY (`u_id`) REFERENCES `users`(`u_id`)
+    FOREIGN KEY (`username`) REFERENCES `users`(`username`) 
 );
 
 DROP TABLE IF EXISTS `game_rooms`;

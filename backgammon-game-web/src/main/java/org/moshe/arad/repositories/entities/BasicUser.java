@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -26,6 +27,10 @@ public class BasicUser {
 	@NotBlank
 	private String password;
 	
+	@Column
+	@NotNull
+	private Boolean enabled;
+	
 	@Column(name="last_updated_date")
 	@NotNull
 	private Date lastUpdatedDate;
@@ -42,7 +47,7 @@ public class BasicUser {
 	@NotNull
 	private Long createdBy;
 	
-	@OneToOne(mappedBy = "basicUser")
+	@OneToOne(cascade = CascadeType.ALL,mappedBy = "basicUser")
 	private GameUser gameUser;
 	
 	@OneToMany(mappedBy = "basicUser")
@@ -50,17 +55,19 @@ public class BasicUser {
 
 	public BasicUser() {
 	}
-
-	public BasicUser(String userName, String password) {
+	
+	public BasicUser(String userName, String password, Boolean enabled) {
 		this.userName = userName;
 		this.password = password;
+		this.enabled = enabled;
 	}
 
 	@Override
 	public String toString() {
-		return "BasicUser [userName=" + userName + ", password=" + password + ", lastUpdatedDate=" + lastUpdatedDate
-				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ ", gameUser=" + gameUser + ", authorities=" + authorities + "]";
+		return "BasicUser [userName=" + userName + ", password=" + password + ", enabled=" + enabled
+				+ ", lastUpdatedDate=" + lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate="
+				+ createdDate + ", createdBy=" + createdBy + ", gameUser=" + gameUser + ", authorities=" + authorities
+				+ "]";
 	}
 	
 	public String getUserName() {
@@ -126,4 +133,13 @@ public class BasicUser {
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
 	}
+	
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
 }

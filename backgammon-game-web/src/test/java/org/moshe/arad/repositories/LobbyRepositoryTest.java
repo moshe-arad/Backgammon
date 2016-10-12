@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,14 @@ public class LobbyRepositoryTest {
 	public void setup(){
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 	}
 	
 	@After

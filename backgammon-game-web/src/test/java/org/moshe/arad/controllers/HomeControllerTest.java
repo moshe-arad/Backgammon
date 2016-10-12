@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.services.UserSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,7 +103,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest5() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -112,7 +119,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest6() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/home"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -122,7 +135,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest7() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/login"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -132,7 +151,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest8() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/register"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -147,9 +172,8 @@ public class HomeControllerTest {
 				.param("firstName", user1.getFirstName())
 				.param("lastName", user1.getLastName())
 				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole()))
+				.param("userName", user1.getUsername())
+				.param("password", user1.getPassword()))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("gameUser", user1))
 		.andExpect(view().name("lobby"))
@@ -169,9 +193,8 @@ public class HomeControllerTest {
 				.param("firstName", user1.getFirstName())
 				.param("lastName", user1.getLastName())
 				.param("email", "not an email")
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole()))
+				.param("userName", user1.getUsername())
+				.param("password", user1.getPassword()))
 		.andExpect(status().isOk())
 		.andExpect(model().attribute("gameUser", user1))
 		.andExpect(model().hasErrors())
@@ -205,9 +228,9 @@ public class HomeControllerTest {
 				.param("firstName", user1.getFirstName())
 				.param("lastName", user1.getLastName())
 				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole())).andExpect(status().isOk())
+				.param("userName", user1.getUsername())
+				.param("password", user1.getPassword()))
+		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
@@ -234,9 +257,9 @@ public class HomeControllerTest {
 				.param("firstName", user1.getFirstName())
 				.param("lastName", user1.getLastName())
 				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole())).andExpect(status().isOk())
+				.param("userName", user1.getUsername())
+				.param("password", user1.getPassword()))
+		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		

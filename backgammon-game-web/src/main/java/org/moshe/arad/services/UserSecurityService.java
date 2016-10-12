@@ -28,13 +28,16 @@ public class UserSecurityService implements UserDetailsService{
 	}
 
 	public void registerNewUser(GameUser gameUser, BasicUser basicUser) {
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 		
-		gameUser.setRole(role);
+		userSecurityRepo.setAuthorityTo(basicUser, "WATCHER");
+		
 		userSecurityRepo.registerNewUser(gameUser);
 		
 		initVirtualRepo();
 		
-		userNames.add(gameUser.getUserName());
+		userNames.add(gameUser.getUsername());
 		emails.add(gameUser.getEmail());
 		
 		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 

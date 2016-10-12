@@ -3,6 +3,7 @@ package org.moshe.arad.repositories;
 import java.util.Date;
 import java.util.List;
 
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
@@ -18,6 +19,8 @@ public class LobbyRepository {
 	GameRoomRepository gameRoomRepository;
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
 	
 	public GameRoom createAndSaveNewGameRoom(GameRoom gameRoom){
 		setUpdateCreateInfo(gameRoom);
@@ -45,14 +48,14 @@ public class LobbyRepository {
 	
 	private void setOpenedByAndWhite(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);
+		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
 		gameRoom.setOpenedBy(loggedUser.getUserId());
 		gameRoom.setWhite(loggedUser.getUserId());
 	}
 
 	private void setUpdateCreateInfo(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		GameUser loggedUser = gameUserRepository.findByUserName(loggedUserName);
+		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
 		Date now = new Date();
 		if(gameRoom.getCreatedBy() == null)	gameRoom.setCreatedBy(loggedUser.getUserId());
 		if(gameRoom.getCreatedDate() == null)	gameRoom.setCreatedDate(now);

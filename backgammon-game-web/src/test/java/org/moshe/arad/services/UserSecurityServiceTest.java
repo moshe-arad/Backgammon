@@ -3,13 +3,18 @@ package org.moshe.arad.services;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import javax.annotation.Resource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -29,12 +34,25 @@ public class UserSecurityServiceTest {
 	UserSecurityService userSecurityService;
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
+	
+	@Resource
+	GameUser gameUser1;
+	@Resource
+	BasicUser basicUser1;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
-
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
+
+//		RepositoryUtils.setCreateAndUpdateSys(basicUser1);
+//		RepositoryUtils.setCreateAndUpdateSys(gameUser1);
+//		gameUser1.setBasicUser(basicUser1);
+//		basicUser1.setGameUser(gameUser1);
+		
 	}
 	
 	@After
@@ -44,25 +62,25 @@ public class UserSecurityServiceTest {
 	
 	@Test
 	public void isUserNameAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
-		assertFalse(userSecurityService.isUserNameAvailable(context.getBean("gameUser1", GameUser.class).getUserName()));
+		userSecurityService.registerNewUser(gameUser1, basicUser1);
+		assertFalse(userSecurityService.isUserNameAvailable(gameUser1.getUsername()));
 	}
 	
 	@Test
 	public void isUserNameAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1, basicUser1);
 		assertTrue(userSecurityService.isUserNameAvailable("userName2"));
 	}
 	
 	@Test
 	public void isEmailAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1, basicUser1);
 		assertFalse(userSecurityService.isEmailAvailable(context.getBean("gameUser1", GameUser.class).getEmail()));
 	}
 	
 	@Test
 	public void isEmailAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1, basicUser1);
 		assertTrue(userSecurityService.isEmailAvailable("email2@walla.com"));
 	}
 }

@@ -1,12 +1,19 @@
 package org.moshe.arad.repositories;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.stream.Collectors;
 
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
+import org.moshe.arad.repositories.entities.Authority;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +25,13 @@ public class UserSecurityRepository {
 
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
 
 	public GameUser loadUserByUsername(String userName){
-		return gameUserRepository.findByUserName(userName);
+		return basicUserRepository.findByUserName(userName).getGameUser();
 	}
 
 	public void registerNewUser(GameUser gameUser) {
@@ -54,6 +65,17 @@ public class UserSecurityRepository {
 	
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		return gameUserRepository.findByUserName(userName) != null ? true : false;
+		return basicUserRepository.findByUserName(userName) != null ? true : false;
+	}
+
+	public void setAuthorityTo(BasicUser basicUser, String auth) {
+		Authority newAuth = new Authority(basicUser.getUserName(), auth);
+		basicUser.setAuthorities(Arrays.asList(newAuth));
+//		newAuth.setBasicUser(basicUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(newAuth);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		
+		authorityRepository.save(newAuth);
 	}
 }

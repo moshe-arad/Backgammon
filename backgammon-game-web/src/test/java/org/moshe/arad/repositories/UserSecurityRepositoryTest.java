@@ -18,7 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
+import org.moshe.arad.repositories.entities.Authority;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -33,12 +38,14 @@ public class UserSecurityRepositoryTest {
 
 private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
 	
-//	@Autowired
-//	ApplicationContext context;
 	@Autowired
 	UserSecurityRepository userSecurityRepo;
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
 	
 	@Resource
 	GameUser gameUser1;
@@ -46,18 +53,21 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	GameUser gameUser2;
 	@Resource
 	GameUser gameUser3;
+	@Resource
+	BasicUser basicUser;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
- 
-		gameUser1.setUserId(null);
-		gameUser2.setUserId(null);
-		gameUser3.setUserId(null);
 		
-		gameUserRepository.save(gameUser1);
-		gameUserRepository.save(gameUser2);
-		gameUserRepository.save(gameUser3);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser1);
+		gameUser1.setUserId(null);
+		
+		basicUser.setGameUser(gameUser1);
+		gameUser1.setBasicUser(basicUser);
+		
+		basicUserRepository.save(basicUser);
 	}
 	
 	@After
@@ -88,7 +98,7 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 		List<GameUser> users = gameUserRepository.findAll();
 		
 		assertEquals(1, users.size());
-		assertEquals(gameUser.getUsername(), users.get(0).getUserName());
+		assertEquals(gameUser.getUsername(), users.get(0).getUsername());
 	}
 	
 	@Test
@@ -149,5 +159,15 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@WithAnonymousUser
 	public void isHasLoggedInUserAnonymousTest(){
 		assertFalse(userSecurityRepo.isHasLoggedInUser());
+	}
+	
+	@Test
+	public void setAuthorityToTest(){
+		
+		userSecurityRepo.setAuthorityTo(basicUser, "WATCHER");
+		assertEquals(1, authorityRepository.findByUserName(basicUser.getUserName())
+				.stream()
+				.filter(item -> !item.equals("WATCHER"))
+				.count());                                 
 	}
 }

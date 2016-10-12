@@ -12,8 +12,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +43,8 @@ public class LobbyServiceTest {
 	@Autowired
 	private GameUserRepository gameUserRepository;
 	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
 	private LobbyService lobbyService;
 	@Autowired
 	private ApplicationContext context; 
@@ -48,12 +53,14 @@ public class LobbyServiceTest {
 	public void setup(){
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@After
 	public void cleanup(){
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
@@ -63,7 +70,13 @@ public class LobbyServiceTest {
 				new Boolean(false), null, null, null, 2);
 		
 		GameUser user1 = context.getBean("loggedIn1", GameUser.class);
-		user1.setUserName("user");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		user1.setBasicUser(basicUser);
+		basicUser.setGameUser(user1);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(user1);
 		
 		gameUserRepository.save(user1);
 		

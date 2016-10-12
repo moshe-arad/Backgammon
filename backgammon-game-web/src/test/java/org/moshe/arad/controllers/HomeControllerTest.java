@@ -52,20 +52,17 @@ public class HomeControllerTest {
 	ApplicationContext context;
 	@Autowired
 	WebApplicationContext wac;
-	@Resource
-	HibernateGameUserDao hibernateGameUserCriteriaDao;
 	@Autowired
 	private GameUserRepository gameUserRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		hibernateGameUserCriteriaDao.deleteAll();
+		gameUserRepository.deleteAllInBatch();
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateGameUserCriteriaDao.deleteAll();
 		gameUserRepository.deleteAllInBatch();
 	}
 	
@@ -161,8 +158,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(user1, gameUserRepository.findAll().get(0));
 				
 	}
 	
@@ -185,7 +182,7 @@ public class HomeControllerTest {
 		.andExpect(view().name("home"))
 		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
 		
-		assertEquals(0, hibernateGameUserCriteriaDao.findAll().size());
+		assertEquals(0, gameUserRepository.findAll().size());
 	}
 	
 	@Test
@@ -217,8 +214,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(user1, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
@@ -246,8 +243,8 @@ public class HomeControllerTest {
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(user1, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
 		.andExpect(status().isOk())

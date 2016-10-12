@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.validators.GameUserValidator;
@@ -50,7 +51,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@Valid @ModelAttribute GameUser gameUser, Errors errors, Model model){
+	public String doRegister(@Valid @ModelAttribute GameUser gameUser,
+			@Valid @ModelAttribute BasicUser basicUser, Errors errors, Model model){
 		if(errors.hasErrors()){
 			logger.info("Some errors occured while trying to bind game user");
 			logger.info("There are " + errors.getErrorCount() + " errors.");
@@ -69,7 +71,7 @@ public class HomeController {
 		logger.info("The GameUser bind result: " + gameUser);
 		
 		try{
-			userSecurityService.registerNewUser(gameUser, "ROLE_USER");
+			userSecurityService.registerNewUser(gameUser, basicUser);
 			logger.info("User was successfuly register.");
 			logger.info("Routing for Lobby page.");
 			model.addAttribute("gameRooms", lobbyService.getAllGameRooms());

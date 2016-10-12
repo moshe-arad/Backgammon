@@ -18,9 +18,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,12 +36,14 @@ public class UserSecurityRepositoryTest {
 
 private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
 	
-//	@Autowired
-//	ApplicationContext context;
+	@Autowired
+	ApplicationContext context;
 	@Autowired
 	UserSecurityRepository userSecurityRepo;
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired 
+	BasicUserRepository basicUserRepository;
 	
 	@Resource
 	GameUser gameUser1;
@@ -46,6 +51,8 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	GameUser gameUser2;
 	@Resource
 	GameUser gameUser3;
+	@Resource
+	BasicUser basicUser1;
 	
 	@Before
 	public void setup(){
@@ -54,6 +61,11 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 		gameUser1.setUserId(null);
 		gameUser2.setUserId(null);
 		gameUser3.setUserId(null);
+		
+		basicUser1.setUserId(null);
+		
+		gameUser1.setBasicUser(basicUser1);
+		basicUser1.setGameUser(gameUser1);
 		
 		gameUserRepository.save(gameUser1);
 		gameUserRepository.save(gameUser2);
@@ -149,5 +161,12 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@WithAnonymousUser
 	public void isHasLoggedInUserAnonymousTest(){
 		assertFalse(userSecurityRepo.isHasLoggedInUser());
+	}
+	
+	@Test
+	public void addAuthorityToTest(){
+		BasicUser basicUser = context.getBean("basicUser1", BasicUser.class);
+		
+		userSecurityRepo.addAuthorityTo(basicUser);
 	}
 }

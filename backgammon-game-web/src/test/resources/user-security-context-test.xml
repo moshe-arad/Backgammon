@@ -17,6 +17,12 @@
 		<constructor-arg name="role" value="ROLE_USER"/>
 	</bean>
 	
+	<bean id="basicUser1" class="org.moshe.arad.repositories.entities.BasicUser" scope="prototype">
+		<constructor-arg value="moshe.arad"/>
+		<constructor-arg value="password"/>
+		<constructor-arg value="true"/>
+	</bean>
+	
 	<bean id="gameUser2" class="org.moshe.arad.repositories.entities.GameUser" scope="prototype">
 		<constructor-arg name="firstName" value="Bob"/>
 		<constructor-arg name="lastName" value="Scholes"/>

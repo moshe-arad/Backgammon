@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.annotation.PostConstruct;
 
 import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,8 +29,8 @@ public class UserSecurityService implements UserDetailsService{
 		return userSecurityRepo.loadUserByUsername(userName);
 	}
 
-	public void registerNewUser(GameUser gameUser, String role) {
-		gameUser.setRole(role);
+	public void registerNewUser(GameUser gameUser, BasicUser basicUser) {
+		gameUser.setRole("WATCHER");
 		userSecurityRepo.registerNewUser(gameUser);
 		
 		initVirtualRepo();

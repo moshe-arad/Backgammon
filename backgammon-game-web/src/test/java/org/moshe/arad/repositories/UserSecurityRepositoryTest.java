@@ -165,7 +165,7 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	public void setAuthorityToTest(){
 		
 		userSecurityRepo.setAuthorityTo(basicUser, "WATCHER");
-		assertEquals(1, authorityRepository.findByUserName(basicUser.getUserName())
+		assertEquals(1, authorityRepository.findByBasicUser(basicUser)
 				.stream()
 				.filter(item -> !item.equals("WATCHER"))
 				.count());                                 

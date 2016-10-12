@@ -15,12 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "authorities")
-@IdClass(AuthorityPK.class)
 public class Authority {
-
-	@Id
-	@Column(name = "username")
-	private String userName;
 	
 	@Id
 	@Column
@@ -49,24 +44,15 @@ public class Authority {
 	public Authority() {
 	}
 
-	public Authority(String userName, String authority) {
-		this.userName = userName;
+	public Authority(String authority) {
 		this.authority = authority;
 	}
 
 	@Override
 	public String toString() {
-		return "Authority [userName=" + userName + ", authority=" + authority + ", lastUpdatedDate=" + lastUpdatedDate
-				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ ", basicUser=" + basicUser + "]";
-	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
+		return "Authority [authority=" + authority + ", lastUpdatedDate=" + lastUpdatedDate + ", lastUpdatedBy="
+				+ lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", basicUser="
+				+ basicUser + "]";
 	}
 
 	public String getAuthority() {

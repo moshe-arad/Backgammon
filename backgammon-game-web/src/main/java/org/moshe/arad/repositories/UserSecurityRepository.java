@@ -69,9 +69,9 @@ public class UserSecurityRepository {
 	}
 
 	public void setAuthorityTo(BasicUser basicUser, String auth) {
-		Authority newAuth = new Authority(basicUser.getUserName(), auth);
+		Authority newAuth = new Authority(auth);
 		basicUser.setAuthorities(Arrays.asList(newAuth));
-//		newAuth.setBasicUser(basicUser);
+		newAuth.setBasicUser(basicUser);
 		
 		RepositoryUtils.setCreateAndUpdateSys(newAuth);
 		RepositoryUtils.setCreateAndUpdateSys(basicUser);

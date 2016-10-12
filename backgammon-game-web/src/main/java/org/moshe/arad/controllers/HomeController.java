@@ -74,7 +74,7 @@ public class HomeController {
 			logger.info("Routing for Lobby page.");
 			model.addAttribute("gameRooms", lobbyService.getAllGameRooms());
 			model.addAttribute("newGameRoom", new GameRoom());
-			model.addAttribute("tokens", lobbyService.encryptAllGameRoomsTokens());
+//			model.addAttribute("tokens", lobbyService.encryptAllGameRoomsTokens());
 			model.addAttribute("speedOptions", getSpeedOptions());
 			model.addAttribute("privateRoomOptions", getPrivateRoomOptions());
 			return "lobby";

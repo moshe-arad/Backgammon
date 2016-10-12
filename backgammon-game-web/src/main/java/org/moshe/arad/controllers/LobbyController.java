@@ -39,11 +39,6 @@ public class LobbyController {
 		return lobbyService.getAllGameRooms();
 	}
 	
-	@ModelAttribute("tokens")
-	public List<String> getTokens(){
-		return lobbyService.encryptAllGameRoomsTokens();
-	}
-	
 	@ModelAttribute("speedOptions")
 	public List<String> getSpeedOptions(){
 		List<String> options = new ArrayList<>();

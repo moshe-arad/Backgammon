@@ -12,7 +12,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.general.DesEncryption;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
@@ -43,9 +42,7 @@ public class LobbyServiceTest {
 	@Autowired
 	private LobbyService lobbyService;
 	@Autowired
-	private ApplicationContext context;
-	@Autowired
-	private DesEncryption desEncryption; 
+	private ApplicationContext context; 
 	
 	@Before
 	public void setup(){
@@ -74,52 +71,36 @@ public class LobbyServiceTest {
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());
-		assertEquals(2, lobbyService.getAllGameRooms().size());
+		assertEquals(1, lobbyService.getAllGameRooms().size());
 	}
 	
-	@Test
-	public void joinGameRoomTest(){
-		GameUser user1 = context.getBean("loggedIn1", GameUser.class);
-		GameUser user2 = context.getBean("loggedIn2", GameUser.class);
-		
-		gameUserRepository.save(Arrays.asList(user1, user2));
-		
-		Authentication auth1 = new UsernamePasswordAuthenticationToken(user1, user1.getPassword(), user1.getAuthorities());
-		Authentication auth2 = new UsernamePasswordAuthenticationToken(user2, user2.getPassword(), user2.getAuthorities());
-		
-		SecurityContextHolder.getContext().setAuthentication(auth1);
-		
-		GameRoom gameRoom = new GameRoom("Arad room123",
-				new Boolean(false), null, null, null, 2);
-		
-		lobbyService.addNewGameRoom(gameRoom);
-		
-		String gameRoomToken = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getToken();
-		String encryptedToken = desEncryption.encrypt(gameRoomToken);
-		
-		assertEquals(1, gameRoomRepository.findAll().size());
-		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());
-		
-		SecurityContextHolder.getContext().setAuthentication(auth2);
-		
-		lobbyService.joinGameRoom(encryptedToken);
-		
-		assertEquals(user2.getUserId(), gameRoomRepository.findByToken(gameRoomToken).getBlack());
-	}
-	
-	@Test
-	public void encryptAllGameRoomsTokensTest(){
-		List<GameRoom> rooms = gameRoomRepository.findAll();
-		
-		if(rooms.size() > 0){
-			List<String> tokens = rooms.stream().map(room -> room.getToken()).collect(Collectors.toList());
-
-			List<String> encryptedTokens = lobbyService.encryptAllGameRoomsTokens();
-			
-			for(int i=0; i<encryptedTokens.size(); i++){
-				assertEquals(tokens.get(i), desEncryption.decrypt(encryptedTokens.get(i)));
-			}
-
-		}
-	}
+//	@Test
+//	public void joinGameRoomTest(){
+//		GameUser user1 = context.getBean("loggedIn1", GameUser.class);
+//		GameUser user2 = context.getBean("loggedIn2", GameUser.class);
+//		
+//		gameUserRepository.save(Arrays.asList(user1, user2));
+//		
+//		Authentication auth1 = new UsernamePasswordAuthenticationToken(user1, user1.getPassword(), user1.getAuthorities());
+//		Authentication auth2 = new UsernamePasswordAuthenticationToken(user2, user2.getPassword(), user2.getAuthorities());
+//		
+//		SecurityContextHolder.getContext().setAuthentication(auth1);
+//		
+//		GameRoom gameRoom = new GameRoom("Arad room123",
+//				new Boolean(false), null, null, null, 2);
+//		
+//		lobbyService.addNewGameRoom(gameRoom);
+//		
+//		String gameRoomToken = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getToken();
+////		String encryptedToken = desEncryption.encrypt(gameRoomToken);
+//		
+//		assertEquals(1, gameRoomRepository.findAll().size());
+//		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());
+//		
+//		SecurityContextHolder.getContext().setAuthentication(auth2);
+//		
+////		lobbyService.joinGameRoom(encryptedToken);
+//		
+//		assertEquals(user2.getUserId(), gameRoomRepository.findByToken(gameRoomToken).getBlack());
+//	}
 }

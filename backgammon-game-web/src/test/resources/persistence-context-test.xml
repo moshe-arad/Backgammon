@@ -19,24 +19,6 @@
 		<property name="password" value="${jdbc.password}" />
 	</bean>
 	
-	<!-- Hibernate -->
-	
-	<bean id="mySessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-		<property name="dataSource" ref="myDataSource" />
-		<property name="annotatedClasses">
-			<list>
-				<value>org.moshe.arad.repositories.entities.GameUser</value>
-				<value>org.moshe.arad.repositories.entities.GameRoom</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-			</props>
-		</property>
-	</bean>
-	
 	<!-- JPA -->
 	
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

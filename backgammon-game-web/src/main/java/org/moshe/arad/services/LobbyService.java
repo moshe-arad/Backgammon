@@ -10,7 +10,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.general.DesEncryption;
 import org.moshe.arad.repositories.LobbyRepository;
 import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
@@ -29,8 +28,6 @@ public class LobbyService {
 	LobbyRepository lobbyRepository;
 	@Autowired
 	UserSecurityRepository userSecurityRepository;
-	@Autowired
-	DesEncryption desEncryption;
 	
 	@PostConstruct
 	public void init(){
@@ -73,9 +70,9 @@ public class LobbyService {
 	}
 
 	public void joinGameRoom(String token) {
-		String decryptedToken = desEncryption.decrypt(token);
-		Long roomId = lobbyRepository.getRoomIdByDecrypedToken(decryptedToken);
-		lobbyRepository.addSecondPlayer(roomId);
+//		String decryptedToken = desEncryption.decrypt(token);
+//		Long roomId = lobbyRepository.getRoomIdByDecrypedToken(decryptedToken);
+//		lobbyRepository.addSecondPlayer(roomId);
 	}
 
 	public boolean isHasLoggedInUser() {
@@ -84,8 +81,9 @@ public class LobbyService {
 
 	@SuppressWarnings("static-access")
 	public List<String> encryptAllGameRoomsTokens() {
-		List<String> ans = gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
-		if(ans == null) ans = new ArrayList<>();
-		return ans;
+//		List<String> ans = gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
+//		if(ans == null) ans = new ArrayList<>();
+//		return ans;
+		return null;
 	}
 }

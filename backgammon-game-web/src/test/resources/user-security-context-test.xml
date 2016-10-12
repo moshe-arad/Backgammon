@@ -5,12 +5,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 		
-	<bean id="hibernateGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.hibernate.criteria.GameUserHibernateCriteriaDaoImpl" />
-	<bean id="hqlGameUserDao" class="org.moshe.arad.repositories.dao.hibernate.hql.GameUserHqlDaoImpl" />
-	<bean id="jpaGameUserCriteriaDao" class="org.moshe.arad.repositories.dao.jpa.criteria.JpaUserCriteriaDaoImpl" />
-	<bean id="jpqlGameUserDao" class="org.moshe.arad.repositories.dao.jpa.jpql.GameUserJpqlDaoImpl" />
 	
-	<!-- <bean class="org.moshe.arad.repositories.UserSecurityRepositoryHibernate" /> -->
 	<bean class="org.moshe.arad.services.UserSecurityService"/>
 	
 	<bean id="gameUser1" class="org.moshe.arad.repositories.entities.GameUser" scope="prototype">

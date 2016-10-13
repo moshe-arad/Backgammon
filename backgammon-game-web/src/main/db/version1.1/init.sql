@@ -102,8 +102,9 @@ CREATE TABLE `game_rooms`
     `last_updated_by` BIGINT NOT NULL,
     `created_date` DATETIME NOT NULL,
     `created_by` BIGINT NOT NULL,
-    `token` VARCHAR(255) AS (SHA1(CONCAT(`name`, "This is a qwe secret 123", `created_by`, `created_date`))),
-    PRIMARY KEY(`game_room_id`)
+    `group_id` BIGINT NOT NULL,
+    PRIMARY KEY(`game_room_id`),
+    constraint fk_game_rooms_group foreign key(group_id) references groups(id)
 );
 
 

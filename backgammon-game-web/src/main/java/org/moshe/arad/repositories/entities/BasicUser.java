@@ -53,6 +53,9 @@ public class BasicUser implements CreateUpdateable{
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "basicUser")
 	private List<Authority> authorities = new ArrayList<>(100);
 
+	@OneToMany(mappedBy = "basicUser")
+	private List<GroupMembers> groupMembers = new ArrayList<GroupMembers>(100);
+	
 	public BasicUser() {
 	}
 	
@@ -70,6 +73,15 @@ public class BasicUser implements CreateUpdateable{
 				+ "]";
 	}
 	
+	
+	public List<GroupMembers> getGroupMembers() {
+		return groupMembers;
+	}
+
+	public void setGroupMembers(List<GroupMembers> groupMembers) {
+		this.groupMembers = groupMembers;
+	}
+
 	public String getUserName() {
 		return userName;
 	}

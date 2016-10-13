@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -24,13 +26,6 @@ import org.hibernate.validator.constraints.Range;
 import org.moshe.arad.game.BasicGame;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * 
- * @author moshe-arad
- * TODO hibernate/jap/spring-data entity
- *  
- *  
- */
 @Entity
 @Table(name ="game_rooms")
 public class GameRoom implements CreateUpdateable{
@@ -47,10 +42,7 @@ public class GameRoom implements CreateUpdateable{
 	
 	@Column(name = "private")
 	@NotNull
-	private Boolean isPrivateRoom;
-	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
-	private Set<GameUser> users = new HashSet<>(1000);
+	private Boolean isPrivateRoom;	
 	
 	@Column(name = "opened_by")
 	@NotNull
@@ -85,10 +77,14 @@ public class GameRoom implements CreateUpdateable{
 	@Column(name="created_by", updatable=false)
 	@NotNull
 	private Long createdBy;
-	
-	@Column(name = "token", updatable = false, insertable = false)
-	private String token;
 
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
+	private Set<GameUser> users = new HashSet<>(1000);
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "group_id")
+	private Group group;
+	
 	public GameRoom() {
 	}
 	
@@ -101,6 +97,14 @@ public class GameRoom implements CreateUpdateable{
 		this.white = white;
 		this.black = black;
 		this.speed = speed;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public Long getGameRoomId() {
@@ -215,14 +219,6 @@ public class GameRoom implements CreateUpdateable{
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
 	
 	@Override
 	public String toString() {
@@ -230,6 +226,6 @@ public class GameRoom implements CreateUpdateable{
 				+ isPrivateRoom + ", users=" + users + ", openedBy=" + openedBy + ", white=" + white + ", black="
 				+ black + ", speed=" + speed + ", game=" + game + ", lastUpdatedDate=" + lastUpdatedDate
 				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ ", token=" + token + "]";
+				+ "]";
 	}
 }

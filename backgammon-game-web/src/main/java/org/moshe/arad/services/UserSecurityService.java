@@ -31,17 +31,8 @@ public class UserSecurityService implements UserDetailsService{
 	}
 
 	public void registerNewUser(GameUser gameUser) {
-		BasicUser basicUser = gameUser.getBasicUser();
 		
-		Authority newAuth = new Authority("WATCHER");
-		basicUser.setAuthorities(Arrays.asList(newAuth));
-		newAuth.setBasicUser(basicUser);
-		gameUser.setBasicUser(basicUser);
-		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(newAuth);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
+		setUserEntities(gameUser);
 		
 		userSecurityRepo.registerNewUser(gameUser);
 		
@@ -53,6 +44,21 @@ public class UserSecurityService implements UserDetailsService{
 		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
 				gameUser.getPassword(), gameUser.getAuthorities()); 
 		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+
+	private void setUserEntities(GameUser gameUser) {
+		BasicUser basicUser = gameUser.getBasicUser();
+		basicUser.setEnabled(true);
+		
+		Authority newAuth = new Authority("ROLE_WATCHER");
+		basicUser.setAuthorities(Arrays.asList(newAuth));
+		newAuth.setBasicUser(basicUser);
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(newAuth);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 	}
 	
 	public boolean isUserNameAvailable(String userName){

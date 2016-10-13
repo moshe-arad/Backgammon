@@ -83,7 +83,7 @@ public class LobbyController {
 	public String joinGameRoom(@RequestParam String token){
 		try{
 			logger.info("adding current logged user to game room with token of: " + token);
-			lobbyService.joinGameRoom(token);
+//			lobbyService.joinGameRoom(token);
 			logger.info("routing for backgammon board page");
 			return "backgammon";
 		}

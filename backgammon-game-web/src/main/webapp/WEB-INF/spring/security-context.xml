@@ -19,14 +19,17 @@
 		authentication-failure-url="/home?error=true" />
 		
 		<security:logout logout-url="/logout" success-handler-ref="logoutHandler"/>
-		<security:intercept-url pattern="/backgammon" access="ROLE_USER"/>
-		<security:intercept-url pattern="/backgammon/*" access="ROLE_USER"/>
-		<security:intercept-url pattern="/lobby" access="ROLE_USER"/>
-		<security:intercept-url pattern="/lobby/*" access="ROLE_USER"/>
+		<security:intercept-url pattern="/backgammon" access="ROLE_WATCHER"/>
+		<security:intercept-url pattern="/backgammon/*" access="ROLE_WATCHER"/>
+		<security:intercept-url pattern="/lobby" access="ROLE_WATCHER"/>
+		<security:intercept-url pattern="/lobby/*" access="ROLE_WATCHER"/>
 	</security:http>
 	
+	<import resource="classpath:persistence-context.xml"/>
+	
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="userSecurityService">
+		<security:authentication-provider>
+			<security:jdbc-user-service data-source-ref="myDataSource"/>
 		</security:authentication-provider>
 	</security:authentication-manager>
 	

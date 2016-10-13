@@ -70,7 +70,7 @@
 						<div class="form-group">
 							<label for="userName">User Name:</label>
 							<input type="text" class="form-control" id="userName" 
-								placeholder="User Name" name="userName">
+								placeholder="User Name" name="basicUser.userName">
 						</div>
 						
 						<p id="invalidUserName" class="hidden text-danger"></p>
@@ -79,7 +79,7 @@
 						<div class="form-group">
 							<label for="password">Password:</label>
 							<input type="password" class="form-control" id="password" 
-								placeholder="Password" name="password" >
+								placeholder="Password" name="basicUser.password" >
 						</div>
 						<p id="invalidPassword" class="hidden text-danger"></p>
 						

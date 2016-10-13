@@ -69,12 +69,6 @@ public class LobbyService {
 		return gameRooms;
 	}
 
-	public void joinGameRoom(String token) {
-//		String decryptedToken = desEncryption.decrypt(token);
-//		Long roomId = lobbyRepository.getRoomIdByDecrypedToken(decryptedToken);
-//		lobbyRepository.addSecondPlayer(roomId);
-	}
-
 	public boolean isHasLoggedInUser() {
 		return userSecurityRepository.isHasLoggedInUser();
 	}

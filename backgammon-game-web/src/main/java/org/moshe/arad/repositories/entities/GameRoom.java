@@ -33,7 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @Entity
 @Table(name ="game_rooms")
-public class GameRoom {
+public class GameRoom implements CreateUpdateable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -176,34 +176,42 @@ public class GameRoom {
 	}
 
 	
+	@Override
 	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
 
+	@Override
 	public void setLastUpdatedDate(Date lastUpdatedDate) {
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
 
+	@Override
 	public Long getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
+	@Override
 	public void setLastUpdatedBy(Long lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	@Override
 	public Date getCreatedDate() {
 		return createdDate;
 	}
 
+	@Override
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
+	@Override
 	public Long getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}

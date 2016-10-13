@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.dao.data.RepositoryUtils;
@@ -36,6 +37,8 @@ public class UserSecurityServiceTest {
 	GameUserRepository gameUserRepository;
 	@Autowired
 	BasicUserRepository basicUserRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
 	
 	@Resource
 	GameUser gameUser1;
@@ -46,18 +49,15 @@ public class UserSecurityServiceTest {
 	public void setup(){
 		logger.info("Initializing test DB.");
 		gameUserRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();
-
-//		RepositoryUtils.setCreateAndUpdateSys(basicUser1);
-//		RepositoryUtils.setCreateAndUpdateSys(gameUser1);
-//		gameUser1.setBasicUser(basicUser1);
-//		basicUser1.setGameUser(gameUser1);
-		
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();		
 	}
 	
 	@After
 	public void cleanup(){
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "authorities")
-public class Authority {
+public class Authority implements CreateUpdateable{
 	
 	@Id
 	@Column
@@ -63,34 +63,42 @@ public class Authority {
 		this.authority = authority;
 	}
 
+	@Override
 	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
 
+	@Override
 	public void setLastUpdatedDate(Date lastUpdatedDate) {
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
 
+	@Override
 	public Long getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
+	@Override
 	public void setLastUpdatedBy(Long lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	@Override
 	public Date getCreatedDate() {
 		return createdDate;
 	}
 
+	@Override
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
+	@Override
 	public Long getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}

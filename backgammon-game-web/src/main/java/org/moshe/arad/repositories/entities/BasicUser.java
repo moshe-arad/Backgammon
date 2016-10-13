@@ -17,7 +17,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 @Table(name = "users")
-public class BasicUser {
+public class BasicUser implements CreateUpdateable{
 
 	@Id
 	@Column(name = "username")
@@ -50,7 +50,7 @@ public class BasicUser {
 	@OneToOne(cascade = CascadeType.ALL,mappedBy = "basicUser")
 	private GameUser gameUser;
 	
-	@OneToMany(mappedBy = "basicUser")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "basicUser")
 	private List<Authority> authorities = new ArrayList<>(100);
 
 	public BasicUser() {
@@ -86,34 +86,42 @@ public class BasicUser {
 		this.password = password;
 	}
 
+	@Override
 	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
 
+	@Override
 	public void setLastUpdatedDate(Date lastUpdatedDate) {
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
 
+	@Override
 	public Long getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
+	@Override
 	public void setLastUpdatedBy(Long lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	@Override
 	public Date getCreatedDate() {
 		return createdDate;
 	}
 
+	@Override
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
+	@Override
 	public Long getCreatedBy() {
 		return createdBy;
 	}
 
+	@Override
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}

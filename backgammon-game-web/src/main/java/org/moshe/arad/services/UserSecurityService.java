@@ -1,8 +1,11 @@
 package org.moshe.arad.services;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
+import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +31,16 @@ public class UserSecurityService implements UserDetailsService{
 	}
 
 	public void registerNewUser(GameUser gameUser, BasicUser basicUser) {
+			
+		Authority newAuth = new Authority("WATCHER");
+		basicUser.setAuthorities(Arrays.asList(newAuth));
+		newAuth.setBasicUser(basicUser);
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		userSecurityRepo.setAuthorityTo(basicUser, "WATCHER");
+		RepositoryUtils.setCreateAndUpdateSys(newAuth);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		userSecurityRepo.registerNewUser(gameUser);
 		

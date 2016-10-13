@@ -37,18 +37,10 @@ public class UserSecurityRepository {
 	public void registerNewUser(GameUser gameUser) {
 		try{
 			if(gameUser == null) throw new NullPointerException();
-			setCreateAndUpdateDbInfo(gameUser);
 			gameUserRepository.save(gameUser);
 		}
 		catch (NullPointerException e) {
 		}
-	}
-
-	private void setCreateAndUpdateDbInfo(GameUser gameUser) {
-		gameUser.setCreatedBy(-1L);
-		gameUser.setCreatedDate(new Date());
-		gameUser.setLastUpdatedBy(-1L);
-		gameUser.setLastUpdatedDate(new Date());
 	}
 	
 	public Set<String> getAllUserNames() {
@@ -66,16 +58,5 @@ public class UserSecurityRepository {
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		return basicUserRepository.findByUserName(userName) != null ? true : false;
-	}
-
-	public void setAuthorityTo(BasicUser basicUser, String auth) {
-		Authority newAuth = new Authority(auth);
-		basicUser.setAuthorities(Arrays.asList(newAuth));
-		newAuth.setBasicUser(basicUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(newAuth);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		
-		authorityRepository.save(newAuth);
 	}
 }

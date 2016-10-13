@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
@@ -45,6 +46,8 @@ public class LobbyServiceTest {
 	@Autowired
 	private BasicUserRepository basicUserRepository;
 	@Autowired
+	private AuthorityRepository authorityRepository;
+	@Autowired
 	private LobbyService lobbyService;
 	@Autowired
 	private ApplicationContext context; 
@@ -53,13 +56,15 @@ public class LobbyServiceTest {
 	public void setup(){
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@After
 	public void cleanup(){
-		gameRoomRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();		
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
 	}
 	

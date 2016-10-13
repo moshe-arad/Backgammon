@@ -29,7 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name="game_users")
-public class GameUser implements UserDetails{
+public class GameUser implements UserDetails, CreateUpdateable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -134,34 +134,42 @@ public class GameUser implements UserDetails{
 		this.email = email;
 	}
 
+	@Override
 	public Date getLastUpdatedDate() {
 		return lastUpdatedDate;
 	}
 
+	@Override
 	public void setLastUpdatedDate(Date lastUpdatedDate) {
 		this.lastUpdatedDate = lastUpdatedDate;
 	}
 
+	@Override
 	public Long getLastUpdatedBy() {
 		return lastUpdatedBy;
 	}
 
+	@Override
 	public void setLastUpdatedBy(Long lastUpdatedBy) {
 		this.lastUpdatedBy = lastUpdatedBy;
 	}
 
+	@Override
 	public Date getCreatedDate() {
 		return createdDate;
 	}
 
+	@Override
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
+	@Override
 	public Long getCreatedBy() {
 		return createdBy;
 	}
-
+	
+	@Override
 	public void setCreatedBy(Long createdBy) {
 		this.createdBy = createdBy;
 	}
@@ -184,7 +192,11 @@ public class GameUser implements UserDetails{
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		String[] authList = (String[]) this.basicUser.getAuthorities().stream().map(item -> item.getAuthority()).collect(Collectors.toList()).toArray();
+		String[] authList = this.basicUser.getAuthorities()
+				.stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList())
+				.toArray(new String[this.basicUser.getAuthorities().size()]);
 		return AuthorityUtils.createAuthorityList(authList);
 	}
 

@@ -160,14 +160,4 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	public void isHasLoggedInUserAnonymousTest(){
 		assertFalse(userSecurityRepo.isHasLoggedInUser());
 	}
-	
-	@Test
-	public void setAuthorityToTest(){
-		
-		userSecurityRepo.setAuthorityTo(basicUser, "WATCHER");
-		assertEquals(1, authorityRepository.findByBasicUser(basicUser)
-				.stream()
-				.filter(item -> !item.equals("WATCHER"))
-				.count());                                 
-	}
 }

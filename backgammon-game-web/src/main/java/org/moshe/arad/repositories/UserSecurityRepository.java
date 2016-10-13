@@ -31,7 +31,9 @@ public class UserSecurityRepository {
 	BasicUserRepository basicUserRepository;
 
 	public GameUser loadUserByUsername(String userName){
-		return basicUserRepository.findByUserName(userName).getGameUser();
+		BasicUser basicUser = basicUserRepository.findByUserName(userName);
+		if(basicUser != null) return basicUser.getGameUser();
+		else return null;
 	}
 
 	public void registerNewUser(GameUser gameUser) {
@@ -57,6 +59,9 @@ public class UserSecurityRepository {
 	
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		return basicUserRepository.findByUserName(userName) != null ? true : false;
+		if(!userName.equals("anonymous")){
+			return basicUserRepository.findByUserName(userName) != null ? true : false;
+		}
+		else return false;
 	}
 }

@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -47,6 +48,9 @@ public class LobbyRepositoryTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
 		
 		gameUserRepository.save(gameUser);
 	}

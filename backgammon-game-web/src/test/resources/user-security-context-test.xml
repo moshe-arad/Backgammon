@@ -25,9 +25,21 @@
 		<constructor-arg name="email" value="email2@walla.com"/>
 	</bean>
 	
+	<bean id="basicUser2" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg name="userName" value="userName2"/>
+		<constructor-arg name="password" value="password2"/>
+		<constructor-arg value="true" />
+	</bean>
+	
 	<bean id="gameUser3" class="org.moshe.arad.repositories.entities.GameUser" scope="prototype">
 		<constructor-arg name="firstName" value="John"/>
 		<constructor-arg name="lastName" value="Terry"/>
 		<constructor-arg name="email" value="email3@walla.com"/>
+	</bean>
+	
+	<bean id="basicUser3" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg name="userName" value="userName3"/>
+		<constructor-arg name="password" value="password3"/>
+		<constructor-arg value="true" />
 	</bean>
 </beans>

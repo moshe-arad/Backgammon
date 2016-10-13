@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -54,25 +55,48 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@Resource
 	GameUser gameUser3;
 	@Resource
-	BasicUser basicUser;
+	BasicUser basicUser1;
+	@Resource
+	BasicUser basicUser2;
+	@Resource
+	BasicUser basicUser3;
 	
 	@Before
 	public void setup(){
+		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
+		
 		logger.info("Initializing test DB.");
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser1);
 		RepositoryUtils.setCreateAndUpdateSys(gameUser1);
-		gameUser1.setUserId(null);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser2);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser2);
+		RepositoryUtils.setCreateAndUpdateSys(basicUser3);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser3);
 		
-		basicUser.setGameUser(gameUser1);
-		gameUser1.setBasicUser(basicUser);
 		
-		basicUserRepository.save(basicUser);
+		basicUser1.setAuthorities(null);
+		basicUser1.setGameUser(gameUser1);
+		gameUser1.setBasicUser(basicUser1);
+		
+		basicUser2.setGameUser(gameUser2);
+		gameUser2.setBasicUser(basicUser2);
+		
+		basicUser3.setGameUser(gameUser3);
+		gameUser3.setBasicUser(basicUser3);
+		
+		basicUserRepository.save(basicUser1);
+		basicUserRepository.save(basicUser2);
+		basicUserRepository.save(basicUser3);
 	}
 	
 	@After
 	public void cleanup(){
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
@@ -150,8 +174,6 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@Test
 	@WithMockUser(username = "userName1", password = "password1")
 	public void isHasLoggedInUserTest(){
-		gameUserRepository.save(gameUser1);
-		
 		assertTrue(userSecurityRepo.isHasLoggedInUser());
 	}
 	

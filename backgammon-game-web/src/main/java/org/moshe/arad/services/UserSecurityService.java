@@ -30,8 +30,9 @@ public class UserSecurityService implements UserDetailsService{
 		return userSecurityRepo.loadUserByUsername(userName);
 	}
 
-	public void registerNewUser(GameUser gameUser, BasicUser basicUser) {
-			
+	public void registerNewUser(GameUser gameUser) {
+		BasicUser basicUser = gameUser.getBasicUser();
+		
 		Authority newAuth = new Authority("WATCHER");
 		basicUser.setAuthorities(Arrays.asList(newAuth));
 		newAuth.setBasicUser(basicUser);

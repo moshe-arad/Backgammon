@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
@@ -50,9 +51,21 @@ public class HomeController {
 		}
 	}
 	
+	@ModelAttribute("gameUser")
+	public GameUser getEmptyGameUser(){
+		GameUser gameUser = new GameUser();
+		gameUser.setBasicUser(new BasicUser());
+		return gameUser;
+	}
+	
+	@ModelAttribute("basicUser")
+	public BasicUser getEmptyBasicUser(){
+		return new BasicUser();
+	}
+	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@Valid @ModelAttribute GameUser gameUser, 
-			@Valid @ModelAttribute BasicUser basicUser, Errors errors, Model model){
+	public String doRegister(@Valid @ModelAttribute("gameUser") GameUser gameUser, 
+			 Errors errors, Model model){
 		if(errors.hasErrors()){
 			logger.info("Some errors occured while trying to bind game user");
 			logger.info("There are " + errors.getErrorCount() + " errors.");
@@ -71,7 +84,7 @@ public class HomeController {
 		logger.info("The GameUser bind result: " + gameUser);
 		
 		try{
-			userSecurityService.registerNewUser(gameUser, basicUser);
+			userSecurityService.registerNewUser(gameUser);
 			logger.info("User was successfuly register.");
 			logger.info("Routing for Lobby page.");
 			model.addAttribute("gameRooms", lobbyService.getAllGameRooms());

@@ -50,7 +50,8 @@ public class UserSecurityServiceTest {
 		logger.info("Initializing test DB.");
 		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();		
+		basicUserRepository.deleteAllInBatch();
+		gameUser1.setBasicUser(basicUser1);
 	}
 	
 	@After
@@ -62,25 +63,25 @@ public class UserSecurityServiceTest {
 	
 	@Test
 	public void isUserNameAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(gameUser1, basicUser1);
+		userSecurityService.registerNewUser(gameUser1);
 		assertFalse(userSecurityService.isUserNameAvailable(gameUser1.getUsername()));
 	}
 	
 	@Test
 	public void isUserNameAvailableTest(){
-		userSecurityService.registerNewUser(gameUser1, basicUser1);
+		userSecurityService.registerNewUser(gameUser1);
 		assertTrue(userSecurityService.isUserNameAvailable("userName2"));
 	}
 	
 	@Test
 	public void isEmailAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(gameUser1, basicUser1);
+		userSecurityService.registerNewUser(gameUser1);
 		assertFalse(userSecurityService.isEmailAvailable(context.getBean("gameUser1", GameUser.class).getEmail()));
 	}
 	
 	@Test
 	public void isEmailAvailableTest(){
-		userSecurityService.registerNewUser(gameUser1, basicUser1);
+		userSecurityService.registerNewUser(gameUser1);
 		assertTrue(userSecurityService.isEmailAvailable("email2@walla.com"));
 	}
 }

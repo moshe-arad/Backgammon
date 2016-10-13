@@ -3,6 +3,7 @@ package org.moshe.arad.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -16,7 +17,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.services.UserSecurityService;
@@ -52,16 +56,25 @@ public class HomeControllerTest {
 	WebApplicationContext wac;
 	@Autowired
 	private GameUserRepository gameUserRepository;
+	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
+		
 	}
 	
 	@After
 	public void cleanup(){
+		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
@@ -109,6 +122,9 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
+		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/"))
 		.andExpect(status().is3xxRedirection())
@@ -124,6 +140,9 @@ public class HomeControllerTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/home"))
@@ -141,6 +160,9 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
+		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/login"))
 		.andExpect(status().is3xxRedirection())
@@ -157,6 +179,9 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
+		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/register"))
 		.andExpect(status().is3xxRedirection())
@@ -166,37 +191,53 @@ public class HomeControllerTest {
 	
 	@Test
 	public void doRegisterTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUsername())
-				.param("password", user1.getPassword()))
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", gameUser.getUsername())
+				.param("basicUser.password", gameUser.getPassword())
+				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
+		.andExpect(model().attribute("gameUser", gameUser))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("gameUser", user1))
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
-		assertEquals(user1, gameUserRepository.findAll().get(0));
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 				
 	}
 	
 	@Test
 	public void doRegisterHasErrorsTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
-		user1.setEmail("not an email");
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
+		
+		gameUser.setEmail("not an email");
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
 				.param("email", "not an email")
-				.param("userName", user1.getUsername())
-				.param("password", user1.getPassword()))
+				.param("userName", gameUser.getUsername())
+				.param("password", gameUser.getPassword()))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("gameUser", user1))
+		.andExpect(model().attribute("gameUser", gameUser))
 		.andExpect(model().hasErrors())
 		.andExpect(model().errorCount(5))
 		.andExpect(view().name("home"))
@@ -222,20 +263,28 @@ public class HomeControllerTest {
 	
 	@Test
 	public void userNameAvailableInValidTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("userName1", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUsername())
-				.param("password", user1.getPassword()))
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", basicUser.getUserName())
+				.param("basicUser.password", basicUser.getPassword())
+				.param("basicUser.enabled", basicUser.getEnabled().toString()))
 		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
-		assertEquals(user1, gameUserRepository.findAll().get(0));
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
@@ -251,20 +300,28 @@ public class HomeControllerTest {
 	
 	@Test
 	public void emailAvailableInValidTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		RepositoryUtils.setCreateAndUpdateSys(basicUser);
+		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUsername())
-				.param("password", user1.getPassword()))
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", gameUser.getUsername())
+				.param("basicUser.password", gameUser.getPassword())
+				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
 		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
-		assertEquals(user1, gameUserRepository.findAll().get(0));
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
 		.andExpect(status().isOk())

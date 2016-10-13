@@ -18,4 +18,14 @@ public interface RepositoryUtils {
 		item.setLastUpdatedDate(now);
 		item.setLastUpdatedBy(-1L);
 	}
+	
+	public static <T extends CreateUpdateable> void setCreateAndUpdateByUserId(T item, Long id){
+		Date now = new Date();
+		
+		if(item.getCreatedDate() == null) item.setCreatedDate(now);
+		if(item.getCreatedBy() == null) item.setCreatedBy(id);
+		
+		item.setLastUpdatedDate(now);
+		item.setLastUpdatedBy(id);
+	}
 }

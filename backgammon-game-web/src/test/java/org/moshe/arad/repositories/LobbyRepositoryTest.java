@@ -74,7 +74,7 @@ public class LobbyRepositoryTest {
 		assertNull(gameRoom.getLastUpdatedBy());
 		assertNull(gameRoom.getLastUpdatedDate());
 		
-		lobbyRepository.createAndSaveNewGameRoom(gameRoom);
+		lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		
 		assertNotNull(gameRoom.getWhite());
 		assertNotNull(gameRoom.getOpenedBy());

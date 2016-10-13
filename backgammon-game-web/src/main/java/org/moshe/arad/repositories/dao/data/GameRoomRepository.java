@@ -7,5 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
 	
-	public GameRoom findByToken(String token);
 }

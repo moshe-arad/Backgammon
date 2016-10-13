@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 public class GroupAuthorities implements CreateUpdateable {
 
 	@Id
-	@Column(name = "group_id")
 	private Long groupId;
 	
 	@Column

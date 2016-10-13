@@ -1,11 +1,13 @@
 package org.moshe.arad.repositories;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,13 @@ public class LobbyRepository {
 	@Autowired
 	BasicUserRepository basicUserRepository;
 	
-	public GameRoom createAndSaveNewGameRoom(GameRoom gameRoom){
-		setUpdateCreateInfo(gameRoom);
+	public GameRoom createNewGameRoomWithLoggedInUser(GameRoom gameRoom){
+		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
+		RepositoryUtils.setCreateAndUpdateByUserId(gameRoom, loggedUser.getUserId());
 		setOpenedByAndWhite(gameRoom);
+		gameRoom.getUsers().add(loggedUser);
+		loggedUser.getGameRooms().add(gameRoom);
 		gameRoomRepository.save(gameRoom);
 		return gameRoom;
 	}
@@ -39,11 +45,6 @@ public class LobbyRepository {
 		gameRoom.setBlack(userId);
 		setUpdateCreateInfo(gameRoom);
 		gameRoomRepository.save(gameRoom);
-	}
-	
-	public Long getRoomIdByDecrypedToken(String decrypedToken)
-	{
-		return gameRoomRepository.findByToken(decrypedToken).getGameRoomId();
 	}
 	
 	private void setOpenedByAndWhite(GameRoom gameRoom) {

@@ -59,7 +59,7 @@ public class UserSecurityRepository {
 	
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		if(!userName.equals("anonymous")){
+		if(!userName.equals("anonymous") && !userName.equals("anonymousUser")){
 			return basicUserRepository.findByUserName(userName) != null ? true : false;
 		}
 		else return false;

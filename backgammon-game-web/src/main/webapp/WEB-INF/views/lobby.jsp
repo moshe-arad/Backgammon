@@ -96,7 +96,7 @@
 											</c:choose>								
 																				
 											<td class="hidden">
-												<c:out value="${gameRooms.get(i).getGameRoomId}" />																							
+												<c:out value="${gameRooms.get(i).getGameRoomId()}" />																							
 											</td>												
 										</tr>
 									</c:forEach>

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Set;
 
 import org.moshe.arad.repositories.UserSecurityRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -55,10 +54,6 @@ public class UserSecurityService implements UserDetailsService{
 		newAuth.setBasicUser(basicUser);
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(newAuth);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 	}
 	
 	public boolean isUserNameAvailable(String userName){

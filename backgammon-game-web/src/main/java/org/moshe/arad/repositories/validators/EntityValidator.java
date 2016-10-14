@@ -14,7 +14,7 @@ public interface EntityValidator {
 	public final static Logger logger = LogManager.getLogger(EntityValidator.class);
 	
 	public static final Set<String> ignore = new HashSet<>(Arrays.asList(
-			"createdDate","lastUpdatedBy","createdBy","lastUpdatedDate"
+			"createdDate","lastModifiedBy","createdBy","lastModifiedDate"
 			));
 	
 	public static boolean acceptableErrors(Errors errors) {

@@ -9,12 +9,13 @@ import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -22,6 +23,11 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,7 +35,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name="game_users")
-public class GameUser implements UserDetails, CreateUpdateable{
+@EntityListeners(AuditingEntityListener.class)
+public class GameUser implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -51,23 +58,27 @@ public class GameUser implements UserDetails, CreateUpdateable{
 	@Column
 	private String email;
 	
-	@Column(name="last_updated_date")
+	@LastModifiedDate
+	@Column(name="last_modified_date")
 	@NotNull
-	private Date lastUpdatedDate;
+	private Date lastModifiedDate;
 	
-	@Column(name="last_updated_by")
+	@LastModifiedBy
+	@Column(name="last_modified_by")
 	@NotNull
-	private Long lastUpdatedBy;
+	private String lastModifiedBy;
 	
+	@CreatedDate
 	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
+	@CreatedBy
 	@Column(name="created_by", updatable=false)
 	@NotNull
-	private Long createdBy;
+	private String createdBy;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "user_in_game_room", 
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
@@ -84,20 +95,47 @@ public class GameUser implements UserDetails, CreateUpdateable{
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.lastUpdatedDate = new Date();
-		this.lastUpdatedBy = 1L;
-		this.createdDate = new Date();
-		this.createdBy = 1L;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "GameUser [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", lastUpdatedDate=" + lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate="
-				+ createdDate + ", createdBy=" + createdBy + ", gameRooms=" + gameRooms + ", basicUser=" + basicUser
-				+ "]";
+				+ ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", createdDate="
+				+ createdDate + ", createdBy=" + createdBy + "]";
 	}
-	
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
 	public void init(){
 		this.userId = null;
 	}
@@ -132,46 +170,6 @@ public class GameUser implements UserDetails, CreateUpdateable{
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	@Override
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
-	}
-
-	@Override
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
-	}
-
-	@Override
-	public Long getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	@Override
-	public void setLastUpdatedBy(Long lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	@Override
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	@Override
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	@Override
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-	
-	@Override
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
 	}
 
 	public BasicUser getBasicUser() {

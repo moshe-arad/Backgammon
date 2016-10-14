@@ -22,19 +22,19 @@ create table users(
 	`username` varchar(50) not null primary key,
 	`password` varchar(50) not null,
 	`enabled` boolean not null,
-	`last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL
+	`last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System"
 );
 
 create table authorities (
 	`username` varchar(50) not null,
 	`authority` varchar(50) not null,
-	`last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+	`last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
 	constraint fk_authorities_users foreign key(username) references users(username)
 );
 
@@ -43,19 +43,19 @@ create unique index ix_auth_username on authorities (username,authority);
 create table groups (
 	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	group_name varchar(50) not null,
-	`last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL
+	`last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System"
 );
 
 create table group_authorities (
 	group_id bigint not null,
 	authority varchar(50) not null,
-	`last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+	`last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
 	constraint fk_group_authorities_group foreign key(group_id) references groups(id)
 );
 
@@ -63,10 +63,10 @@ create table group_members (
 	id bigint NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	username varchar(50) not null,
 	group_id bigint not null,
-	`last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+	`last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
 	constraint fk_group_members_group foreign key(group_id) references groups(id)
 );
 
@@ -78,10 +78,10 @@ CREATE TABLE `game_users`
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL UNIQUE,
-    `last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+    `last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
     `username` varchar(50) not null,
     PRIMARY KEY(`user_id`),
     FOREIGN KEY (`username`) REFERENCES `users`(`username`) 
@@ -98,10 +98,10 @@ CREATE TABLE `game_rooms`
     `black` BIGINT DEFAULT NULL,
     `opened_by` BIGINT NOT NULL,
     `speed` BIT(3) NOT NULL,
-    `last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+    `last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
     `group_id` BIGINT NOT NULL,
     PRIMARY KEY(`game_room_id`),
     constraint fk_game_rooms_group foreign key(group_id) references groups(id)
@@ -114,10 +114,10 @@ CREATE TABLE `user_in_game_room`
 (
 	`user_id` BIGINT NOT NULL,
 	`game_room_id` BIGINT NOT NULL,
-    `last_updated_date` DATETIME NOT NULL,
-    `last_updated_by` BIGINT NOT NULL,
-    `created_date` DATETIME NOT NULL,
-    `created_by` BIGINT NOT NULL,
+    `last_modified_date` DATETIME NOT NULL default now(),
+    `last_modified_by` varchar(50) NOT NULL default "System",
+    `created_date` DATETIME NOT NULL default now(),
+    `created_by` varchar(50) NOT NULL default "System",
     PRIMARY KEY(`user_id`, `game_room_id`),
     FOREIGN KEY (`user_id`) REFERENCES `game_users`(`user_id`),
     FOREIGN KEY (`game_room_id`) REFERENCES `game_rooms`(`game_room_id`)

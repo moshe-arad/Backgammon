@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
@@ -59,9 +58,7 @@ public class UserSecurityRepository {
 	
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-//		if(!userName.equals("anonymous") && !userName.equals("anonymousUser")){
-			return basicUserRepository.findByUserName(userName) != null ? true : false;
-//		}
-//		else return false;
+		return basicUserRepository.findByUserName(userName) != null ? true : false;
+
 	}
 }

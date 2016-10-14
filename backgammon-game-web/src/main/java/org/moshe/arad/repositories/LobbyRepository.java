@@ -1,18 +1,18 @@
 package org.moshe.arad.repositories;
 
-import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
+import org.moshe.arad.repositories.entities.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class LobbyRepository {
@@ -24,13 +24,20 @@ public class LobbyRepository {
 	@Autowired
 	BasicUserRepository basicUserRepository;
 	
+	@Transactional
 	public GameRoom createNewGameRoomWithLoggedInUser(GameRoom gameRoom){
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
-		RepositoryUtils.setCreateAndUpdateByUserId(gameRoom, loggedUser.getUserId());
+		
 		setOpenedByAndWhite(gameRoom);
 		gameRoom.getUsers().add(loggedUser);
-		loggedUser.getGameRooms().add(gameRoom);
+		Set<GameRoom> rooms = gameUserRepository.findGameRoomsByLoggenUser(loggedUserName);
+		rooms.add(gameRoom);
+		loggedUser.setGameRooms(rooms);
+		Group groupRoom = new Group("group_" + gameRoom.getGameRoomName() + "_" + gameRoom.getGameRoomId());
+		
+		
+		gameRoom.setGroup(groupRoom);
 		gameRoomRepository.save(gameRoom);
 		return gameRoom;
 	}
@@ -43,7 +50,6 @@ public class LobbyRepository {
 		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
 		GameRoom gameRoom = gameRoomRepository.findOne(roomId);
 		gameRoom.setBlack(userId);
-		setUpdateCreateInfo(gameRoom);
 		gameRoomRepository.save(gameRoom);
 	}
 	
@@ -52,16 +58,5 @@ public class LobbyRepository {
 		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
 		gameRoom.setOpenedBy(loggedUser.getUserId());
 		gameRoom.setWhite(loggedUser.getUserId());
-	}
-
-	private void setUpdateCreateInfo(GameRoom gameRoom) {
-		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
-		Date now = new Date();
-		if(gameRoom.getCreatedBy() == null)	gameRoom.setCreatedBy(loggedUser.getUserId());
-		if(gameRoom.getCreatedDate() == null)	gameRoom.setCreatedDate(now);
-		
-		gameRoom.setLastUpdatedBy(loggedUser.getUserId());
-		gameRoom.setLastUpdatedDate(now);		
 	}
 }

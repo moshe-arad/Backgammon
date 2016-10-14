@@ -3,17 +3,15 @@ package org.moshe.arad.repositories.entities;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -25,10 +23,16 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.moshe.arad.game.BasicGame;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name ="game_rooms")
-public class GameRoom implements CreateUpdateable{
+@EntityListeners(AuditingEntityListener.class)
+public class GameRoom {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -62,23 +66,27 @@ public class GameRoom implements CreateUpdateable{
 	@Transient
 	private BasicGame game;
 	
-	@Column(name="last_updated_date")
+	@LastModifiedDate
+	@Column(name="last_modified_date")
 	@NotNull
-	private Date lastUpdatedDate;
+	private Date lastModifiedDate;
 	
-	@Column(name="last_updated_by")
+	@LastModifiedBy
+	@Column(name="last_modified_by")
 	@NotNull
-	private Long lastUpdatedBy;
+	private String lastModifiedBy;
 	
+	@CreatedDate
 	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
+	@CreatedBy
 	@Column(name="created_by", updatable=false)
 	@NotNull
-	private Long createdBy;
+	private String createdBy;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
 	private Set<GameUser> users = new HashSet<>(1000);
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -178,54 +186,44 @@ public class GameRoom implements CreateUpdateable{
 	public void setGame(BasicGame game) {
 		this.game = game;
 	}
-
 	
-	@Override
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
 	}
 
-	@Override
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	@Override
-	public Long getLastUpdatedBy() {
-		return lastUpdatedBy;
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
 	}
 
-	@Override
-	public void setLastUpdatedBy(Long lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
 	}
 
-	@Override
 	public Date getCreatedDate() {
 		return createdDate;
 	}
 
-	@Override
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	@Override
-	public Long getCreatedBy() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	@Override
-	public void setCreatedBy(Long createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "GameRoom [gameRoomId=" + gameRoomId + ", gameRoomName=" + gameRoomName + ", isPrivateRoom="
-				+ isPrivateRoom + ", users=" + users + ", openedBy=" + openedBy + ", white=" + white + ", black="
-				+ black + ", speed=" + speed + ", game=" + game + ", lastUpdatedDate=" + lastUpdatedDate
-				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ "]";
+				+ isPrivateRoom + ", openedBy=" + openedBy + ", white=" + white + ", black=" + black + ", speed="
+				+ speed + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy
+				+ ", createdDate=" + createdDate + ", createdBy=" + createdBy + "]";
 	}
 }

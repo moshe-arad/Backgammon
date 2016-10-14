@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.data.annotation.CreatedBy;
@@ -24,6 +25,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class GroupAuthorities {
 
 	@Id
+	@Column(name = "group_id")
 	private Long groupId;
 	
 	@Column
@@ -50,10 +52,16 @@ public class GroupAuthorities {
 	private String createdBy;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "group_id")
+	@JoinColumn(name = "group_id", insertable = false, updatable = false)
 	private Group group;
 	
+	public GroupAuthorities() {
+	}
 	
+	public GroupAuthorities(String authority) {
+		this.authority = authority;
+	}
+
 	public Group getGroup() {
 		return group;
 	}

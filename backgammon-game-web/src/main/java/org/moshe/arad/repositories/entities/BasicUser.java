@@ -78,10 +78,7 @@ public class BasicUser {
 
 	@Override
 	public String toString() {
-		return "BasicUser [userName=" + userName + ", password=" + password + ", enabled=" + enabled
-				+ ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", createdDate="
-				+ createdDate + ", createdBy=" + createdBy + ", gameUser=" + gameUser + ", authorities=" + authorities
-				+ ", groupMembers=" + groupMembers + "]";
+		return "BasicUser [userName=" + userName + ", password=" + password + ", enabled=" + enabled + "]";
 	}
 	
 	public Date getLastModifiedDate() {

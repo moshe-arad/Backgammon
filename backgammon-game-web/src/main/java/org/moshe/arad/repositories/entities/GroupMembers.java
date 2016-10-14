@@ -54,11 +54,14 @@ public class GroupMembers {
 	@JoinColumn(name = "group_id")
 	private Group group;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE,
+			CascadeType.REFRESH, CascadeType.REMOVE})
 	@JoinColumn(name = "username")
 	private BasicUser basicUser;
 	
-	
+	public GroupMembers() {
+	}
+
 	public Group getGroup() {
 		return group;
 	}

@@ -15,5 +15,5 @@ public interface GameUserRepository extends JpaRepository<GameUser, Long> {
 	@Query("select gu.gameRooms from GameUser gu join BasicUser b"
 			+ " on gu.basicUser.userName = b.userName"
 			+ " where b.userName = :userName")
-	public Set<GameRoom> findGameRoomsByLoggenUser(@Param("userName")String userName);	
+	public Set<GameRoom> findGameRoomsByLoggedUser(@Param("userName")String userName);	
 }

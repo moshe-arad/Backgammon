@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -86,7 +86,7 @@ public class GameRoom {
 	@NotNull
 	private String createdBy;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
 	private Set<GameUser> users = new HashSet<>(1000);
 	
 	@OneToOne(cascade = CascadeType.ALL)

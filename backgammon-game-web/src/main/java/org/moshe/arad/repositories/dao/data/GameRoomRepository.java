@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
-	
+
 }

@@ -60,9 +60,7 @@ public class Authority {
 
 	@Override
 	public String toString() {
-		return "Authority [authority=" + authority + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy="
-				+ lastModifiedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy + ", basicUser="
-				+ basicUser + "]";
+		return "Authority [authority=" + authority + "]";
 	}
 
 	public Date getLastModifiedDate() {

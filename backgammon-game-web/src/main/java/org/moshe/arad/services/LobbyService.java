@@ -37,6 +37,7 @@ public class LobbyService {
 	public void addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
 		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
+		lobbyRepository.createNewGroupForNewRoom(roomInDb);
 		logger.info("New game room was added to DB, details: " + gameRoom);
 		gameRooms.add(roomInDb);
 		logger.info("game room was added successfully, details: " + gameRoom);

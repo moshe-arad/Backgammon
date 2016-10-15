@@ -62,7 +62,6 @@ public class GameRoom {
 	@Range(min=0, max=2)
 	private Integer speed;
 	
-	@Autowired
 	@Transient
 	private BasicGame game;
 	
@@ -225,5 +224,60 @@ public class GameRoom {
 				+ isPrivateRoom + ", openedBy=" + openedBy + ", white=" + white + ", black=" + black + ", speed="
 				+ speed + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy
 				+ ", createdDate=" + createdDate + ", createdBy=" + createdBy + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((black == null) ? 0 : black.hashCode());
+		result = prime * result + ((gameRoomName == null) ? 0 : gameRoomName.hashCode());
+		result = prime * result + ((isPrivateRoom == null) ? 0 : isPrivateRoom.hashCode());
+		result = prime * result + ((openedBy == null) ? 0 : openedBy.hashCode());
+		result = prime * result + ((speed == null) ? 0 : speed.hashCode());
+		result = prime * result + ((white == null) ? 0 : white.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameRoom other = (GameRoom) obj;
+		if (black == null) {
+			if (other.black != null)
+				return false;
+		} else if (!black.equals(other.black))
+			return false;
+		if (gameRoomName == null) {
+			if (other.gameRoomName != null)
+				return false;
+		} else if (!gameRoomName.equals(other.gameRoomName))
+			return false;
+		if (isPrivateRoom == null) {
+			if (other.isPrivateRoom != null)
+				return false;
+		} else if (!isPrivateRoom.equals(other.isPrivateRoom))
+			return false;
+		if (openedBy == null) {
+			if (other.openedBy != null)
+				return false;
+		} else if (!openedBy.equals(other.openedBy))
+			return false;
+		if (speed == null) {
+			if (other.speed != null)
+				return false;
+		} else if (!speed.equals(other.speed))
+			return false;
+		if (white == null) {
+			if (other.white != null)
+				return false;
+		} else if (!white.equals(other.white))
+			return false;
+		return true;
 	}
 }

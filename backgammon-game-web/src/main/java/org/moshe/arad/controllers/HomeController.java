@@ -11,7 +11,7 @@ import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.validators.GameUserValidator;
 import org.moshe.arad.services.LobbyService;
-import org.moshe.arad.services.UserSecurityService;
+import org.moshe.arad.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +31,7 @@ public class HomeController {
 	private final Logger logger = LogManager.getLogger(HomeController.class);
 	
 	@Autowired
-	UserSecurityService userSecurityService;
+	HomeService userSecurityService;
 	@Autowired
 	LobbyService lobbyService;
 

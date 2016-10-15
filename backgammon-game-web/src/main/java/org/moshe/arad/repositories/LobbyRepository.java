@@ -42,7 +42,7 @@ public class LobbyRepository {
 	@Transactional
 	public GameRoom createNewGameRoomWithLoggedInUser(GameRoom gameRoom){
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		BasicUser basicUser = basicUserRepository.findByUserName(loggedUserName);
+		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
 		GameUser loggedUser = basicUser.getGameUser();
 		
 		setOpenedByAndWhite(gameRoom);
@@ -66,7 +66,7 @@ public class LobbyRepository {
 	@Transactional
 	public void createNewGroupForNewRoom(GameRoom gameRoom){
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		BasicUser basicUser = basicUserRepository.findByUserName(loggedUserName);
+		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
 		GameUser loggedUser = basicUser.getGameUser();
 		
 		Group groupRoom = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getGroup();
@@ -110,7 +110,7 @@ public class LobbyRepository {
 	
 	private void setOpenedByAndWhite(GameRoom gameRoom) {
 		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		GameUser loggedUser = basicUserRepository.findByUserName(loggedUserName).getGameUser();
+		GameUser loggedUser = basicUserRepository.findOne(loggedUserName).getGameUser();
 		gameRoom.setOpenedBy(loggedUser.getUserId());
 		gameRoom.setWhite(loggedUser.getUserId());
 	}

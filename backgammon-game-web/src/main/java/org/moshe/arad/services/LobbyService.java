@@ -9,7 +9,7 @@ import javax.annotation.PostConstruct;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.LobbyRepository;
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.HomeRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class LobbyService {
 	@Autowired
 	LobbyRepository lobbyRepository;
 	@Autowired
-	UserSecurityRepository userSecurityRepository;
+	HomeRepository homeRepository;
 	
 	@PostConstruct
 	public void init(){
@@ -69,6 +69,10 @@ public class LobbyService {
 	}
 
 	public boolean isHasLoggedInUser() {
-		return userSecurityRepository.isHasLoggedInUser();
+		return homeRepository.isHasLoggedInUser();
+	}
+
+	public void joinGameRoom(GameRoom gameRoom) {
+		
 	}
 }

@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
 
 	@Query("select r.group from GameRoom r where r.gameRoomId = :gameRoomId")
-	public Group findByGameRoomId(@Param("gameRoomId") Long gameRoomId);
+	public Group findByGroupGameRoomId(@Param("gameRoomId") Long gameRoomId);
+	
+	public GameRoom findByGroup(Group group);
 }

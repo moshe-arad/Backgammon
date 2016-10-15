@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.entities.BasicUser;
+import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserSecurityRepository {
+public class HomeRepository {
 
 	@Autowired
 	GameUserRepository gameUserRepository;
@@ -23,12 +23,6 @@ public class UserSecurityRepository {
 	AuthorityRepository authorityRepository;
 	@Autowired
 	BasicUserRepository basicUserRepository;
-
-	public GameUser loadUserByUsername(String userName){
-		BasicUser basicUser = basicUserRepository.findByUserName(userName);
-		if(basicUser != null) return basicUser.getGameUser();
-		else return null;
-	}
 
 	public void registerNewUser(GameUser gameUser) {
 		try{
@@ -51,9 +45,14 @@ public class UserSecurityRepository {
 		return new ConcurrentSkipListSet<String>(emails);
 	}
 	
+	
 	public boolean isHasLoggedInUser() {
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
-		return basicUserRepository.findByUserName(userName) != null ? true : false;
+		return basicUserRepository.findOne(userName) != null ? true : false;
 
+	}
+	
+	public void addAuthorityToLoggedInUser(Authority auth){
+//		SecurityContext
 	}
 }

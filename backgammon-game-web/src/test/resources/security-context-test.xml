@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+
+	<bean id="basicUser1" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg value="username1"/>
+		<constructor-arg value="Hgf2vc34$"/>
+		<constructor-arg value="true"/>
+	</bean>
+	
+	<bean id="basicUser2" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg value="username2"/>
+		<constructor-arg value="Hgf2vc34$"/>
+		<constructor-arg value="true"/>
+	</bean>
+	
+	<bean id="basicUser3" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg value="username3"/>
+		<constructor-arg value="Hgf2vc34$"/>
+		<constructor-arg value="true"/>
+	</bean>
+	
+	<bean id="gameUser1" class="org.moshe.arad.repositories.entities.GameUser">
+		<constructor-arg value="David"/>
+		<constructor-arg value="Luiz"/>
+		<constructor-arg value="email1@email.com"/>
+	</bean>
+	
+	<bean id="gameUser2" class="org.moshe.arad.repositories.entities.GameUser">
+		<constructor-arg value="Frank"/>
+		<constructor-arg value="Ribery"/>
+		<constructor-arg value="email2@email.com"/>
+	</bean>
+	
+	<bean id="gameUser3" class="org.moshe.arad.repositories.entities.GameUser">
+		<constructor-arg value="Mario"/>
+		<constructor-arg value="Balloteli"/>
+		<constructor-arg value="email3@email.com"/>
+	</bean>
+	
+	<bean id="auth1" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_WARCHER"></constructor-arg>
+	</bean>
+	
+	<bean id="auth2" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_PLAYER"></constructor-arg>
+	</bean>
+	
+	<util:list id="authList" value-type="org.moshe.arad.repositories.entities.Authority">
+		<ref bean="auth1"/>
+		<ref bean="auth2"/>
+	</util:list>
+	
+	<bean id="group1" class="org.moshe.arad.repositories.entities.Group">
+		<constructor-arg value="group1" />
+	</bean>
+	
+	<bean id="private" class="java.lang.Boolean">
+		<constructor-arg value="false"/>
+	</bean>
+	
+	<bean id="gameRoom1" class="org.moshe.arad.repositories.entities.GameRoom">
+		<constructor-arg value="room1" />
+		<constructor-arg ref="private"/>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg value="2"/>
+	</bean>
+</beans>

@@ -2,6 +2,7 @@ package org.moshe.arad.repositories.dao.data;
 
 import java.util.Set;
 
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface GameUserRepository extends JpaRepository<GameUser, Long> {
 	@Query("select gu.gameRooms from GameUser gu join BasicUser b"
 			+ " on gu.basicUser.userName = b.userName"
 			+ " where b.userName = :userName")
-	public Set<GameRoom> findGameRoomsByLoggedUser(@Param("userName")String userName);	
+	public Set<GameRoom> findGameRoomsByLoggedUser(@Param("userName")String userName);
+	
+	public GameUser findByBasicUser(BasicUser basicUser);
 }

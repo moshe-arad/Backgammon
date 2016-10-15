@@ -18,7 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.HomeRepository;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
@@ -36,12 +36,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration({"classpath:persistence-context-test.xml",
 						"classpath:user-security-context-test.xml"})
 @WithAnonymousUser
-public class UserSecurityRepositoryTest {
+public class HomeRepositoryTest {
 
-private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
+private final Logger logger = LogManager.getLogger(HomeRepositoryTest.class);
 	
 	@Autowired
-	UserSecurityRepository userSecurityRepo;
+	HomeRepository userSecurityRepo;
 	@Autowired
 	GameUserRepository gameUserRepository;
 	@Autowired
@@ -90,21 +90,6 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
-	}
-	
-	@Test
-	public void loadUserByUserNameTest(){
-		GameUser expected = gameUser1;
-		GameUser actual = userSecurityRepo.loadUserByUsername("userName1");
-		
-		assertEquals(expected, actual);
-	}
-	
-	@Test
-	public void loadUserByUserNameNotInDBTest(){
-		GameUser actual = userSecurityRepo.loadUserByUsername("userNotInDB");
-		
-		assertNull(actual);
 	}
 	
 	@Test

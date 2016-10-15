@@ -21,7 +21,7 @@ import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
-import org.moshe.arad.services.UserSecurityService;
+import org.moshe.arad.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -48,7 +48,7 @@ public class HomeControllerTest {
 	private final Logger logger = LogManager.getLogger(HomeControllerTest.class);
 	private MockMvc mockMvc;
 	@Autowired
-	UserSecurityService userSecurityService;
+	HomeService userSecurityService;
 	@Autowired
 	ApplicationContext context;
 	@Autowired

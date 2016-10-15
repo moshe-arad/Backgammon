@@ -9,17 +9,27 @@
 	<context:component-scan base-package="org.moshe.arad" />
 	
 	<bean id="loggedIn1" class="org.moshe.arad.repositories.entities.GameUser">
-		<constructor-arg value="Robret" />
-		<constructor-arg value="Levandovski" />
-		<constructor-arg value="robert.lev@gmail.com" />
+		<constructor-arg value="Frank" />
+		<constructor-arg value="Ribery" />
+		<constructor-arg value="frank.ribery@gmail.com" />
 	</bean>
-	
-	<!-- 
+	 
 	<bean id="loggedIn2" class="org.moshe.arad.repositories.entities.GameUser">
 		<constructor-arg value="David" />
 		<constructor-arg value="Luiz" />
 		<constructor-arg value="david.luiz@gmail.com" />
 	</bean>
 	
-	 -->
+	<bean id="loggedInBasic1" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg value="frank.ribery" />
+		<constructor-arg value="Hgf2BV31#" />
+		<constructor-arg value="true" />
+	</bean>
+	 
+	<bean id="loggedInBasic2" class="org.moshe.arad.repositories.entities.BasicUser">
+		<constructor-arg value="david.luiz" />
+		<constructor-arg value="Hgf2BV31#" />
+		<constructor-arg value="true" />
+	</bean>
+
 </beans>

@@ -3,7 +3,7 @@ package org.moshe.arad.services;
 import java.util.Arrays;
 import java.util.Set;
 
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.HomeRepository;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -13,11 +13,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-@Service("userSecurityService")
-public class UserSecurityService {
+@Service
+public class HomeService {
 
 	@Autowired
-	private UserSecurityRepository userSecurityRepo;
+	private HomeRepository userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
 

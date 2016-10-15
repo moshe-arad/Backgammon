@@ -17,17 +17,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service("userSecurityService")
-public class UserSecurityService implements UserDetailsService{
+public class UserSecurityService {
 
 	@Autowired
 	private UserSecurityRepository userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
-	
-	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		return userSecurityRepo.loadUserByUsername(userName);
-	}
 
 	public void registerNewUser(GameUser gameUser) {
 		
@@ -40,21 +35,8 @@ public class UserSecurityService implements UserDetailsService{
 		userNames.add(gameUser.getUsername());
 		emails.add(gameUser.getEmail());
 		
-		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
-				gameUser.getPassword(), gameUser.getAuthorities()); 
-		SecurityContextHolder.getContext().setAuthentication(auth);
-	}
-
-	private void setUserEntities(GameUser gameUser) {
-		BasicUser basicUser = gameUser.getBasicUser();
-		basicUser.setEnabled(true);
-		
-		Authority newAuth = new Authority("ROLE_WATCHER");
-		basicUser.setAuthorities(Arrays.asList(newAuth));
-		newAuth.setBasicUser(basicUser);
-		gameUser.setBasicUser(basicUser);
-		basicUser.setGameUser(gameUser);
-	}
+		authenticateUser(gameUser);
+	}	
 	
 	public boolean isUserNameAvailable(String userName){
 		initVirtualRepo();
@@ -71,6 +53,23 @@ public class UserSecurityService implements UserDetailsService{
 	private void initVirtualRepo() {
 		if(userNames == null) userNames = userSecurityRepo.getAllUserNames();
 		if(emails == null) emails = userSecurityRepo.getAllEmails();
+	}
+	
+	private void authenticateUser(GameUser gameUser) {
+		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
+				gameUser.getPassword(), gameUser.getAuthorities()); 
+		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+
+	private void setUserEntities(GameUser gameUser) {
+		BasicUser basicUser = gameUser.getBasicUser();
+		basicUser.setEnabled(true);
+		
+		Authority newAuth = new Authority("ROLE_WATCHER");
+		basicUser.setAuthorities(Arrays.asList(newAuth));
+		newAuth.setBasicUser(basicUser);
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 	}
 }
 

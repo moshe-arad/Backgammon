@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
@@ -30,6 +31,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,13 +55,17 @@ public class LobbyControllerTest {
 	private GameUserRepository gameUserRepository;
 	@Autowired
 	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		gameRoomRepository.deleteAllInBatch();
+		
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 		
 		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
 		BasicUser basicUser = new BasicUser("user", "password", true);
@@ -71,14 +77,16 @@ public class LobbyControllerTest {
 	}
 	
 	@After
-	public void cleanup(){
-		gameRoomRepository.deleteAllInBatch();
+	public void cleanup(){		
 		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 	}
 	
 	@Test
 	@WithMockUser
+	@Transactional
 	public void openNewGameRoomTest() throws Exception{
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Arad room123")
@@ -97,6 +105,7 @@ public class LobbyControllerTest {
 	
 	@Test
 	@WithMockUser
+	@Transactional
 	public void openNewGameRoomWithErrorsTest() throws Exception{
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Ara$$$$$d room123")

@@ -176,6 +176,7 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void doRegisterTest() throws Exception{
 		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
 		BasicUser basicUser = new BasicUser("user", "password", true);
@@ -242,6 +243,7 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void userNameAvailableInValidTest() throws Exception{
 		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
 		BasicUser basicUser = new BasicUser("userName1", "password", true);
@@ -276,6 +278,7 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void emailAvailableInValidTest() throws Exception{
 		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
 		BasicUser basicUser = new BasicUser("user", "password", true);

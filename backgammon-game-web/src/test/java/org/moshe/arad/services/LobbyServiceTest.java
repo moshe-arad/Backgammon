@@ -46,19 +46,19 @@ public class LobbyServiceTest {
 	private ApplicationContext context; 
 	
 	@Before
-	public void setup(){
-		gameRoomRepository.deleteAllInBatch();
+	public void setup(){		
 		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 	}
 	
 	@After
-	public void cleanup(){
-		gameRoomRepository.deleteAllInBatch();		
+	public void cleanup(){			
 		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 	}
 	
 	@Test

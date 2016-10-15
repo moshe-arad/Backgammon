@@ -26,6 +26,7 @@ import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
@@ -34,6 +35,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
 						"classpath:user-security-context-test.xml"})
+@WithAnonymousUser
 public class UserSecurityRepositoryTest {
 
 private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
@@ -60,7 +62,7 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@Resource
 	BasicUser basicUser3;
 	
-	@Before
+	@Before	
 	public void setup(){
 		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();

@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextHierarchy({
@@ -39,8 +40,8 @@ public class LobbyRepositoryTest {
 	
 	@Before
 	public void setup(){
-		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 		
 		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
 		BasicUser basicUser = new BasicUser("user", "password", true);
@@ -53,12 +54,13 @@ public class LobbyRepositoryTest {
 	
 	@After
 	public void cleanup(){
-		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
 	}
 	
 	@Test
 	@WithMockUser
+	@Transactional
 	public void createAndSaveNewGameRoomTest(){
 		GameRoom gameRoom = new GameRoom("Arad room123",
 				new Boolean(false), null, null, null, 2);

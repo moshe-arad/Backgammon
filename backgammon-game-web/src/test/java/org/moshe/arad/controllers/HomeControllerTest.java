@@ -44,6 +44,7 @@ import org.springframework.web.context.WebApplicationContext;
 })
 public class HomeControllerTest {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = LogManager.getLogger(HomeControllerTest.class);
 	private MockMvc mockMvc;
 	@Autowired

@@ -1,6 +1,9 @@
 package org.moshe.arad.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +18,7 @@ import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
+import org.moshe.arad.repositories.entities.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -77,6 +81,25 @@ public class LobbyServiceTest {
 		gameUserRepository.save(user1);
 		
 		lobbyService.addNewGameRoom(gameRoom);
+		
+		assertEquals(1, authorityRepository.findByBasicUser(basicUser)
+		 .stream()
+		 .map(auth -> auth.getAuthority())
+		 .filter(auth -> !auth.equals("ROLE_WATCHER"))
+		 .collect(Collectors.toList())
+		 .size());
+		
+		assertNotNull(gameRoomRepository.findByGameRoomId(gameRoom.getGameRoomId()));	
+		Group group = gameRoomRepository.findByGameRoomId(gameRoom.getGameRoomId());
+		
+		assertEquals(1, group.getGroupAuthorities()
+		.stream()
+		.map(auth -> auth.getAuthority())
+		.filter(auth -> !auth.equals("ROLE_WATCHER"))
+		 .collect(Collectors.toList())
+		 .size());
+		
+		assertEquals(1,group.getGroupMembers().size());
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals(gameRoom.getGameRoomName(), gameRoomRepository.findAll().get(0).getGameRoomName());

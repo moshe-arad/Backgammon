@@ -15,17 +15,20 @@ import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.GroupMembersRepository;
 import org.moshe.arad.repositories.dao.data.GroupRepository;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.entities.Group;
+import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
@@ -58,6 +61,8 @@ public class SecurityRepositoryTest {
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
 	private GroupRepository groupRepository;
+	@Autowired
+	private GroupMembersRepository groupMembersRepository;
 	
 	@Resource
 	List<Authority> authList;
@@ -69,10 +74,16 @@ public class SecurityRepositoryTest {
 	@Before
 	public void setup(){		
 		gameRoomRepository.deleteAllInBatch();
+		groupMembersRepository.deleteAllInBatch();
 		groupRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+
+		GroupMembers groupMembers1 = new GroupMembers();
+		groupMembers1.setGroup(group1);
+		groupMembers1.setBasicUser(basicUser1);
+		group1.setGroupMembers(Arrays.asList(groupMembers1));
 		
 		gameRoom1.setGroup(group1);
 		
@@ -111,6 +122,7 @@ public class SecurityRepositoryTest {
 	@After
 	public void cleanup(){		
 		gameRoomRepository.deleteAllInBatch();
+		groupMembersRepository.deleteAllInBatch();
 		groupRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
@@ -192,5 +204,19 @@ public class SecurityRepositoryTest {
 	public void getGroupByGameRoom(){
 		Group groupFromDb = securityRepository.getGroupByGameRoom(gameRoom1);
 		assertEquals(group1, groupFromDb);
+	}
+	
+	@Test
+	public void getGroupByGameRoomId(){
+		Group groupFromDb = securityRepository.getGroupByGameRoomId(gameRoom1.getGameRoomId());
+		assertEquals(group1, groupFromDb);
+	}
+	
+	@Test
+	public void getGroupMembersByGroup(){
+		List<GroupMembers> groupMembersList = securityRepository.getGroupMembersByGroup(group1);
+		assertEquals(1, groupMembersList.size());
+		assertEquals(group1.getGroupId(), groupMembersList.get(0).getGroup().getGroupId());
+		assertEquals(basicUser1.getUserName(), groupMembersList.get(0).getBasicUser().getUserName());
 	}
 }

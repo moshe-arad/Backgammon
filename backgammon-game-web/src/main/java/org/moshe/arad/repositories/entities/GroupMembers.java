@@ -50,11 +50,14 @@ public class GroupMembers {
 	@NotNull
 	private String createdBy;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "group_id")
 	private Group group;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.DETACH, 
+			CascadeType.MERGE, 
+			CascadeType.REFRESH, 
+			CascadeType.REMOVE})
 	@JoinColumn(name = "username")
 	private BasicUser basicUser;
 	

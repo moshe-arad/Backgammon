@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -54,10 +55,10 @@ public class Group {
 	@NotNull
 	private String createdBy;
 
-	@OneToMany(mappedBy = "group")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
 	private List<GroupMembers> groupMembers = new ArrayList<>(100);
 	
-	@OneToMany(mappedBy = "group")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
 	private List<GroupAuthorities> groupAuthorities = new ArrayList<>(100);
 	
 	@OneToOne(mappedBy = "group")

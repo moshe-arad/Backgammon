@@ -2,10 +2,6 @@ package org.moshe.arad.services;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -16,19 +12,16 @@ import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextHierarchy({
@@ -70,6 +63,7 @@ public class LobbyServiceTest {
 	
 	@Test
 	@WithMockUser
+	@Transactional
 	public void addNewGameRoomTest(){
 		GameRoom gameRoom = new GameRoom("Arad room123",
 				new Boolean(false), null, null, null, 2);
@@ -79,9 +73,6 @@ public class LobbyServiceTest {
 		
 		user1.setBasicUser(basicUser);
 		basicUser.setGameUser(user1);
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(user1);
 		
 		gameUserRepository.save(user1);
 		

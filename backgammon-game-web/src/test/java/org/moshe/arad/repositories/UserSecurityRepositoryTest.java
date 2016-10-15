@@ -22,7 +22,6 @@ import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -68,14 +67,6 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 		basicUserRepository.deleteAllInBatch();
 		
 		logger.info("Initializing test DB.");
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser1);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser1);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser2);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser2);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser3);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser3);
-		
 		
 		basicUser1.setAuthorities(null);
 		basicUser1.setGameUser(gameUser1);

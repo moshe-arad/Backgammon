@@ -3,7 +3,6 @@ package org.moshe.arad.controllers;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -20,7 +19,6 @@ import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.services.UserSecurityService;
@@ -122,9 +120,6 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
-		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/"))
 		.andExpect(status().is3xxRedirection())
@@ -140,9 +135,6 @@ public class HomeControllerTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/home"))
@@ -160,9 +152,6 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
-		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/login"))
 		.andExpect(status().is3xxRedirection())
@@ -179,9 +168,6 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
-		
 		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/register"))
 		.andExpect(status().is3xxRedirection())
@@ -196,9 +182,6 @@ public class HomeControllerTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		mockMvc.perform(post("/register")
 				.param("firstName", gameUser.getFirstName())
@@ -224,9 +207,6 @@ public class HomeControllerTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		gameUser.setEmail("not an email");
 		
@@ -269,9 +249,6 @@ public class HomeControllerTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
-		
 		mockMvc.perform(post("/register")
 				.param("firstName", gameUser.getFirstName())
 				.param("lastName", gameUser.getLastName())
@@ -305,9 +282,6 @@ public class HomeControllerTest {
 		
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
-		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(gameUser);
 		
 		mockMvc.perform(post("/register")
 				.param("firstName", gameUser.getFirstName())

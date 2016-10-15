@@ -13,6 +13,9 @@
 	<jpa:repositories base-package="org.moshe.arad.repositories.dao.data" />
 	<tx:annotation-driven/>
 	
+	<bean id="customAuditorAware" class="org.moshe.arad.general.CustomAuditorAware" />
+	<jpa:auditing auditor-aware-ref="customAuditorAware"/>
+	
 	<context:property-placeholder location="classpath:db-config-test.properties"/>
 	
 	<bean id="myDataSource" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">

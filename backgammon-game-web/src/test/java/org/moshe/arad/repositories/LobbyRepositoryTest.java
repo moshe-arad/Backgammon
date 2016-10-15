@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.data.RepositoryUtils;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
@@ -49,9 +48,6 @@ public class LobbyRepositoryTest {
 		gameUser.setBasicUser(basicUser);
 		basicUser.setGameUser(gameUser);
 		
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		RepositoryUtils.setCreateAndUpdateSys(basicUser);
-		
 		gameUserRepository.save(gameUser);
 	}
 	
@@ -71,8 +67,8 @@ public class LobbyRepositoryTest {
 		assertNull(gameRoom.getOpenedBy());
 		assertNull(gameRoom.getCreatedBy());
 		assertNull(gameRoom.getCreatedDate());
-		assertNull(gameRoom.getLastUpdatedBy());
-		assertNull(gameRoom.getLastUpdatedDate());
+		assertNull(gameRoom.getLastModifiedBy());
+		assertNull(gameRoom.getLastModifiedDate());
 		
 		lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		
@@ -80,8 +76,8 @@ public class LobbyRepositoryTest {
 		assertNotNull(gameRoom.getOpenedBy());
 		assertNotNull(gameRoom.getCreatedBy());
 		assertNotNull(gameRoom.getCreatedDate());
-		assertNotNull(gameRoom.getLastUpdatedBy());
-		assertNotNull(gameRoom.getLastUpdatedDate());
+		assertNotNull(gameRoom.getLastModifiedBy());
+		assertNotNull(gameRoom.getLastModifiedDate());
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals("Arad room123", gameRoomRepository.findAll().get(0).getGameRoomName());

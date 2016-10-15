@@ -51,20 +51,8 @@ public class HomeController {
 		}
 	}
 	
-	@ModelAttribute("gameUser")
-	public GameUser getEmptyGameUser(){
-		GameUser gameUser = new GameUser();
-		gameUser.setBasicUser(new BasicUser());
-		return gameUser;
-	}
-	
-	@ModelAttribute("basicUser")
-	public BasicUser getEmptyBasicUser(){
-		return new BasicUser();
-	}
-	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@Valid @ModelAttribute("gameUser") GameUser gameUser, 
+	public String doRegister(@Valid @ModelAttribute GameUser gameUser, 
 			 Errors errors, Model model){
 		if(errors.hasErrors()){
 			logger.info("Some errors occured while trying to bind game user");
@@ -151,7 +139,7 @@ public class HomeController {
 		binder.addValidators(new GameUserValidator());
 	}
 	
-	public List<String> getSpeedOptions(){
+	private List<String> getSpeedOptions(){
 		List<String> options = new ArrayList<>();
 		options.add("High - 30 sec");
 		options.add("Medium - 45 sec");
@@ -159,7 +147,7 @@ public class HomeController {
 		return options;
 	}
 	
-	public List<String> getPrivateRoomOptions(){
+	private List<String> getPrivateRoomOptions(){
 		List<String> options = new ArrayList<>();
 		options.add("No");
 		options.add("Yes");

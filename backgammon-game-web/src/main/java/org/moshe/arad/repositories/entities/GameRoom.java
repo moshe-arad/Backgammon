@@ -85,7 +85,7 @@ public class GameRoom {
 	@NotNull
 	private String createdBy;
 
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
+	@ManyToMany(mappedBy = "gameRooms")
 	private Set<GameUser> users = new HashSet<>(1000);
 	
 	@OneToOne(cascade = CascadeType.ALL)

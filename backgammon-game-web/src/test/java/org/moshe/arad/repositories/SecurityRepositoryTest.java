@@ -1,6 +1,6 @@
 package org.moshe.arad.repositories;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +15,7 @@ import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.GroupAuthoritiesRepository;
 import org.moshe.arad.repositories.dao.data.GroupMembersRepository;
 import org.moshe.arad.repositories.dao.data.GroupRepository;
 import org.moshe.arad.repositories.entities.Authority;
@@ -22,6 +23,7 @@ import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.entities.Group;
+import org.moshe.arad.repositories.entities.GroupAuthorities;
 import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -63,9 +65,15 @@ public class SecurityRepositoryTest {
 	private GroupRepository groupRepository;
 	@Autowired
 	private GroupMembersRepository groupMembersRepository;
+	@Autowired
+	private GroupAuthoritiesRepository groupAuthoritiesRepository;
 	
 	@Resource
-	List<Authority> authList;
+	List<Authority> authList1;
+	@Resource
+	List<Authority> authList2;
+	@Resource
+	List<Authority> authList3;
 	@Resource
 	GameRoom gameRoom1;
 	@Resource
@@ -74,33 +82,29 @@ public class SecurityRepositoryTest {
 	@Before
 	public void setup(){		
 		gameRoomRepository.deleteAllInBatch();
+		groupAuthoritiesRepository.deleteAllInBatch();
 		groupMembersRepository.deleteAllInBatch();
-		groupRepository.deleteAllInBatch();
+		groupRepository.deleteAllInBatch();		
 		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();
-
-		GroupMembers groupMembers1 = new GroupMembers();
-		groupMembers1.setGroup(group1);
-		groupMembers1.setBasicUser(basicUser1);
-		group1.setGroupMembers(Arrays.asList(groupMembers1));
+		basicUserRepository.deleteAllInBatch();				
 		
 		gameRoom1.setGroup(group1);
 		
-		for(Authority auth:authList){
+		for(Authority auth:authList1){
 			auth.setBasicUser(basicUser1);
 		}
-		basicUser1.setAuthorities(authList);
+		basicUser1.setAuthorities(authList1);
 		
-		for(Authority auth:authList){
+		for(Authority auth:authList2){
 			auth.setBasicUser(basicUser2);
 		}
-		basicUser2.setAuthorities(authList);
+		basicUser2.setAuthorities(authList2);
 		
-		for(Authority auth:authList){
+		for(Authority auth:authList3){
 			auth.setBasicUser(basicUser3);
 		}
-		basicUser3.setAuthorities(authList);
+		basicUser3.setAuthorities(authList3);
 		
 		gameUser1.setBasicUser(basicUser1);
 		gameUser2.setBasicUser(basicUser2);
@@ -116,14 +120,26 @@ public class SecurityRepositoryTest {
 		gameRoom1.setGameRoomId(null);
 		group1.setGroupId(null);
 		gameRoom1.setOpenedBy(gameUser1.getUserId());
-		gameRoomRepository.save(gameRoom1);
+		gameRoomRepository.save(gameRoom1);	
+		
+		GroupMembers groupMembers1 = new GroupMembers();
+		groupMembers1.setGroup(group1);
+		groupMembers1.setBasicUser(basicUser1);
+		
+		groupMembersRepository.save(groupMembers1);
+		
+		GroupAuthorities groupAuthorities1 = new GroupAuthorities("ROLE_WATCHER");
+		groupAuthorities1.setGroupId(group1.getGroupId());
+		
+		groupAuthoritiesRepository.save(groupAuthorities1);
 	}
 	
 	@After
 	public void cleanup(){		
 		gameRoomRepository.deleteAllInBatch();
+		groupAuthoritiesRepository.deleteAllInBatch();
 		groupMembersRepository.deleteAllInBatch();
-		groupRepository.deleteAllInBatch();
+		groupRepository.deleteAllInBatch();		
 		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
@@ -174,7 +190,7 @@ public class SecurityRepositoryTest {
 	public void getAuthoritiesOfGameUser(){
 		List<Authority> authListGameUser = securityRepository.getAuthoritiesOfGameUser(gameUser1);
 		for(int i=0; i<authListGameUser.size(); i++){
-			assertEquals(authList.get(i), authListGameUser.get(i));
+			assertTrue( authListGameUser.contains(authList1.get(i)));
 		}
 	}
 	
@@ -182,7 +198,7 @@ public class SecurityRepositoryTest {
 	public void getAuthoritiesOfBasicUser(){
 		List<Authority> authListGameUser = securityRepository.getAuthoritiesOfBasicUser(basicUser1);
 		for(int i=0; i<authListGameUser.size(); i++){
-			assertEquals(authList.get(i), authListGameUser.get(i));
+			assertTrue(  authListGameUser.contains(authList1.get(i)));
 		}
 	}
 	
@@ -190,7 +206,7 @@ public class SecurityRepositoryTest {
 	public void getAuthoritiesByUserName(){
 		List<Authority> authListGameUser = securityRepository.getAuthoritiesByUserName(basicUser1.getUserName());
 		for(int i=0; i<authListGameUser.size(); i++){
-			assertEquals(authList.get(i), authListGameUser.get(i));
+			assertTrue( authListGameUser.contains(authList1.get(i)));
 		}
 	}
 	
@@ -218,5 +234,69 @@ public class SecurityRepositoryTest {
 		assertEquals(1, groupMembersList.size());
 		assertEquals(group1.getGroupId(), groupMembersList.get(0).getGroup().getGroupId());
 		assertEquals(basicUser1.getUserName(), groupMembersList.get(0).getBasicUser().getUserName());
+	}
+	
+	@Test
+	public void getGroupMembersByBasicUser(){
+		List<GroupMembers> groupMembersList = securityRepository.getGroupMembersByBasicUser(basicUser1);
+		assertEquals(1, groupMembersList.size());
+		assertEquals(group1.getGroupId(), groupMembersList.get(0).getGroup().getGroupId());
+		assertEquals(basicUser1.getUserName(), groupMembersList.get(0).getBasicUser().getUserName());
+	}
+	
+	@Test
+	public void getGroupAuthoritiesByGroup(){
+		List<GroupAuthorities> groupAuthoritiesList = securityRepository.getGroupAuthoritiesByGroup(group1);
+		assertEquals(1, groupAuthoritiesList.size());
+		assertEquals("ROLE_WATCHER", groupAuthoritiesList.get(0).getAuthority());
+	}
+	
+	@Test
+	public void saveNewUser(){
+		securityRepository.saveNewUser(gameUser2, basicUser2);
+		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
+		assertEquals(gameUser2, gameUserFromDb);
+		assertEquals(basicUser2, basicUserFromDb);
+	}
+	
+	@Test
+	public void saveNewUserWithAuthority(){
+		authorityRepository.deleteAllInBatch();
+		securityRepository.saveNewUserWithAuthority(gameUser2, basicUser2, authList2.get(0));
+		
+		List<Authority> authListFromDb = securityRepository.getAuthoritiesOfBasicUser(basicUser2);
+		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
+		
+		assertEquals(1, authListFromDb.size());
+		assertTrue(authListFromDb.contains(authList2.get(0)));
+		assertEquals(gameUser2, gameUserFromDb);
+		assertEquals(basicUser2, basicUserFromDb);
+	}
+	
+	@Test
+	public void saveNewUserWithAuthorities(){
+		authorityRepository.deleteAllInBatch();
+		securityRepository.saveNewUserWithAuthorities(gameUser2, basicUser2, authList2);
+		
+		List<Authority> authListFromDb = securityRepository.getAuthoritiesOfBasicUser(basicUser2);
+		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
+		
+		assertEquals(2, authListFromDb.size());
+		assertTrue(authListFromDb.containsAll(authList2));
+		assertEquals(gameUser2, gameUserFromDb);
+		assertEquals(basicUser2, basicUserFromDb);
+	}
+	
+	@Test
+	public void saveNewGameRoomAndGroup(){
+		gameRoomRepository.deleteAllInBatch();
+		gameRoom1 = securityRepository.saveNewGameRoomAndGroup(gameRoom1, group1);
+		GameRoom gameRoomFromDb = gameRoomRepository.findOne(gameRoom1.getGameRoomId());
+		Group groupFromDb = groupRepository.findOne(group1.getGroupId());
+		assertEquals(gameRoom1, gameRoomFromDb);
+		assertEquals(group1, groupFromDb);
 	}
 }

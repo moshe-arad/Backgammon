@@ -47,7 +47,8 @@ public class Authority {
 	@NotNull
 	private String createdBy;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.MERGE,
+			CascadeType.REFRESH, CascadeType.PERSIST})
 	@JoinColumn(name = "username")
 	private BasicUser basicUser;
 

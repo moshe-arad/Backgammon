@@ -43,16 +43,42 @@
 	</bean>
 	
 	<bean id="auth1" class="org.moshe.arad.repositories.entities.Authority">
-		<constructor-arg value="ROLE_WARCHER"></constructor-arg>
+		<constructor-arg value="ROLE_WARCHER1"></constructor-arg>
 	</bean>
 	
 	<bean id="auth2" class="org.moshe.arad.repositories.entities.Authority">
-		<constructor-arg value="ROLE_PLAYER"></constructor-arg>
+		<constructor-arg value="ROLE_PLAYER1"></constructor-arg>
 	</bean>
 	
-	<util:list id="authList" value-type="org.moshe.arad.repositories.entities.Authority">
+	<bean id="auth3" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_WARCHER2"></constructor-arg>
+	</bean>
+	
+	<bean id="auth4" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_PLAYER2"></constructor-arg>
+	</bean>
+	
+	<bean id="auth5" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_WARCHER3"></constructor-arg>
+	</bean>
+	
+	<bean id="auth6" class="org.moshe.arad.repositories.entities.Authority">
+		<constructor-arg value="ROLE_PLAYER3"></constructor-arg>
+	</bean>
+	
+	<util:list id="authList1" value-type="org.moshe.arad.repositories.entities.Authority">
 		<ref bean="auth1"/>
 		<ref bean="auth2"/>
+	</util:list>
+	
+	<util:list id="authList2" value-type="org.moshe.arad.repositories.entities.Authority">
+		<ref bean="auth3"/>
+		<ref bean="auth4"/>
+	</util:list>
+	
+	<util:list id="authList3" value-type="org.moshe.arad.repositories.entities.Authority">
+		<ref bean="auth5"/>
+		<ref bean="auth6"/>
 	</util:list>
 	
 	<bean id="group1" class="org.moshe.arad.repositories.entities.Group">

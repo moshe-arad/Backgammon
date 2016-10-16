@@ -93,11 +93,11 @@ CREATE TABLE `game_rooms`
 (
 	`game_room_id` BIGINT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255) NOT NULL,
-    `private` BIT(1) NOT NULL,
+    `private` TINYINT NOT NULL,
     `white` BIGINT DEFAULT NULL,
     `black` BIGINT DEFAULT NULL,
     `opened_by` BIGINT NOT NULL,
-    `speed` BIT(3) NOT NULL,
+    `speed` TINYINT NOT NULL,
     `last_modified_date` DATETIME NOT NULL default now(),
     `last_modified_by` varchar(50) NOT NULL default "System",
     `created_date` DATETIME NOT NULL default now(),

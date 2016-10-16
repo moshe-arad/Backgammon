@@ -55,10 +55,10 @@ public class Group {
 	@NotNull
 	private String createdBy;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
+	@OneToMany(mappedBy = "group")
 	private List<GroupMembers> groupMembers = new ArrayList<>(100);
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "group")
+	@OneToMany(mappedBy = "group")
 	private List<GroupAuthorities> groupAuthorities = new ArrayList<>(100);
 	
 	@OneToOne(mappedBy = "group")

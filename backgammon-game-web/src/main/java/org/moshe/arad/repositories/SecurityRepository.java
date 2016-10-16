@@ -1,17 +1,20 @@
 package org.moshe.arad.repositories;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.dao.data.GroupAuthoritiesRepository;
 import org.moshe.arad.repositories.dao.data.GroupMembersRepository;
 import org.moshe.arad.repositories.entities.Authority;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.entities.Group;
+import org.moshe.arad.repositories.entities.GroupAuthorities;
 import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +34,10 @@ public class SecurityRepository {
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
 	private GroupMembersRepository groupMembersRepository;
+	@Autowired
+	private GroupAuthoritiesRepository groupAuthoritiesRepository;
+	
+	/*** read operations ***/
 	
 	public GameUser getLoggedInGameUser(){
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -92,16 +99,83 @@ public class SecurityRepository {
 	
 	public Group getGroupByGameRoom(GameRoom gameRoom){
 		if(gameRoom == null) return null;
-		return gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId());
+		return gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId());
 	}
 	
 	public Group getGroupByGameRoomId(Long gameRoomId){
 		if(gameRoomId == null) return null;
-		return gameRoomRepository.findByGroupGameRoomId(gameRoomId);
+		return gameRoomRepository.findGroupByGameRoomId(gameRoomId);
 	}
 	
 	public List<GroupMembers> getGroupMembersByGroup(Group group){
 		if(group == null) return null;
 		return groupMembersRepository.findGroupMembersByGroup(group);
 	}
+	
+	public List<GroupMembers> getGroupMembersByBasicUser(BasicUser basicUser){
+		if(basicUser == null) return null;
+		return groupMembersRepository.findByBasicUser(basicUser);
+	}
+	
+	public List<GroupAuthorities> getGroupAuthoritiesByGroup(Group group){
+		if(group == null) return null;
+		return groupAuthoritiesRepository.findByGroup(group);
+	}
+	
+	/*** insert - update, operations ***/
+	
+	public void saveNewUser(GameUser gameUser, BasicUser basicUser){
+		if(gameUser != null && basicUser != null){
+			gameUser.setBasicUser(basicUser);
+			gameUserRepository.save(gameUser);
+		}		
+	}
+	
+	public void saveNewUserWithAuthority(GameUser gameUser, BasicUser basicUser, Authority auth){
+		if(gameUser != null && basicUser != null && auth != null){
+			gameUser.setBasicUser(basicUser);
+			basicUser.setAuthorities(Arrays.asList(auth));
+			gameUserRepository.save(gameUser);
+		}		
+	}
+	
+	public void saveNewUserWithAuthorities(GameUser gameUser, BasicUser basicUser, List<Authority> authList){
+		if(gameUser != null && basicUser != null && authList != null){
+			gameUser.setBasicUser(basicUser);
+			basicUser.setAuthorities(authList);
+			gameUserRepository.save(gameUser);
+		}		
+	}
+	
+	public GameRoom saveNewGameRoomAndGroup(GameRoom gameRoom, Group group){
+		if(gameRoom != null && group != null){
+			gameRoom.setGroup(group);
+			gameRoom  = gameRoomRepository.save(gameRoom);
+		}
+		return gameRoom;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

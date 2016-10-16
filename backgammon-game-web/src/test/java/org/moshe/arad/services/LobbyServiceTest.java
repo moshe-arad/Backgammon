@@ -102,8 +102,8 @@ public class LobbyServiceTest {
 		 .collect(Collectors.toList())
 		 .size());
 		
-		assertNotNull(gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId()));	
-		Group group = gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId());
+		assertNotNull(gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId()));	
+		Group group = gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId());
 		
 		assertEquals(1, group.getGroupAuthorities()
 		.stream()
@@ -150,8 +150,8 @@ public class LobbyServiceTest {
 		 .collect(Collectors.toList())
 		 .size());
 		
-		assertNotNull(gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId()));	
-		Group group = gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId());
+		assertNotNull(gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId()));	
+		Group group = gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId());
 		
 		assertEquals(1, group.getGroupAuthorities()
 		.stream()
@@ -178,7 +178,7 @@ public class LobbyServiceTest {
 				.filter(item->!item.getAuthority()
 						.equals("player_" + gameRoom.getGameRoomName() + "_" + user2.getUserId()))
 				.collect(Collectors.toList()).size());  
-		group = gameRoomRepository.findByGroupGameRoomId(gameRoom.getGameRoomId());
+		group = gameRoomRepository.findGroupByGameRoomId(gameRoom.getGameRoomId());
 		
 		List<BasicUser> basicUserList = groupMembersRepository.findByGroup(group);
 		assertEquals(1, basicUserList.stream()

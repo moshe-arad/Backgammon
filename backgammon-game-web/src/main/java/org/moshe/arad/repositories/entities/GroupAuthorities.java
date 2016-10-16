@@ -51,7 +51,7 @@ public class GroupAuthorities {
 	@NotNull
 	private String createdBy;
 	
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = "group_id", insertable = false, updatable = false)
 	private Group group;
 	

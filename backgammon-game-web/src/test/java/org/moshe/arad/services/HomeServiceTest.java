@@ -23,7 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
-						"classpath:user-security-context-test.xml"})
+						"classpath:security-context-test.xml"})
 public class HomeServiceTest {
 
 	private final Logger logger = LogManager.getLogger(HomeServiceTest.class);

@@ -75,7 +75,6 @@ public class LobbyServiceTest {
 	
 	@Test
 	@WithMockUser
-//	@Transactional
 	public void addNewGameRoomTest(){
 		GameRoom gameRoom = new GameRoom("Arad room123",
 				new Boolean(false), null, null, null, 2);

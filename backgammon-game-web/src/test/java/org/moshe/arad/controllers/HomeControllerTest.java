@@ -38,7 +38,7 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ContextHierarchy({
 	@ContextConfiguration("classpath:persistence-context-test.xml"),
-	@ContextConfiguration("classpath:user-security-context-test.xml"),
+	@ContextConfiguration("classpath:security-context-test.xml"),
 	@ContextConfiguration("classpath:webapp-context-test.xml"),
 	@ContextConfiguration("classpath:lobby-context-test.xml")
 })
@@ -301,7 +301,7 @@ public class HomeControllerTest {
 		assertEquals(1, gameUserRepository.findAll().size());
 		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
-		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
+		mockMvc.perform(get("/email").param("email", "email1@email.com"))
 		.andExpect(status().isOk())
 		.andExpect(content().string("Email is not availbale."));
 	}

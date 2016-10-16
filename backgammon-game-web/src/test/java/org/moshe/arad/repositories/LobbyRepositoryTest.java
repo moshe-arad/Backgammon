@@ -10,6 +10,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
 import org.moshe.arad.repositories.entities.BasicUser;
@@ -20,7 +22,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextHierarchy({
@@ -37,12 +38,18 @@ public class LobbyRepositoryTest {
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
 	private GameUserRepository gameUserRepository;
+	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 	
 	@Before
 	public void setup(){
-		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
-		
+		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();		
+				
 		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
 		BasicUser basicUser = new BasicUser("user", "password", true);
 		
@@ -54,13 +61,14 @@ public class LobbyRepositoryTest {
 	
 	@After
 	public void cleanup(){
-		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();				
 	}
 	
 	@Test
 	@WithMockUser
-	@Transactional
 	public void createAndSaveNewGameRoomTest(){
 		GameRoom gameRoom = new GameRoom("Arad room123",
 				new Boolean(false), null, null, null, 2);
@@ -72,7 +80,7 @@ public class LobbyRepositoryTest {
 		assertNull(gameRoom.getLastModifiedBy());
 		assertNull(gameRoom.getLastModifiedDate());
 		
-		lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
+		gameRoom = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		
 		assertNotNull(gameRoom.getWhite());
 		assertNotNull(gameRoom.getOpenedBy());

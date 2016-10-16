@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.SecurityRepository;
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
@@ -57,36 +58,35 @@ public class LobbyControllerTest {
 	private BasicUserRepository basicUserRepository;
 	@Autowired
 	private AuthorityRepository authorityRepository;
+	@Autowired
+	private SecurityRepository securityRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 		
-		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();		
+		basicUserRepository.deleteAllInBatch();
+		
 		
 		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
 		BasicUser basicUser = new BasicUser("user", "password", true);
 		
-		gameUser.setBasicUser(basicUser);
-		basicUser.setGameUser(gameUser);
-		
-		gameUserRepository.save(gameUser);
+		securityRepository.saveNewUser(gameUser, basicUser);
 	}
 	
 	@After
 	public void cleanup(){		
-		gameUserRepository.deleteAllInBatch();
 		authorityRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();		
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
 	@WithMockUser
-	@Transactional
 	public void openNewGameRoomTest() throws Exception{
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Arad room123")
@@ -105,7 +105,6 @@ public class LobbyControllerTest {
 	
 	@Test
 	@WithMockUser
-	@Transactional
 	public void openNewGameRoomWithErrorsTest() throws Exception{
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Ara$$$$$d room123")

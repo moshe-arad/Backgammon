@@ -319,7 +319,7 @@ public class SecurityRepositoryTest {
 		gameRoomRepository.deleteAllInBatch();
 		
 		gameRoom1 = securityRepository.saveNewGameRoomAndGroupWithNewUser(gameRoom1, group1, gameUser2, basicUser2);
-		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		GameUser gameUserFromDb = securityRepository.getGameUserByBasicUser(basicUser2);
 		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
 		GameRoom gameRoomFromDb = gameRoomRepository.findByGroup(group1);
 		Group groupFromDb = groupRepository.findOne(group1.getGroupId());

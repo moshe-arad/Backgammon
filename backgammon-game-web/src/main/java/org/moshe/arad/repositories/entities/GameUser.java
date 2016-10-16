@@ -1,8 +1,9 @@
 package org.moshe.arad.repositories.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -82,7 +83,7 @@ public class GameUser implements UserDetails{
 	@JoinTable(name = "user_in_game_room", 
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
-	private Set<GameRoom> gameRooms = new HashSet<>(1000);
+	private List<GameRoom> gameRooms = new ArrayList<>(1000);
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username")
@@ -180,11 +181,11 @@ public class GameUser implements UserDetails{
 		this.basicUser = basicUser;
 	}
 	
-	public Set<GameRoom> getGameRooms() {
+	public List<GameRoom> getGameRooms() {
 		return gameRooms;
 	}
 
-	public void setGameRooms(Set<GameRoom> gameRooms) {
+	public void setGameRooms(List<GameRoom> gameRooms) {
 		this.gameRooms = gameRooms;
 	}
 	

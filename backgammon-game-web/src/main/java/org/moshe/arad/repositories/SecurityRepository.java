@@ -1,5 +1,6 @@
 package org.moshe.arad.repositories;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -21,7 +22,6 @@ import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Repository
@@ -135,12 +135,14 @@ public class SecurityRepository {
 		return gameUser;
 	}
 	
-	public void saveNewUserWithAuthority(GameUser gameUser, BasicUser basicUser, Authority auth){
+	public GameUser saveNewUserWithAuthority(GameUser gameUser, BasicUser basicUser, Authority auth){
 		if(gameUser != null && basicUser != null && auth != null){
+			auth.setBasicUser(basicUser);
 			gameUser.setBasicUser(basicUser);
 			basicUser.setAuthorities(Arrays.asList(auth));
-			gameUserRepository.save(gameUser);
-		}		
+			gameUser = gameUserRepository.save(gameUser);
+		}
+		return gameUser;
 	}
 	
 	public GameUser saveNewUserWithAuthorities(GameUser gameUser, BasicUser basicUser, List<Authority> authList){
@@ -160,18 +162,18 @@ public class SecurityRepository {
 		return gameRoom;
 	}
 	
-	public GameUser saveNewGameRoomAndGroupWithNewUser(GameRoom gameRoom, Group group, GameUser gameUser, BasicUser basicUser){
+	public GameRoom saveNewGameRoomAndGroupWithNewUser(GameRoom gameRoom, Group group, GameUser gameUser, BasicUser basicUser){
 		if(gameUser == null || basicUser == null) return null;
 		
 		gameUser = saveNewUser(gameUser, basicUser);
 		
 		if(gameRoom != null && group != null){
 			gameRoom.setGroup(group);
-			Set<GameRoom> gameRooms = new HashSet<>(1000);
+			List<GameRoom> gameRooms = new ArrayList<>(1000);
 			gameRooms.add(gameRoom);
 			gameUser.setGameRooms(gameRooms);
 			gameUser = gameUserRepository.save(gameUser);
-			return gameUser;
+			return gameUser.getGameRooms().get(0);			
 		}
 		
 		return null;
@@ -184,7 +186,7 @@ public class SecurityRepository {
 		
 		if(gameRoom != null && group != null){
 			gameRoom.setGroup(group);
-			Set<GameRoom> gameRooms = new HashSet<>(1000);
+			List<GameRoom> gameRooms = new ArrayList<>(1000);
 			gameRooms.add(gameRoom);
 			gameUser.setGameRooms(gameRooms);
 			gameUser = gameUserRepository.save(gameUser);
@@ -213,9 +215,6 @@ public class SecurityRepository {
 			groupAuthoritiesRepository.save(groupAuthorities);
 		}
 	}
-	
-	
-	
 	
 	
 	

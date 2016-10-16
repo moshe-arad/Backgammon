@@ -1,6 +1,7 @@
 package org.moshe.arad.repositories;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -39,62 +40,78 @@ public class LobbyRepository {
 	@Autowired
 	private GroupMembersRepository groupMembersRepository;
 	
-	@Transactional
-	public GameRoom createNewGameRoomWithLoggedInUser(GameRoom gameRoom){
-		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
-		GameUser loggedUser = basicUser.getGameUser();
-		
+	@Autowired
+	private SecurityRepository securityRepository;
+	
+//	@Transactional
+	public GameRoom createNewGameRoomWithLoggedInUser(GameRoom gameRoom){		
 		setOpenedByAndWhite(gameRoom);
-		
-		gameRoom.getUsers().add(loggedUser);
-		Set<GameRoom> rooms = gameUserRepository.findGameRoomsByLoggedUser(loggedUserName);
-		rooms.add(gameRoom);
-		loggedUser.setGameRooms(rooms);
-		
-		Authority auth = new Authority("player_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
-		auth.setBasicUser(basicUser);
-		basicUser.getAuthorities().add(auth);
-		
-		Group groupRoom = new Group("group_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
-		gameRoom.setGroup(groupRoom);
-		
-		gameRoomRepository.save(gameRoom);
+		GameUser loggedInGameUser = securityRepository.getLoggedInGameUser();
+		String authorityToUser = "player_" + gameRoom.getGameRoomName() + "_" + loggedInGameUser.getUserId();
+		loggedInGameUser = securityRepository.saveNewUserWithAuthority(loggedInGameUser, loggedInGameUser.getBasicUser(), new Authority(authorityToUser));
+		Group groupRoom = new Group("group_" + gameRoom.getGameRoomName() + "_" + loggedInGameUser.getUserId());
+		gameRoom = securityRepository.saveNewGameRoomAndGroupWithNewUser(gameRoom, groupRoom, loggedInGameUser, loggedInGameUser.getBasicUser());
 		return gameRoom;
+//		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+//		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
+//		GameUser loggedUser = basicUser.getGameUser();
+//		
+//		
+//		setOpenedByAndWhite(gameRoom);
+//		
+//		gameRoom.getUsers().add(loggedUser);
+//		Set<GameRoom> rooms = gameUserRepository.findGameRoomsByLoggedUser(loggedUserName);
+//		rooms.add(gameRoom);
+//		loggedUser.setGameRooms(rooms);
+//		
+//		Authority auth = new Authority("player_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
+//		auth.setBasicUser(basicUser);
+//		basicUser.getAuthorities().add(auth);
+//		
+//		Group groupRoom = new Group("group_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
+//		gameRoom.setGroup(groupRoom);
+//		
+//		gameRoomRepository.save(gameRoom);
+//		return gameRoom;
 	}
 	
-	@Transactional
+//	@Transactional
 	public void createNewGroupForNewRoom(GameRoom gameRoom){
-		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
-		GameUser loggedUser = basicUser.getGameUser();
+		GameUser loggedInGameUser = securityRepository.getLoggedInGameUser();
 		
-		Group groupRoom = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getGroup();
-		
-		List<GroupMembers> groupMembersList = new ArrayList<>();
-		GroupMembers groupMembers = new GroupMembers();
-		groupMembers.setGroup(groupRoom);
-		groupMembers.setBasicUser(basicUser);
-		groupMembersList.add(groupMembers);
-		groupRoom.setGroupMembers(groupMembersList);
-		
-		List<GroupAuthorities> groupAuthoritiesList = new ArrayList<>();
-		GroupAuthorities groupAuthorities = new GroupAuthorities("player_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
-		groupAuthorities.setGroup(groupRoom);
-		groupAuthoritiesList.add(groupAuthorities);
-		groupRoom.setGroupAuthorities(groupAuthoritiesList);
-		
-		
-		groupAuthorities.setGroupId(groupRoom.getGroupId());
-		groupAuthoritiesRepository.save(groupAuthorities);
-		logger.info("after group Authorities Repository");
-		
-		groupMembersRepository.save(groupMembers);
-		logger.info("after group Members Repository");
-		
-		gameRoom.setGroup(groupRoom);
-		gameRoomRepository.save(gameRoom);
-		logger.info("after game room Repository");
+		securityRepository.saveUserAsGroupMember(loggedInGameUser.getBasicUser(), Arrays.asList(gameRoom.getGroup()));
+		List<Authority> authList = securityRepository.getAuthoritiesByUserName(loggedInGameUser.getBasicUser().getUserName());
+		securityRepository.saveAuthoritiesForGroup(gameRoom.getGroup(), authList);
+//		String loggedUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+//		BasicUser basicUser = basicUserRepository.findOne(loggedUserName);
+//		GameUser loggedUser = basicUser.getGameUser();
+//		
+//		Group groupRoom = gameRoomRepository.findOne(gameRoom.getGameRoomId()).getGroup();
+//		
+//		List<GroupMembers> groupMembersList = new ArrayList<>();
+//		GroupMembers groupMembers = new GroupMembers();
+//		groupMembers.setGroup(groupRoom);
+//		groupMembers.setBasicUser(basicUser);
+//		groupMembersList.add(groupMembers);
+//		groupRoom.setGroupMembers(groupMembersList);
+//		
+//		List<GroupAuthorities> groupAuthoritiesList = new ArrayList<>();
+//		GroupAuthorities groupAuthorities = new GroupAuthorities("player_" + gameRoom.getGameRoomName() + "_" + loggedUser.getUserId());
+//		groupAuthorities.setGroup(groupRoom);
+//		groupAuthoritiesList.add(groupAuthorities);
+//		groupRoom.setGroupAuthorities(groupAuthoritiesList);
+//		
+//		
+//		groupAuthorities.setGroupId(groupRoom.getGroupId());
+//		groupAuthoritiesRepository.save(groupAuthorities);
+//		logger.info("after group Authorities Repository");
+//		
+//		groupMembersRepository.save(groupMembers);
+//		logger.info("after group Members Repository");
+//		
+//		gameRoom.setGroup(groupRoom);
+//		gameRoomRepository.save(gameRoom);
+//		logger.info("after game room Repository");
 	}
 	
 	public List<GameRoom> getAllGameRooms(){

@@ -32,13 +32,14 @@ public class LobbyService {
 		gameRooms.addAll(lobbyRepository.getAllGameRooms());
 	}
 	
-	public void addNewGameRoom(GameRoom gameRoom) {
+	public GameRoom addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
 		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		lobbyRepository.createNewGroupForNewRoom(roomInDb);
 		logger.info("New game room was added to DB, details: " + gameRoom);
 		gameRooms.add(roomInDb);
 		logger.info("game room was added successfully, details: " + gameRoom);
+		return roomInDb;
 	}
 	
 	public void setDefaultValues(GameRoom gameRoom){

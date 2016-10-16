@@ -1,9 +1,12 @@
 package org.moshe.arad.repositories;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
@@ -77,7 +80,11 @@ public class SecurityRepositoryTest {
 	@Resource
 	GameRoom gameRoom1;
 	@Resource
+	GameRoom gameRoom2;
+	@Resource
 	Group group1;
+	@Resource
+	Group group2;
 	
 	@Before
 	public void setup(){		
@@ -90,6 +97,7 @@ public class SecurityRepositoryTest {
 		basicUserRepository.deleteAllInBatch();				
 		
 		gameRoom1.setGroup(group1);
+		gameRoom2.setGroup(group2);
 		
 		for(Authority auth:authList1){
 			auth.setBasicUser(basicUser1);
@@ -120,7 +128,12 @@ public class SecurityRepositoryTest {
 		gameRoom1.setGameRoomId(null);
 		group1.setGroupId(null);
 		gameRoom1.setOpenedBy(gameUser1.getUserId());
-		gameRoomRepository.save(gameRoom1);	
+		gameRoomRepository.save(gameRoom1);
+		
+		gameRoom2.setGameRoomId(null);
+		group2.setGroupId(null);
+		gameRoom2.setOpenedBy(gameUser2.getUserId());
+		gameRoomRepository.save(gameRoom2);
 		
 		GroupMembers groupMembers1 = new GroupMembers();
 		groupMembers1.setGroup(group1);
@@ -298,5 +311,67 @@ public class SecurityRepositoryTest {
 		Group groupFromDb = groupRepository.findOne(group1.getGroupId());
 		assertEquals(gameRoom1, gameRoomFromDb);
 		assertEquals(group1, groupFromDb);
+	}
+	
+	@Test
+	public void saveNewGameRoomAndGroupWithNewUser(){
+		gameUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
+		
+		gameUser2 = securityRepository.saveNewGameRoomAndGroupWithNewUser(gameRoom1, group1, gameUser2, basicUser2);
+		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
+		GameRoom gameRoomFromDb = gameRoomRepository.findByGroup(group1);
+		Group groupFromDb = groupRepository.findOne(group1.getGroupId());
+		
+		assertEquals(gameUser2, gameUserFromDb);
+		assertEquals(basicUser2, basicUserFromDb);
+		assertEquals(gameRoom1, gameRoomFromDb);
+		assertEquals(group1, groupFromDb);
+	}
+	
+	@Test
+	public void saveNewGameRoomAndGroupWithNewUserAndAuthorities(){
+		gameUserRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
+		
+		gameUser2 = securityRepository.saveNewGameRoomAndGroupWithNewUserAndAuthorities(gameRoom1, group1, gameUser2, basicUser2, authList2);
+		List<Authority> authListFromDb = authorityRepository.findByBasicUser(basicUser2);
+		GameUser gameUserFromDb = gameUserRepository.findOne(gameUser2.getUserId());
+		BasicUser basicUserFromDb = basicUserRepository.findOne(basicUser2.getUserName());
+		GameRoom gameRoomFromDb = gameRoomRepository.findByGroup(group1);
+		Group groupFromDb = groupRepository.findOne(group1.getGroupId());
+		
+		assertTrue(authListFromDb.containsAll(authList2));
+		assertEquals(gameUser2, gameUserFromDb);
+		assertEquals(basicUser2, basicUserFromDb);
+		assertEquals(gameRoom1, gameRoomFromDb);
+		assertEquals(group1, groupFromDb);
+	}
+	
+	@Test
+	public void saveUserAsGroupMember(){
+		groupMembersRepository.deleteAll();
+		
+		securityRepository.saveUserAsGroupMember(basicUser2, Arrays.asList(group1, group2));
+		List<GroupMembers> groupMembersFromDb = securityRepository.getGroupMembersByBasicUser(basicUser2);
+		
+		for(GroupMembers groupMember:groupMembersFromDb){
+			assertThat(groupMember.getGroup().getGroupId(), anyOf(is(group1.getGroupId()), is(group2.getGroupId())));
+			assertThat(groupMember.getBasicUser().getUserName(), is(basicUser2.getUserName()));
+		}
+	}
+	
+	@Test
+	public void saveAuthoritiesForGroup(){
+		groupAuthoritiesRepository.deleteAllInBatch();
+		
+		securityRepository.saveAuthoritiesForGroup(group2, authList2);
+		List<GroupAuthorities> groupAuthoritiesFromDb = securityRepository.getGroupAuthoritiesByGroup(group2);
+		
+		List<String> authStr2 = authList2.stream().map(item->item.getAuthority()).collect(Collectors.toList());
+		List<String> authFromDb = groupAuthoritiesFromDb.stream().map(item->item.getAuthority()).collect(Collectors.toList());
+		
+		assertTrue(authFromDb.containsAll(authStr2));		
 	}
 }

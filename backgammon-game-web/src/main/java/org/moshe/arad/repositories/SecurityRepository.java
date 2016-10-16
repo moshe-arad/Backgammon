@@ -1,7 +1,9 @@
 package org.moshe.arad.repositories;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.moshe.arad.repositories.dao.data.AuthorityRepository;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
@@ -19,6 +21,7 @@ import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 @Repository
@@ -124,11 +127,12 @@ public class SecurityRepository {
 	
 	/*** insert - update, operations ***/
 	
-	public void saveNewUser(GameUser gameUser, BasicUser basicUser){
+	public GameUser saveNewUser(GameUser gameUser, BasicUser basicUser){
 		if(gameUser != null && basicUser != null){
 			gameUser.setBasicUser(basicUser);
-			gameUserRepository.save(gameUser);
-		}		
+			gameUser = gameUserRepository.save(gameUser);
+		}	
+		return gameUser;
 	}
 	
 	public void saveNewUserWithAuthority(GameUser gameUser, BasicUser basicUser, Authority auth){
@@ -154,6 +158,60 @@ public class SecurityRepository {
 			gameRoom  = gameRoomRepository.save(gameRoom);
 		}
 		return gameRoom;
+	}
+	
+	public GameUser saveNewGameRoomAndGroupWithNewUser(GameRoom gameRoom, Group group, GameUser gameUser, BasicUser basicUser){
+		if(gameUser == null || basicUser == null) return null;
+		
+		gameUser = saveNewUser(gameUser, basicUser);
+		
+		if(gameRoom != null && group != null){
+			gameRoom.setGroup(group);
+			Set<GameRoom> gameRooms = new HashSet<>(1000);
+			gameRooms.add(gameRoom);
+			gameUser.setGameRooms(gameRooms);
+			gameUser = gameUserRepository.save(gameUser);
+			return gameUser;
+		}
+		
+		return null;
+	}
+	
+	public GameUser saveNewGameRoomAndGroupWithNewUserAndAuthorities(GameRoom gameRoom, Group group, GameUser gameUser, BasicUser basicUser, List<Authority> authList){
+		if(gameUser == null || basicUser == null) return null;
+		
+		gameUser = saveNewUserWithAuthorities(gameUser, basicUser, authList);
+		
+		if(gameRoom != null && group != null){
+			gameRoom.setGroup(group);
+			Set<GameRoom> gameRooms = new HashSet<>(1000);
+			gameRooms.add(gameRoom);
+			gameUser.setGameRooms(gameRooms);
+			gameUser = gameUserRepository.save(gameUser);
+			return gameUser;
+		}
+		
+		return null;
+	}
+	
+	public void saveUserAsGroupMember(BasicUser basicUser, List<Group> groups){
+		if(basicUser == null || groups == null) return;
+		for(Group group:groups){
+			GroupMembers groupMembers = new GroupMembers();
+			groupMembers.setBasicUser(basicUser);
+			groupMembers.setGroup(group);
+			groupMembersRepository.save(groupMembers);			
+		}
+	}
+	
+	public void saveAuthoritiesForGroup(Group group, List<Authority> authList){
+		if(authList == null || group == null) return;
+		for(Authority auth:authList){
+			GroupAuthorities groupAuthorities = new GroupAuthorities(auth.getAuthority());
+			groupAuthorities.setGroupId(group.getGroupId());
+			groupAuthorities.setGroup(group);
+			groupAuthoritiesRepository.save(groupAuthorities);
+		}
 	}
 	
 	

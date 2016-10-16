@@ -56,6 +56,7 @@ create table group_authorities (
     `last_modified_by` varchar(50) NOT NULL default "System",
     `created_date` DATETIME NOT NULL default now(),
     `created_by` varchar(50) NOT NULL default "System",
+    primary key(group_id, authority),
 	constraint fk_group_authorities_group foreign key(group_id) references groups(id)
 );
 

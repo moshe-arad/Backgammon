@@ -85,6 +85,10 @@
 		<constructor-arg value="group1" />
 	</bean>
 	
+	<bean id="group2" class="org.moshe.arad.repositories.entities.Group">
+		<constructor-arg value="group2" />
+	</bean>
+	
 	<bean id="private" class="java.lang.Boolean">
 		<constructor-arg value="false"/>
 	</bean>
@@ -96,5 +100,14 @@
 		<constructor-arg><null /></constructor-arg>
 		<constructor-arg><null /></constructor-arg>
 		<constructor-arg value="2"/>
+	</bean>
+	
+	<bean id="gameRoom2" class="org.moshe.arad.repositories.entities.GameRoom">
+		<constructor-arg value="room2" />
+		<constructor-arg ref="private"/>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg><null /></constructor-arg>
+		<constructor-arg value="1"/>
 	</bean>
 </beans>

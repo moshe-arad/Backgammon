@@ -139,12 +139,13 @@ public class SecurityRepository {
 		}		
 	}
 	
-	public void saveNewUserWithAuthorities(GameUser gameUser, BasicUser basicUser, List<Authority> authList){
+	public GameUser saveNewUserWithAuthorities(GameUser gameUser, BasicUser basicUser, List<Authority> authList){
 		if(gameUser != null && basicUser != null && authList != null){
 			gameUser.setBasicUser(basicUser);
 			basicUser.setAuthorities(authList);
-			gameUserRepository.save(gameUser);
-		}		
+			gameUser = gameUserRepository.save(gameUser);
+		}
+		return gameUser;
 	}
 	
 	public GameRoom saveNewGameRoomAndGroup(GameRoom gameRoom, Group group){

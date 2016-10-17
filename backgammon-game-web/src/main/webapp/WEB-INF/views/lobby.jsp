@@ -70,7 +70,6 @@
 							</thead>
 							<tbody>	
 								<c:set var="roomsSize" value="${gameRooms.size()}" />
-								<c:out value="${roomsSize}"></c:out>
 								<c:if test="${roomsSize > 0}">
 									<c:forEach var="i" begin="0" end="${roomsSize - 1}">
 										<tr>

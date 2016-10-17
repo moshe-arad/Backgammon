@@ -53,7 +53,6 @@ public class LobbyRepository {
 	
 	public void addSecondPlayer(GameRoom gameRoom){
 		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
-		gameRoom = gameRoomRepository.findOne(gameRoom.getGameRoomId());
 		gameRoom.setBlack(userId);
 		gameRoomRepository.save(gameRoom);
 	}

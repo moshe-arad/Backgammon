@@ -69,8 +69,9 @@
 							</thead>
 							<tbody>	
 								<c:set var="roomsSize" value="${gameRooms.size()}" />
+								<c:out value="${roomsSize}"></c:out>
 								<c:if test="${roomsSize > 0}">
-									<c:forEach var="i" begin="0" end="">
+									<c:forEach var="i" begin="0" end="${roomsSize - 1}">
 										<tr>
 											<th scope="row"><c:out value="${i+1}"></c:out></th>
 											<td>${gameRooms.get(i).getGameRoomName()}</td>

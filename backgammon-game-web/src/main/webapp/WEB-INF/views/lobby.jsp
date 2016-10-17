@@ -56,7 +56,8 @@
 					</div>
 					
 					<spring:url value="/lobby/join" var="joinRoom"/>
-					<form id="joinForm" method="POST" action="${joinRoom}" >
+					<p id="joinFormDestUrl" class="hidden">${joinRoom}</p>
+					<form id="joinForm" method="POST" action="#" >
 						<table class="table">
 							<thead>
 								<tr>
@@ -104,7 +105,6 @@
 								</c:if>																																		
 							</tbody>	
 						</table>
-						<input id="roomInput" class="hidden" name="token" />
 						<sec:csrfInput/>
 					</form>
 				</div>

@@ -8,9 +8,11 @@ import org.apache.logging.log4j.Logger;
 import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.entities.Authority;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.entities.Group;
+import org.moshe.arad.repositories.entities.GroupMembers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
@@ -49,9 +51,9 @@ public class LobbyRepository {
 		return gameRoomRepository.findAll();
 	}
 	
-	public void addSecondPlayer(Long roomId){
+	public void addSecondPlayer(GameRoom gameRoom){
 		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
-		GameRoom gameRoom = gameRoomRepository.findOne(roomId);
+		gameRoom = gameRoomRepository.findOne(gameRoom.getGameRoomId());
 		gameRoom.setBlack(userId);
 		gameRoomRepository.save(gameRoom);
 	}
@@ -62,4 +64,39 @@ public class LobbyRepository {
 		gameRoom.setOpenedBy(loggedUser.getUserId());
 		gameRoom.setWhite(loggedUser.getUserId());
 	}
+
+	public void addAuthoritiesForSecondPlayer(GameRoom gameRoom) {
+		BasicUser basicUserLoggedIn = securityRepository.getLoggedInBasicUser();
+		GameUser gameUserLoggedIn = securityRepository.getLoggedInGameUser();
+		Authority auth = new Authority("player_" + gameRoom.getGameRoomName() + "_" + gameUserLoggedIn.getUserId());
+		
+		securityRepository.saveNewAuthorityOnBasicUser(basicUserLoggedIn, auth);
+		securityRepository.saveUserAsGroupMember(basicUserLoggedIn, Arrays.asList(gameRoom.getGroup()));		
+		securityRepository.saveAuthoritiesForGroup(gameRoom.getGroup(), Arrays.asList(auth));
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -88,13 +88,7 @@ public class SecurityRepositoryTest {
 	
 	@Before
 	public void setup(){		
-		gameRoomRepository.deleteAllInBatch();
-		groupAuthoritiesRepository.deleteAllInBatch();
-		groupMembersRepository.deleteAllInBatch();
-		groupRepository.deleteAllInBatch();		
-		authorityRepository.deleteAllInBatch();
-		gameUserRepository.deleteAllInBatch();
-		basicUserRepository.deleteAllInBatch();				
+		clearDB();				
 		
 		gameRoom1.setGroup(group1);
 		gameRoom2.setGroup(group2);
@@ -146,9 +140,8 @@ public class SecurityRepositoryTest {
 		
 		groupAuthoritiesRepository.save(groupAuthorities1);
 	}
-	
-	@After
-	public void cleanup(){		
+
+	private void clearDB() {
 		gameRoomRepository.deleteAllInBatch();
 		groupAuthoritiesRepository.deleteAllInBatch();
 		groupMembersRepository.deleteAllInBatch();
@@ -156,6 +149,11 @@ public class SecurityRepositoryTest {
 		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
 		basicUserRepository.deleteAllInBatch();
+	}
+	
+	@After
+	public void cleanup(){		
+		clearDB();
 	}
 	
 	@Test
@@ -374,4 +372,31 @@ public class SecurityRepositoryTest {
 		
 		assertTrue(authFromDb.containsAll(authStr2));		
 	}
+	
+	@Test
+	public void saveNewAuthorityOnBasicUser(){
+		clearDB();
+		
+		Authority auth = new Authority("ROLE_TEST");
+		basicUser1.setGameUser(gameUser1);	
+		securityRepository.saveNewAuthorityOnBasicUser(basicUser1, auth);
+		
+		GameUser gameUserFromDb = securityRepository.getGameUserByBasicUser(basicUser1);
+		BasicUser basicUserFromDb = securityRepository.getBasicUserByGameUser(gameUser1);
+		List<Authority> authListFromDb = securityRepository.getAuthoritiesOfBasicUser(basicUser1);
+		assertEquals(gameUser1, gameUserFromDb);
+		assertEquals(basicUser1, basicUserFromDb);
+		assertTrue(authListFromDb.contains(auth));
+	}
 }
+
+
+
+
+
+
+
+
+
+
+

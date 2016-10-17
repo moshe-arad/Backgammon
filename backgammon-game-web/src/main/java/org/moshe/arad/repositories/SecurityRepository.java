@@ -154,6 +154,14 @@ public class SecurityRepository {
 		return gameUser;
 	}
 	
+	public BasicUser saveNewAuthorityOnBasicUser(BasicUser basicUser, Authority authority){
+		if(basicUser == null || authority == null) return null;
+		authority.setBasicUser(basicUser);
+		basicUser.setAuthorities(Arrays.asList(authority));
+		basicUser = basicUserRepository.save(basicUser);
+		return basicUser;
+	}
+	
 	public GameRoom saveNewGameRoomAndGroup(GameRoom gameRoom, Group group){
 		if(gameRoom != null && group != null){
 			gameRoom.setGroup(group);

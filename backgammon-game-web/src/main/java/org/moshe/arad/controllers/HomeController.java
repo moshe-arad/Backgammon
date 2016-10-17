@@ -11,10 +11,8 @@ import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.repositories.validators.GameUserValidator;
 import org.moshe.arad.services.LobbyService;
-import org.moshe.arad.services.UserSecurityService;
+import org.moshe.arad.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -33,7 +31,7 @@ public class HomeController {
 	private final Logger logger = LogManager.getLogger(HomeController.class);
 	
 	@Autowired
-	UserSecurityService userSecurityService;
+	HomeService userSecurityService;
 	@Autowired
 	LobbyService lobbyService;
 
@@ -50,7 +48,8 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/register", method = RequestMethod.POST)
-	public String doRegister(@Valid @ModelAttribute GameUser gameUser, Errors errors, Model model){
+	public String doRegister(@Valid @ModelAttribute GameUser gameUser, 
+			 Errors errors, Model model){
 		if(errors.hasErrors()){
 			logger.info("Some errors occured while trying to bind game user");
 			logger.info("There are " + errors.getErrorCount() + " errors.");
@@ -69,12 +68,11 @@ public class HomeController {
 		logger.info("The GameUser bind result: " + gameUser);
 		
 		try{
-			userSecurityService.registerNewUser(gameUser, "ROLE_USER");
+			userSecurityService.registerNewUser(gameUser);
 			logger.info("User was successfuly register.");
 			logger.info("Routing for Lobby page.");
 			model.addAttribute("gameRooms", lobbyService.getAllGameRooms());
 			model.addAttribute("newGameRoom", new GameRoom());
-			model.addAttribute("tokens", lobbyService.encryptAllGameRoomsTokens());
 			model.addAttribute("speedOptions", getSpeedOptions());
 			model.addAttribute("privateRoomOptions", getPrivateRoomOptions());
 			return "lobby";
@@ -137,7 +135,7 @@ public class HomeController {
 		binder.addValidators(new GameUserValidator());
 	}
 	
-	public List<String> getSpeedOptions(){
+	private List<String> getSpeedOptions(){
 		List<String> options = new ArrayList<>();
 		options.add("High - 30 sec");
 		options.add("Medium - 45 sec");
@@ -145,7 +143,7 @@ public class HomeController {
 		return options;
 	}
 	
-	public List<String> getPrivateRoomOptions(){
+	private List<String> getPrivateRoomOptions(){
 		List<String> options = new ArrayList<>();
 		options.add("No");
 		options.add("Yes");

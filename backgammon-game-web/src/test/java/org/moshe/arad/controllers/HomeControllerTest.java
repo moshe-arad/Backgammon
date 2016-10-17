@@ -10,18 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import javax.annotation.Resource;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
-import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
-import org.moshe.arad.services.UserSecurityService;
+import org.moshe.arad.services.HomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.test.context.support.WithAnonymousUser;
@@ -38,35 +38,42 @@ import org.springframework.web.context.WebApplicationContext;
 @WebAppConfiguration
 @ContextHierarchy({
 	@ContextConfiguration("classpath:persistence-context-test.xml"),
-	@ContextConfiguration("classpath:user-security-context-test.xml"),
+	@ContextConfiguration("classpath:security-context-test.xml"),
 	@ContextConfiguration("classpath:webapp-context-test.xml"),
 	@ContextConfiguration("classpath:lobby-context-test.xml")
 })
 public class HomeControllerTest {
 
+	@SuppressWarnings("unused")
 	private final Logger logger = LogManager.getLogger(HomeControllerTest.class);
 	private MockMvc mockMvc;
 	@Autowired
-	UserSecurityService userSecurityService;
+	HomeService userSecurityService;
 	@Autowired
 	ApplicationContext context;
 	@Autowired
 	WebApplicationContext wac;
-	@Resource
-	HibernateGameUserDao hibernateGameUserCriteriaDao;
 	@Autowired
 	private GameUserRepository gameUserRepository;
+	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		hibernateGameUserCriteriaDao.deleteAll();
+		authorityRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
+		
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateGameUserCriteriaDao.deleteAll();
+		authorityRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
@@ -108,7 +115,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest5() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -118,7 +131,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest6() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/home"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -128,7 +147,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest7() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/login"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -138,7 +163,13 @@ public class HomeControllerTest {
 	@Test
 	@WithMockUser
 	public void goHomeTest8() throws Exception {
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 		mockMvc.perform(get("/register"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/lobby/"))
@@ -146,46 +177,55 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void doRegisterTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole()))
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", gameUser.getUsername())
+				.param("basicUser.password", gameUser.getPassword())
+				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
+		.andExpect(model().attribute("gameUser", gameUser))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("gameUser", user1))
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 				
 	}
 	
 	@Test
 	public void doRegisterHasErrorsTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
-		user1.setEmail("not an email");
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUser.setEmail("not an email");
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
 				.param("email", "not an email")
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole()))
+				.param("userName", gameUser.getUsername())
+				.param("password", gameUser.getPassword()))
 		.andExpect(status().isOk())
-		.andExpect(model().attribute("gameUser", user1))
+		.andExpect(model().attribute("gameUser", gameUser))
 		.andExpect(model().hasErrors())
 		.andExpect(model().errorCount(5))
 		.andExpect(view().name("home"))
 		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
 		
-		assertEquals(0, hibernateGameUserCriteriaDao.findAll().size());
+		assertEquals(0, gameUserRepository.findAll().size());
 	}
 	
 	@Test
@@ -204,21 +244,27 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void userNameAvailableInValidTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("userName1", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole())).andExpect(status().isOk())
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", basicUser.getUserName())
+				.param("basicUser.password", basicUser.getPassword())
+				.param("basicUser.enabled", basicUser.getEnabled().toString()))
+		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
@@ -233,23 +279,29 @@ public class HomeControllerTest {
 	}
 	
 	@Test
+	@WithAnonymousUser
 	public void emailAvailableInValidTest() throws Exception{
-		GameUser user1 = context.getBean("gameUser1", GameUser.class);
+		GameUser gameUser = context.getBean("gameUser1", GameUser.class);
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 		
 		mockMvc.perform(post("/register")
-				.param("firstName", user1.getFirstName())
-				.param("lastName", user1.getLastName())
-				.param("email", user1.getEmail())
-				.param("userName", user1.getUserName())
-				.param("password", user1.getPassword())
-				.param("role", user1.getRole())).andExpect(status().isOk())
+				.param("firstName", gameUser.getFirstName())
+				.param("lastName", gameUser.getLastName())
+				.param("email", gameUser.getEmail())
+				.param("basicUser.userName", gameUser.getUsername())
+				.param("basicUser.password", gameUser.getPassword())
+				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
+		.andExpect(status().isOk())
 		.andExpect(view().name("lobby"))
 		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
 		
-		assertEquals(1, hibernateGameUserCriteriaDao.findAll().size());
-		assertEquals(user1, hibernateGameUserCriteriaDao.findAll().get(0));
+		assertEquals(1, gameUserRepository.findAll().size());
+		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
-		mockMvc.perform(get("/email").param("email", "email1@walla.com"))
+		mockMvc.perform(get("/email").param("email", "email1@email.com"))
 		.andExpect(status().isOk())
 		.andExpect(content().string("Email is not availbale."));
 	}

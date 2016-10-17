@@ -10,8 +10,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +38,33 @@ public class LobbyRepositoryTest {
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
 	private GameUserRepository gameUserRepository;
+	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
 	
 	@Before
 	public void setup(){
+		authorityRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		basicUserRepository.deleteAllInBatch();		
+				
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
+		
+		gameUserRepository.save(gameUser);
 	}
 	
 	@After
 	public void cleanup(){
+		authorityRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
 		gameUserRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();				
 	}
 	
 	@Test
@@ -59,17 +77,17 @@ public class LobbyRepositoryTest {
 		assertNull(gameRoom.getOpenedBy());
 		assertNull(gameRoom.getCreatedBy());
 		assertNull(gameRoom.getCreatedDate());
-		assertNull(gameRoom.getLastUpdatedBy());
-		assertNull(gameRoom.getLastUpdatedDate());
+		assertNull(gameRoom.getLastModifiedBy());
+		assertNull(gameRoom.getLastModifiedDate());
 		
-		lobbyRepository.createAndSaveNewGameRoom(gameRoom);
+		gameRoom = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		
 		assertNotNull(gameRoom.getWhite());
 		assertNotNull(gameRoom.getOpenedBy());
 		assertNotNull(gameRoom.getCreatedBy());
 		assertNotNull(gameRoom.getCreatedDate());
-		assertNotNull(gameRoom.getLastUpdatedBy());
-		assertNotNull(gameRoom.getLastUpdatedDate());
+		assertNotNull(gameRoom.getLastModifiedBy());
+		assertNotNull(gameRoom.getLastModifiedDate());
 		
 		assertEquals(1, gameRoomRepository.findAll().size());
 		assertEquals("Arad room123", gameRoomRepository.findAll().get(0).getGameRoomName());

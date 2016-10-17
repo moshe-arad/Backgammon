@@ -11,7 +11,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.dao.hibernate.HibernateGameUserDao;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
+import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -20,51 +23,64 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
-						"classpath:user-security-context-test.xml"})
-public class UserSecurityServiceTest {
+						"classpath:security-context-test.xml"})
+public class HomeServiceTest {
 
-	private final Logger logger = LogManager.getLogger(UserSecurityServiceTest.class);
+	private final Logger logger = LogManager.getLogger(HomeServiceTest.class);
 	
 	@Autowired
 	ApplicationContext context;
 	@Autowired
-	UserSecurityService userSecurityService;
+	HomeService userSecurityService;
+	@Autowired
+	GameUserRepository gameUserRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
+	
 	@Resource
-	HibernateGameUserDao hibernateGameUserCriteriaDao;
+	GameUser gameUser1;
+	@Resource
+	BasicUser basicUser1;
 	
 	@Before
 	public void setup(){
 		logger.info("Initializing test DB.");
-
-		hibernateGameUserCriteriaDao.deleteAll(); 
+		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
+		gameUser1.setBasicUser(basicUser1);
 	}
 	
 	@After
 	public void cleanup(){
-		hibernateGameUserCriteriaDao.deleteAll();
+		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
 	public void isUserNameAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
-		assertFalse(userSecurityService.isUserNameAvailable(context.getBean("gameUser1", GameUser.class).getUserName()));
+		userSecurityService.registerNewUser(gameUser1);
+		assertFalse(userSecurityService.isUserNameAvailable(gameUser1.getUsername()));
 	}
 	
 	@Test
 	public void isUserNameAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1);
 		assertTrue(userSecurityService.isUserNameAvailable("userName2"));
 	}
 	
 	@Test
 	public void isEmailAvailableNotAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1);
 		assertFalse(userSecurityService.isEmailAvailable(context.getBean("gameUser1", GameUser.class).getEmail()));
 	}
 	
 	@Test
 	public void isEmailAvailableTest(){
-		userSecurityService.registerNewUser(context.getBean("gameUser1", GameUser.class), "Role_Test");
+		userSecurityService.registerNewUser(gameUser1);
 		assertTrue(userSecurityService.isEmailAvailable("email2@walla.com"));
 	}
 }

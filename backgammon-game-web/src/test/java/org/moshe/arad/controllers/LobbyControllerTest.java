@@ -16,8 +16,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.moshe.arad.repositories.SecurityRepository;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameRoomRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.moshe.arad.services.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -49,20 +54,35 @@ public class LobbyControllerTest {
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
 	private GameUserRepository gameUserRepository;
+	@Autowired
+	private BasicUserRepository basicUserRepository;
+	@Autowired
+	private AuthorityRepository authorityRepository;
+	@Autowired
+	private SecurityRepository securityRepository;
 	
 	@Before
 	public void setup(){
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
-		gameRoomRepository.deleteAllInBatch();
 		
-		gameUserRepository.deleteAllInBatch();
-		gameUserRepository.save(new GameUser("John", "Terry", "ashley.cole@gmail.com", "user", "password", "ROLE_USER"));
+		authorityRepository.deleteAllInBatch();
+		gameRoomRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();		
+		basicUserRepository.deleteAllInBatch();
+		
+		
+		GameUser gameUser = new GameUser("John", "Terry", "ashley.cole@gmail.com");
+		BasicUser basicUser = new BasicUser("user", "password", true);
+		
+		securityRepository.saveNewUser(gameUser, basicUser);
 	}
 	
 	@After
-	public void cleanup(){
+	public void cleanup(){		
+		authorityRepository.deleteAllInBatch();
 		gameRoomRepository.deleteAllInBatch();
-		gameUserRepository.deleteAllInBatch();
+		gameUserRepository.deleteAllInBatch();		
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test

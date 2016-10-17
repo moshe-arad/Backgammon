@@ -3,17 +3,17 @@ package org.moshe.arad.repositories.entities;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -23,16 +23,15 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.moshe.arad.game.BasicGame;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-/**
- * 
- * @author moshe-arad
- * TODO hibernate/jap/spring-data entity
- *  
- *  
- */
 @Entity
 @Table(name ="game_rooms")
+@EntityListeners(AuditingEntityListener.class)
 public class GameRoom {
 
 	@Id
@@ -47,10 +46,7 @@ public class GameRoom {
 	
 	@Column(name = "private")
 	@NotNull
-	private Boolean isPrivateRoom;
-	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "gameRooms")
-	private Set<GameUser> users = new HashSet<>(1000);
+	private Boolean isPrivateRoom;	
 	
 	@Column(name = "opened_by")
 	@NotNull
@@ -66,29 +62,36 @@ public class GameRoom {
 	@Range(min=0, max=2)
 	private Integer speed;
 	
-	@Autowired
 	@Transient
 	private BasicGame game;
 	
-	@Column(name="last_updated_date")
+	@LastModifiedDate
+	@Column(name="last_modified_date")
 	@NotNull
-	private Date lastUpdatedDate;
+	private Date lastModifiedDate;
 	
-	@Column(name="last_updated_by")
+	@LastModifiedBy
+	@Column(name="last_modified_by")
 	@NotNull
-	private Long lastUpdatedBy;
+	private String lastModifiedBy;
 	
+	@CreatedDate
 	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
+	@CreatedBy
 	@Column(name="created_by", updatable=false)
 	@NotNull
-	private Long createdBy;
-	
-	@Column(name = "token", updatable = false, insertable = false)
-	private String token;
+	private String createdBy;
 
+	@ManyToMany(mappedBy = "gameRooms")
+	private Set<GameUser> users = new HashSet<>(1000);
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "group_id")
+	private Group group;
+	
 	public GameRoom() {
 	}
 	
@@ -101,6 +104,14 @@ public class GameRoom {
 		this.white = white;
 		this.black = black;
 		this.speed = speed;
+	}
+
+	public Group getGroup() {
+		return group;
+	}
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
 
 	public Long getGameRoomId() {
@@ -174,22 +185,21 @@ public class GameRoom {
 	public void setGame(BasicGame game) {
 		this.game = game;
 	}
-
 	
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
 	}
 
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 
-	public Long getLastUpdatedBy() {
-		return lastUpdatedBy;
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
 	}
 
-	public void setLastUpdatedBy(Long lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
 	}
 
 	public Date getCreatedDate() {
@@ -200,28 +210,74 @@ public class GameRoom {
 		this.createdDate = createdDate;
 	}
 
-	public Long getCreatedBy() {
+	public String getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(Long createdBy) {
+	public void setCreatedBy(String createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-	
 	@Override
 	public String toString() {
 		return "GameRoom [gameRoomId=" + gameRoomId + ", gameRoomName=" + gameRoomName + ", isPrivateRoom="
-				+ isPrivateRoom + ", users=" + users + ", openedBy=" + openedBy + ", white=" + white + ", black="
-				+ black + ", speed=" + speed + ", game=" + game + ", lastUpdatedDate=" + lastUpdatedDate
-				+ ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy=" + createdBy
-				+ ", token=" + token + "]";
+				+ isPrivateRoom + ", openedBy=" + openedBy + ", white=" + white + ", black=" + black + ", speed="
+				+ speed + ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy
+				+ ", createdDate=" + createdDate + ", createdBy=" + createdBy + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((black == null) ? 0 : black.hashCode());
+		result = prime * result + ((gameRoomName == null) ? 0 : gameRoomName.hashCode());
+		result = prime * result + ((isPrivateRoom == null) ? 0 : isPrivateRoom.hashCode());
+		result = prime * result + ((openedBy == null) ? 0 : openedBy.hashCode());
+		result = prime * result + ((speed == null) ? 0 : speed.hashCode());
+		result = prime * result + ((white == null) ? 0 : white.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameRoom other = (GameRoom) obj;
+		if (black == null) {
+			if (other.black != null)
+				return false;
+		} else if (!black.equals(other.black))
+			return false;
+		if (gameRoomName == null) {
+			if (other.gameRoomName != null)
+				return false;
+		} else if (!gameRoomName.equals(other.gameRoomName))
+			return false;
+		if (isPrivateRoom == null) {
+			if (other.isPrivateRoom != null)
+				return false;
+		} else if (!isPrivateRoom.equals(other.isPrivateRoom))
+			return false;
+		if (openedBy == null) {
+			if (other.openedBy != null)
+				return false;
+		} else if (!openedBy.equals(other.openedBy))
+			return false;
+		if (speed == null) {
+			if (other.speed != null)
+				return false;
+		} else if (!speed.equals(other.speed))
+			return false;
+		if (white == null) {
+			if (other.white != null)
+				return false;
+		} else if (!white.equals(other.white))
+			return false;
+		return true;
 	}
 }

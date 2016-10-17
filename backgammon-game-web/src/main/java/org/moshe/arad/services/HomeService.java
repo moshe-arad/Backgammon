@@ -1,46 +1,39 @@
 package org.moshe.arad.services;
 
+import java.util.Arrays;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.HomeRepository;
+import org.moshe.arad.repositories.entities.Authority;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service("userSecurityService")
-public class UserSecurityService implements UserDetailsService{
+@Service
+public class HomeService {
 
 	@Autowired
-	private UserSecurityRepository userSecurityRepo;
+	private HomeRepository userSecurityRepo;
 	private Set<String> userNames = null;
 	private Set<String> emails = null;
-	
-	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		return userSecurityRepo.loadUserByUsername(userName);
-	}
 
-	public void registerNewUser(GameUser gameUser, String role) {
-		gameUser.setRole(role);
+	public void registerNewUser(GameUser gameUser) {
+		
+		setUserEntities(gameUser);
+		
 		userSecurityRepo.registerNewUser(gameUser);
 		
 		initVirtualRepo();
 		
-		userNames.add(gameUser.getUserName());
+		userNames.add(gameUser.getUsername());
 		emails.add(gameUser.getEmail());
 		
-		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
-				gameUser.getPassword(), gameUser.getAuthorities()); 
-		SecurityContextHolder.getContext().setAuthentication(auth);
-	}
+		authenticateUser(gameUser);
+	}	
 	
 	public boolean isUserNameAvailable(String userName){
 		initVirtualRepo();
@@ -57,6 +50,23 @@ public class UserSecurityService implements UserDetailsService{
 	private void initVirtualRepo() {
 		if(userNames == null) userNames = userSecurityRepo.getAllUserNames();
 		if(emails == null) emails = userSecurityRepo.getAllEmails();
+	}
+	
+	private void authenticateUser(GameUser gameUser) {
+		Authentication auth = new UsernamePasswordAuthenticationToken(gameUser, 
+				gameUser.getPassword(), gameUser.getAuthorities()); 
+		SecurityContextHolder.getContext().setAuthentication(auth);
+	}
+
+	private void setUserEntities(GameUser gameUser) {
+		BasicUser basicUser = gameUser.getBasicUser();
+		basicUser.setEnabled(true);
+		
+		Authority newAuth = new Authority("ROLE_WATCHER");
+		basicUser.setAuthorities(Arrays.asList(newAuth));
+		newAuth.setBasicUser(basicUser);
+		gameUser.setBasicUser(basicUser);
+		basicUser.setGameUser(gameUser);
 	}
 }
 

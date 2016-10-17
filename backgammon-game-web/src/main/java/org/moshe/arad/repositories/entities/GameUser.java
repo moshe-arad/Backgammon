@@ -1,25 +1,34 @@
 package org.moshe.arad.repositories.entities;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +36,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @SuppressWarnings("serial")
 @Entity
 @Table(name="game_users")
+@EntityListeners(AuditingEntityListener.class)
 public class GameUser implements UserDetails{
 
 	@Id
@@ -44,67 +54,89 @@ public class GameUser implements UserDetails{
 	@Pattern(regexp = "[A-Z|a-z| \\-]+")
 	private String lastName;
 	
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "user_in_game_room", 
-		joinColumns = @JoinColumn(name = "user_id"),
-		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
-	private Set<GameRoom> gameRooms = new HashSet<>(1000);
-	
 	@Email
 	@NotBlank
+	@Column
 	private String email;
 	
-	@Column(name="user_name")
-	@NotBlank
-	private String userName;
-	
-	@NotBlank
-	private String password;
-	
-	@NotBlank
-	private String role;
-	
-	@Column(name="last_updated_date")
+	@LastModifiedDate
+	@Column(name="last_modified_date")
 	@NotNull
-	private Date lastUpdatedDate;
+	private Date lastModifiedDate;
 	
-	@Column(name="last_updated_by")
+	@LastModifiedBy
+	@Column(name="last_modified_by")
 	@NotNull
-	private Long lastUpdatedBy;
+	private String lastModifiedBy;
 	
+	@CreatedDate
 	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
+	@CreatedBy
 	@Column(name="created_by", updatable=false)
 	@NotNull
-	private Long createdBy;
+	private String createdBy;
 
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "user_in_game_room", 
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "game_room_id"))
+	private List<GameRoom> gameRooms = new ArrayList<>(1000);
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "username")
+	private BasicUser basicUser;
+	
 	public GameUser() {
 	}
 	
-	public GameUser(String firstName, String lastName, String email, String userName, String password,
-			String role) {
+	public GameUser(String firstName, String lastName, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.userName = userName;
-		this.password = password;
-		this.role = role;
-		this.lastUpdatedDate = new Date();
-		this.lastUpdatedBy = 1L;
-		this.createdDate = new Date();
-		this.createdBy = 1L;
 	}
-
+	
 	@Override
 	public String toString() {
 		return "GameUser [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", userName=" + userName + ", password=" + password + ", role=" + role + ", lastUpdatedDate="
-				+ lastUpdatedDate + ", lastUpdatedBy=" + lastUpdatedBy + ", createdDate=" + createdDate + ", createdBy="
-				+ createdBy + "]";
+				+ ", lastModifiedDate=" + lastModifiedDate + ", lastModifiedBy=" + lastModifiedBy + ", createdDate="
+				+ createdDate + ", createdBy=" + createdBy + "]";
 	}
-	
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
 	public void init(){
 		this.userId = null;
 	}
@@ -141,81 +173,42 @@ public class GameUser implements UserDetails{
 		this.email = email;
 	}
 
-	public String getUserName() {
-		return userName;
+	public BasicUser getBasicUser() {
+		return basicUser;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setBasicUser(BasicUser basicUser) {
+		this.basicUser = basicUser;
+	}
+	
+	public List<GameRoom> getGameRooms() {
+		return gameRooms;
 	}
 
-	public String getPassword() {
-		return password;
+	public void setGameRooms(List<GameRoom> gameRooms) {
+		this.gameRooms = gameRooms;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public Date getLastUpdatedDate() {
-		return lastUpdatedDate;
-	}
-
-	public void setLastUpdatedDate(Date lastUpdatedDate) {
-		this.lastUpdatedDate = lastUpdatedDate;
-	}
-
-	public Long getLastUpdatedBy() {
-		return lastUpdatedBy;
-	}
-
-	public void setLastUpdatedBy(Long lastUpdatedBy) {
-		this.lastUpdatedBy = lastUpdatedBy;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-	public Long getCreatedBy() {
-		return createdBy;
-	}
-
-	public void setCreatedBy(Long createdBy) {
-		this.createdBy = createdBy;
-	}
-
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return AuthorityUtils.createAuthorityList(this.role);
+		String[] authList = this.basicUser.getAuthorities()
+				.stream()
+				.map(item -> item.getAuthority())
+				.collect(Collectors.toList())
+				.toArray(new String[this.basicUser.getAuthorities().size()]);
+		return AuthorityUtils.createAuthorityList(authList);
 	}
 
 	@Override
 	public String getUsername() {
-		return this.userName;
+		return this.basicUser.getUserName();
 	}	
-	
-	
-	public Set<GameRoom> getGameRooms() {
-		return gameRooms;
-	}
 
-	public void setGameRooms(Set<GameRoom> gameRooms) {
-		this.gameRooms = gameRooms;
+	@Override
+	public String getPassword() {
+		return this.basicUser.getPassword();
 	}
-
+	
 	/**
 	 * TODO fill logic the these 4 method of UserDetails.
 	 */
@@ -237,6 +230,16 @@ public class GameUser implements UserDetails{
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((email == null) ? 0 : email.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		return result;
 	}
 
 	@Override
@@ -263,23 +266,6 @@ public class GameUser implements UserDetails{
 				return false;
 		} else if (!lastName.equals(other.lastName))
 			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (role == null) {
-			if (other.role != null)
-				return false;
-		} else if (!role.equals(other.role))
-			return false;
-		if (userName == null) {
-			if (other.userName != null)
-				return false;
-		} else if (!userName.equals(other.userName))
-			return false;
 		return true;
 	}
-	
-	
 }

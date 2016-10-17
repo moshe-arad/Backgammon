@@ -15,7 +15,10 @@
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 	
-	<context:component-scan base-package="org.moshe.arad.repositories" />
+	<context:component-scan base-package="org.moshe.arad" />
 	<jpa:repositories base-package="org.moshe.arad.repositories.dao.data" />
 	<tx:annotation-driven/>
+	
+	<bean id="customAuditorAware" class="org.moshe.arad.general.CustomAuditorAware" />
+	<jpa:auditing auditor-aware-ref="customAuditorAware"/>
 </beans>

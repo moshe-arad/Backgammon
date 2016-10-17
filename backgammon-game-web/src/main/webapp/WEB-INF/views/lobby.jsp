@@ -56,7 +56,8 @@
 					</div>
 					
 					<spring:url value="/lobby/join" var="joinRoom"/>
-					<form id="joinForm" method="POST" action="${joinRoom}" >
+					<p id="joinFormDestUrl" class="hidden">${joinRoom}</p>
+					<form id="joinForm" method="POST" action="#" >
 						<table class="table">
 							<thead>
 								<tr>
@@ -69,8 +70,9 @@
 							</thead>
 							<tbody>	
 								<c:set var="roomsSize" value="${gameRooms.size()}" />
+								<c:out value="${roomsSize}"></c:out>
 								<c:if test="${roomsSize > 0}">
-									<c:forEach var="i" begin="0" end="">
+									<c:forEach var="i" begin="0" end="${roomsSize - 1}">
 										<tr>
 											<th scope="row"><c:out value="${i+1}"></c:out></th>
 											<td>${gameRooms.get(i).getGameRoomName()}</td>
@@ -96,14 +98,13 @@
 											</c:choose>								
 																				
 											<td class="hidden">
-												<c:out value="${tokens.get(i)}" />																							
+												<c:out value="${gameRooms.get(i).getGameRoomId()}" />																							
 											</td>												
 										</tr>
 									</c:forEach>
 								</c:if>																																		
 							</tbody>	
 						</table>
-						<input id="roomInput" class="hidden" name="token" />
 						<sec:csrfInput/>
 					</form>
 				</div>

@@ -1,18 +1,15 @@
 package org.moshe.arad.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.general.DesEncryption;
+import org.moshe.arad.repositories.HomeRepository;
 import org.moshe.arad.repositories.LobbyRepository;
-import org.moshe.arad.repositories.UserSecurityRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,21 +25,21 @@ public class LobbyService {
 	@Autowired
 	LobbyRepository lobbyRepository;
 	@Autowired
-	UserSecurityRepository userSecurityRepository;
-	@Autowired
-	DesEncryption desEncryption;
+	HomeRepository homeRepository;
 	
 	@PostConstruct
 	public void init(){
 		gameRooms.addAll(lobbyRepository.getAllGameRooms());
 	}
 	
-	public void addNewGameRoom(GameRoom gameRoom) {
+	public GameRoom addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
-		GameRoom roomInDb = lobbyRepository.createAndSaveNewGameRoom(gameRoom);
+		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
+		lobbyRepository.createNewGroupForNewRoom(roomInDb);
 		logger.info("New game room was added to DB, details: " + gameRoom);
 		gameRooms.add(roomInDb);
 		logger.info("game room was added successfully, details: " + gameRoom);
+		return roomInDb;
 	}
 	
 	public void setDefaultValues(GameRoom gameRoom){
@@ -72,20 +69,12 @@ public class LobbyService {
 		return gameRooms;
 	}
 
-	public void joinGameRoom(String token) {
-		String decryptedToken = desEncryption.decrypt(token);
-		Long roomId = lobbyRepository.getRoomIdByDecrypedToken(decryptedToken);
-		lobbyRepository.addSecondPlayer(roomId);
-	}
-
 	public boolean isHasLoggedInUser() {
-		return userSecurityRepository.isHasLoggedInUser();
+		return homeRepository.isHasLoggedInUser();
 	}
 
-	@SuppressWarnings("static-access")
-	public List<String> encryptAllGameRoomsTokens() {
-		List<String> ans = gameRooms.stream().map(room -> desEncryption.encrypt(room.getToken())).collect(Collectors.toList());
-		if(ans == null) ans = new ArrayList<>();
-		return ans;
+	public void joinGameRoom(GameRoom gameRoom) {
+		lobbyRepository.addSecondPlayer(gameRoom);
+		lobbyRepository.addAuthoritiesForSecondPlayer(gameRoom);
 	}
 }

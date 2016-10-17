@@ -54,6 +54,7 @@ function cancelSelection(){
 function joinRoom(){
 	var roomId = $("#joinForm td:last").html().trim();
 	$("#roomInput").val(roomId);
+	$("#joinForm").attr("action", $("#joinFormDestUrl").html() + "/" + roomId);
 	$("#joinForm").submit();
 }
 

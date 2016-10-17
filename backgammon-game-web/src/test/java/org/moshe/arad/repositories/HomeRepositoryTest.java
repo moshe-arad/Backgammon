@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -17,10 +18,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.moshe.arad.repositories.UserSecurityRepository;
+import org.moshe.arad.repositories.HomeRepository;
+import org.moshe.arad.repositories.dao.data.AuthorityRepository;
+import org.moshe.arad.repositories.dao.data.BasicUserRepository;
 import org.moshe.arad.repositories.dao.data.GameUserRepository;
+import org.moshe.arad.repositories.entities.Authority;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,17 +34,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({"classpath:persistence-context-test.xml",
-						"classpath:user-security-context-test.xml"})
-public class UserSecurityRepositoryTest {
+						"classpath:security-context-test.xml"})
+@WithAnonymousUser
+public class HomeRepositoryTest {
 
-private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.class);
+private final Logger logger = LogManager.getLogger(HomeRepositoryTest.class);
 	
-//	@Autowired
-//	ApplicationContext context;
 	@Autowired
-	UserSecurityRepository userSecurityRepo;
+	HomeRepository userSecurityRepo;
 	@Autowired
 	GameUserRepository gameUserRepository;
+	@Autowired
+	BasicUserRepository basicUserRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
 	
 	@Resource
 	GameUser gameUser1;
@@ -46,38 +55,41 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	GameUser gameUser2;
 	@Resource
 	GameUser gameUser3;
+	@Resource
+	BasicUser basicUser1;
+	@Resource
+	BasicUser basicUser2;
+	@Resource
+	BasicUser basicUser3;
 	
-	@Before
+	@Before	
 	public void setup(){
-		logger.info("Initializing test DB.");
- 
-		gameUser1.setUserId(null);
-		gameUser2.setUserId(null);
-		gameUser3.setUserId(null);
+		gameUserRepository.deleteAllInBatch();
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 		
-		gameUserRepository.save(gameUser1);
-		gameUserRepository.save(gameUser2);
-		gameUserRepository.save(gameUser3);
+		logger.info("Initializing test DB.");
+		
+		basicUser1.setAuthorities(null);
+		basicUser1.setGameUser(gameUser1);
+		gameUser1.setBasicUser(basicUser1);
+		
+		basicUser2.setGameUser(gameUser2);
+		gameUser2.setBasicUser(basicUser2);
+		
+		basicUser3.setGameUser(gameUser3);
+		gameUser3.setBasicUser(basicUser3);
+		
+		basicUserRepository.save(basicUser1);
+		basicUserRepository.save(basicUser2);
+		basicUserRepository.save(basicUser3);
 	}
 	
 	@After
 	public void cleanup(){
 		gameUserRepository.deleteAllInBatch();
-	}
-	
-	@Test
-	public void loadUserByUserNameTest(){
-		GameUser expected = gameUser1;
-		GameUser actual = userSecurityRepo.loadUserByUsername("userName1");
-		
-		assertEquals(expected, actual);
-	}
-	
-	@Test
-	public void loadUserByUserNameNotInDBTest(){
-		GameUser actual = userSecurityRepo.loadUserByUsername("userNotInDB");
-		
-		assertNull(actual);
+		authorityRepository.deleteAllInBatch();
+		basicUserRepository.deleteAllInBatch();
 	}
 	
 	@Test
@@ -88,7 +100,7 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 		List<GameUser> users = gameUserRepository.findAll();
 		
 		assertEquals(1, users.size());
-		assertEquals(gameUser.getUsername(), users.get(0).getUserName());
+		assertEquals(gameUser.getUsername(), users.get(0).getUsername());
 	}
 	
 	@Test
@@ -140,8 +152,6 @@ private final Logger logger = LogManager.getLogger(UserSecurityRepositoryTest.cl
 	@Test
 	@WithMockUser(username = "userName1", password = "password1")
 	public void isHasLoggedInUserTest(){
-		gameUserRepository.save(gameUser1);
-		
 		assertTrue(userSecurityRepo.isHasLoggedInUser());
 	}
 	

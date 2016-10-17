@@ -114,8 +114,8 @@ function timeOutCheckConfirmPassword(){
 }
 
 function checkConfirmPasswordMatch(){
-	var originalPassword = $("form input[name='password']")[0];
-	var confirmPassword = $("form[action$='register'] div:last input")[0];
+	var originalPassword = $("form input[name='basicUser.password']");
+	var confirmPassword = $("confirmPassword");
 	
 	if(originalPassword.value != confirmPassword.value) {		
 		showElement($("#invalidConfirmPassword"));
@@ -136,7 +136,7 @@ function timeOutCheckPassword(){
 }
 
 function checkPasswordValidation(){
-	var originalPassword = $("form input[name='password']")[0];
+	var originalPassword = $("form input[name='basicUser.password']")[0];
 	
 	var msg = isValidPassword(originalPassword.value);
 	if(msg == "valid"){
@@ -283,8 +283,9 @@ function submitRegister(e){
 				checkConfirmPasswordMatch() && 
 				checkPasswordValidation() &&
 				userNameAjaxAnswer &&
-				emailAjaxAnswer) 
+				emailAjaxAnswer){
 			$("#registerForm").submit();
+		} 
 	}, 3000);
 }
 

@@ -16,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,11 +38,6 @@ public class LobbyController {
 	@ModelAttribute("gameRooms")
 	public List<GameRoom> getGameRooms(){
 		return lobbyService.getAllGameRooms();
-	}
-	
-	@ModelAttribute("tokens")
-	public List<String> getTokens(){
-		return lobbyService.encryptAllGameRoomsTokens();
 	}
 	
 	@ModelAttribute("speedOptions")
@@ -84,16 +80,16 @@ public class LobbyController {
 		return "backgammon";
 	}
 	
-	@RequestMapping(value = "/join")
-	public String joinGameRoom(@RequestParam String token){
+	@RequestMapping(value = "/join/{gameRoomId}")
+	public String joinGameRoom(@PathVariable("gameRoomId") GameRoom gameRoom){
 		try{
-			logger.info("adding current logged user to game room with token of: " + token);
-			lobbyService.joinGameRoom(token);
+			logger.info("adding current logged user to game room with details of: " +gameRoom);
+			lobbyService.joinGameRoom(gameRoom);
 			logger.info("routing for backgammon board page");
 			return "backgammon";
 		}
 		catch (Exception e) {
-			logger.error("Error occured while trying to add current logged user to game room with token of: " + token);
+			logger.error("Error occured while trying to add current logged user to game room with deatils of: " + gameRoom);
 			return "lobby";
 		}
 	}

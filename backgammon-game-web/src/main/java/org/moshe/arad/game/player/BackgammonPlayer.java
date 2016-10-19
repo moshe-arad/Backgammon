@@ -10,8 +10,6 @@ import org.moshe.arad.game.turn.Turn;
 
 public class BackgammonPlayer extends ClassicGamePlayer {
 
-	@SuppressWarnings("unused")
-	private String id;
 	private String firstName;
 	private String lastName;
 	@SuppressWarnings("unused")
@@ -20,9 +18,8 @@ public class BackgammonPlayer extends ClassicGamePlayer {
 	private boolean isWhite;
 
 	
-	public BackgammonPlayer(String id, String firstName, String lastName, int age, BackgammonTurn turn,
+	public BackgammonPlayer(String firstName, String lastName, int age, BackgammonTurn turn,
 			boolean isWhite) {
-		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;

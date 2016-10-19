@@ -16,15 +16,18 @@ public abstract class ClassicBoardGame extends BasicGame {
 	private final Logger logger = LogManager.getLogger("org.moshe.arad");
 	@Autowired
 	protected Board board;
-	@Resource
-	private Player firstPlayer;
-	@Resource
-	private Player secondPlayer;
 	@Autowired
 	private TurnOrderable turnOrderManager;
 	
 	private boolean isPlaying = true;
-
+	private Player firstPlayer;
+	private Player secondPlayer;
+//	@Resource
+//	private Player firstPlayer;
+//	@Resource
+//	private Player secondPlayer;
+	
+	
 	@Override
 	public void initGame() {
 		logger.info("Initializing board...");
@@ -79,4 +82,18 @@ public abstract class ClassicBoardGame extends BasicGame {
 	public Player getSecondPlayer() {
 		return secondPlayer;
 	}
+
+	public void setFirstPlayer(Player firstPlayer) {
+		this.firstPlayer = firstPlayer;
+	}
+
+	public void setSecondPlayer(Player secondPlayer) {
+		this.secondPlayer = secondPlayer;
+	}
+
+	public TurnOrderable getTurnOrderManager() {
+		return turnOrderManager;
+	}
+	
+	
 }

@@ -2,6 +2,8 @@ package org.moshe.arad.repositories;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,12 +49,15 @@ public class LobbyRepository {
 		securityRepository.saveAuthoritiesForGroup(gameRoom.getGroup(), authList);
 	}
 	
-	public List<GameRoom> getAllGameRooms(){
-		return gameRoomRepository.findAll();
+	public Map<Long, GameRoom> getAllGameRooms(){
+		List<GameRoom> gameRooms = gameRoomRepository.findAll();
+		Map<Long, GameRoom> roomsMap = new ConcurrentHashMap<>(1000, 0.75F, 1000);		
+		gameRooms.stream().forEach(room -> roomsMap.put(room.getGameRoomId(), room));
+		return roomsMap;
 	}
 	
 	public void addSecondPlayer(GameRoom gameRoom){
-		Long userId = ((GameUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUserId();
+		Long userId =  securityRepository.getLoggedInGameUser().getUserId();
 		gameRoom.setBlack(userId);
 		gameRoomRepository.save(gameRoom);
 	}
@@ -72,6 +77,10 @@ public class LobbyRepository {
 		securityRepository.saveNewAuthorityOnBasicUser(basicUserLoggedIn, auth);
 		securityRepository.saveUserAsGroupMember(basicUserLoggedIn, Arrays.asList(gameRoom.getGroup()));		
 		securityRepository.saveAuthoritiesForGroup(gameRoom.getGroup(), Arrays.asList(auth));
+	}
+
+	public GameRoom getGameRoom(GameRoom gameRoom) {
+		return securityRepository.getGameRoomById(gameRoom.getGameRoomId());
 	}
 }
 

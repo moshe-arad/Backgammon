@@ -1,7 +1,9 @@
 package org.moshe.arad.repositories.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -63,6 +65,7 @@ public class GameRoom {
 	private Integer speed;
 	
 	@Transient
+	@Autowired
 	private BasicGame game;
 	
 	@LastModifiedDate
@@ -86,7 +89,7 @@ public class GameRoom {
 	private String createdBy;
 
 	@ManyToMany(mappedBy = "gameRooms")
-	private Set<GameUser> users = new HashSet<>(1000);
+	private List<GameUser> users = new ArrayList<>(1000);
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "group_id")
@@ -99,7 +102,7 @@ public class GameRoom {
 			Long white, Long black, Integer speed) {
 		this.gameRoomName = gameRoomName;
 		this.isPrivateRoom = isPrivateRoom;
-		this.users  = new HashSet<>(1000);
+		this.users  = new ArrayList<>(1000);
 		this.openedBy = openedBy;
 		this.white = white;
 		this.black = black;
@@ -138,11 +141,11 @@ public class GameRoom {
 		this.isPrivateRoom = isPrivateRoom;
 	}
 
-	public Set<GameUser> getUsers() {
+	public List<GameUser> getUsers() {
 		return users;
 	}
 
-	public void setUsers(Set<GameUser> users) {
+	public void setUsers(List<GameUser> users) {
 		this.users = users;
 	}
 

@@ -8,6 +8,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<sec:csrfMetaTags />
 		<title>Arad's Backgammon Game</title>
 		<link rel="stylesheet" href='<spring:url value="/resources/bootstrap/bootstrap.min.css"/>' type="text/css" />
 		<link rel="stylesheet" href='<spring:url value="/resources/css/home.css"/>' type="text/css" />
@@ -15,6 +16,7 @@
 		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
 		<script src="<spring:url value="/resources/js/logout.js" />"></script>
+		<script src="<spring:url value="/resources/js/backgammon.js" />"></script>
 	</head>
 	<body>
 		<jsp:include page="header.jsp"></jsp:include>
@@ -257,5 +259,27 @@
 				</table>
 			</div>	
 		</div>
+		
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-5"></div>
+				<div class="col-lg-2">
+					<button id="identifyBtn" type="button" class="btn btn-primary">Identify me!</button>
+					<br/>
+					<button id="userMoveBtn" type="button" class="btn btn-primary">Test User Move</button>
+					<br/>
+					<button id="registerBtn" type="button" class="btn btn-primary">Register for messages</button>
+				</div>
+				<div class="col-lg-5"></div>					
+			</div>
+		</div>
+		
+		
+		
+		
+		
+		
+		
 	</body>
 </html>

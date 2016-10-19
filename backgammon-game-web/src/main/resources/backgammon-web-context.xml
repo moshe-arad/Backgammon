@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
+
+	<bean class="org.moshe.arad.game.classic_board.backgammon.Backgammon" />
+	
+	<bean class="org.moshe.arad.game.instrument.BackgammonBoard" />
+	
+	<!-- 
+	<bean id="firstPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
+		<constructor-arg name="id" value="021787221" />
+		<constructor-arg name="firstName" value="Moshe" />
+		<constructor-arg name="lastName" value="Arad" />
+		<constructor-arg name="age" value="33" />
+		<constructor-arg name="turn" ref="turn" />
+		<constructor-arg name="isWhite" value="true" />
+	</bean>
+
+	<bean id="secondPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
+		<qualifier value="secondPlayer" />
+		<constructor-arg name="id" value="023456223" />
+		<constructor-arg name="firstName" value="James" />
+		<constructor-arg name="lastName" value="Brown" />
+		<constructor-arg name="age" value="72" />
+		<constructor-arg name="turn" ><null /></constructor-arg>
+		<constructor-arg name="isWhite" value="false" />
+	</bean>
+	
+	 -->
+	 
+	<util:list id="order" list-class="java.util.LinkedList">
+		<ref bean="firstPlayer"/>
+		<ref bean="secondPlayer"/>
+	</util:list>
+	
+	<bean class="org.moshe.arad.game.turn.ClassicGameTurnOrderManager" />
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" />
+	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
+</beans>

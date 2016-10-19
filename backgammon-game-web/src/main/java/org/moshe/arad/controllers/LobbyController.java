@@ -2,6 +2,7 @@ package org.moshe.arad.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import org.moshe.arad.repositories.validators.GameRoomValidator;
 import org.moshe.arad.services.LobbyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -77,7 +79,7 @@ public class LobbyController {
 		}
 		
 		lobbyService.addNewGameRoom(gameRoom);
-		return "backgammon";
+		return "redirect:/backgammon";
 	}
 	
 	@RequestMapping(value = "/join/{gameRoomId}")
@@ -88,7 +90,9 @@ public class LobbyController {
 			logger.info("routing for backgammon board page");
 			return "backgammon";
 		}
-		catch (Exception e) {
+		catch (Exception ex) {
+			logger.error(ex.getMessage());
+			logger.error(ex);
 			logger.error("Error occured while trying to add current logged user to game room with deatils of: " + gameRoom);
 			return "lobby";
 		}

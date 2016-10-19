@@ -125,6 +125,10 @@ public class SecurityRepository {
 		return groupAuthoritiesRepository.findByGroup(group);
 	}
 	
+	public GameRoom getGameRoomById(Long gameRoomId){
+		return gameRoomRepository.findOne(gameRoomId);
+	}
+	
 	/*** insert - update, operations ***/
 	
 	public GameUser saveNewUser(GameUser gameUser, BasicUser basicUser){

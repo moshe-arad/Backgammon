@@ -24,6 +24,10 @@ import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 import org.moshe.arad.game.BasicGame;
+import org.moshe.arad.game.classic_board.backgammon.Backgammon;
+import org.moshe.arad.game.player.BackgammonPlayer;
+import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.BackgammonTurn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -66,7 +70,7 @@ public class GameRoom {
 	
 	@Transient
 	@Autowired
-	private BasicGame game;
+	private Backgammon game;
 	
 	@LastModifiedDate
 	@Column(name="last_modified_date")
@@ -109,6 +113,21 @@ public class GameRoom {
 		this.speed = speed;
 	}
 
+	public void initAndStartGame(GameUser white, GameUser black){
+		Player playerWhite = new BackgammonPlayer(white.getFirstName(),
+				white.getLastName(), 100, ((BackgammonTurn)this.game.getTurnOrderManager()).getInstance(), 
+				true);
+		
+		Player playerBlack = new BackgammonPlayer(black.getFirstName(),
+				black.getLastName(), 100, ((BackgammonTurn)this.game.getTurnOrderManager()).getInstance(), 
+				false);
+		
+		game.setFirstPlayer(playerWhite);
+		game.setSecondPlayer(playerBlack);
+		
+		game.start();
+	}
+	
 	public Group getGroup() {
 		return group;
 	}
@@ -181,11 +200,11 @@ public class GameRoom {
 		this.speed = speed;
 	}
 
-	public BasicGame getGame() {
+	public Backgammon getGame() {
 		return game;
 	}
 
-	public void setGame(BasicGame game) {
+	public void setGame(Backgammon game) {
 		this.game = game;
 	}
 	

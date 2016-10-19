@@ -15,11 +15,12 @@
 		<link rel="stylesheet" href='<spring:url value="/resources/css/backgammon.css"/>' type="text/css" />
 		<script src="<spring:url value="/resources/bootstrap/jquery-3.1.0.min.js" />"></script>
 		<script src="<spring:url value="/resources/bootstrap/bootstrap.min.js" />" /></script>
-		<script src="<spring:url value="/resources/js/logout.js" />"></script>
-		<script src="<spring:url value="/resources/js/backgammon.js" />"></script>
+		<script src="<spring:url value="/resources/js/logout.js" />"></script>		
 	</head>
 	<body>
 		<jsp:include page="header.jsp"></jsp:include>
+		<p id="gameRoomId" class="hidden"><c:out value="${gameRoomId}" /></p>
+		<p id="remoteServer" class="hidden"><spring:url value="/backgammon"></spring:url></p>
 		
 		<div class="container">
 			<div class="row">
@@ -280,6 +281,6 @@
 		
 		
 		
-		
+	<script src="<spring:url value="/resources/js/backgammon.js" />"></script>	
 	</body>
 </html>

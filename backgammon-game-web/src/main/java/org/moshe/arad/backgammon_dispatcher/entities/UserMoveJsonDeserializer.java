@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon_dispatcher;
+package org.moshe.arad.backgammon_dispatcher.entities;
 
 import java.io.IOException;
 import java.util.Iterator;

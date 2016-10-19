@@ -3,6 +3,7 @@ package org.moshe.arad.backgammon_dispatcher;
 import java.util.Comparator;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
 import org.moshe.arad.game.move.Move;
 
 public class UserMoveQueue {

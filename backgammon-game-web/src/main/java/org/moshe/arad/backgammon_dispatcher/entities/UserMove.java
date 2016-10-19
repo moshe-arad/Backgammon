@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon_dispatcher;
+package org.moshe.arad.backgammon_dispatcher.entities;
 
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.repositories.entities.BasicUser;

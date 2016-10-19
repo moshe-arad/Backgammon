@@ -14,4 +14,10 @@ public interface GameRoomRepository extends JpaRepository<GameRoom, Long> {
 	public Group findGroupByGameRoomId(@Param("gameRoomId") Long gameRoomId);
 	
 	public GameRoom findByGroup(Group group);
+	
+	@Query("select g.white from GameRoom g where g.gameRoomId = :gameRoomId")
+	public Long selectWhiteFromGameRoom(@Param("gameRoomId") Long gameRoomId);
+	
+	@Query("select g.black from GameRoom g where g.gameRoomId = :gameRoomId")
+	public Long selectBlackFromGameRoom(@Param("gameRoomId") Long gameRoomId);
 }

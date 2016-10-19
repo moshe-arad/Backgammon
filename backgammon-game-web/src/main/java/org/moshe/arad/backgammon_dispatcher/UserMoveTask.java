@@ -2,6 +2,7 @@ package org.moshe.arad.backgammon_dispatcher;
 
 import java.util.concurrent.Callable;
 
+import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
 import org.moshe.arad.game.move.Move;
 
 public class UserMoveTask implements Callable<UserMove>{

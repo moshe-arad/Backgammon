@@ -93,7 +93,5 @@ public abstract class ClassicBoardGame extends BasicGame {
 
 	public TurnOrderable getTurnOrderManager() {
 		return turnOrderManager;
-	}
-	
-	
+	}	
 }

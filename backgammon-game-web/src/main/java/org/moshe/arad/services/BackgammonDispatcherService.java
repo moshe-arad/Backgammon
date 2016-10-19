@@ -9,10 +9,10 @@ import java.util.concurrent.TimeoutException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.UserMove;
 import org.moshe.arad.backgammon_dispatcher.UserMoveQueue;
 import org.moshe.arad.backgammon_dispatcher.UserMoveQueuesManager;
 import org.moshe.arad.backgammon_dispatcher.UserMoveTask;
+import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.repositories.SecurityRepository;
 import org.moshe.arad.repositories.entities.BasicUser;

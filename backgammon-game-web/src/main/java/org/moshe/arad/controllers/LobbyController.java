@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/lobby")
@@ -65,7 +66,8 @@ public class LobbyController {
 	}
 	
 	@RequestMapping(value="/open")
-	public String openNewGameRoom(@ModelAttribute @Valid GameRoom gameRoom, Errors errors){
+	public String openNewGameRoom(@ModelAttribute @Valid GameRoom gameRoom, 
+			Errors errors, RedirectAttributes attributes){
 		logger.info("Try to open a new game room.");
 		logger.info("The game room bind result is: " + gameRoom);
 		
@@ -78,17 +80,20 @@ public class LobbyController {
 			}
 		}
 		
-		lobbyService.addNewGameRoom(gameRoom);
-		return "redirect:/backgammon";
+		gameRoom = lobbyService.addNewGameRoom(gameRoom);
+		attributes.addAttribute("gameRoomId", gameRoom.getGameRoomId());
+		return "redirect:/backgammon/";
 	}
 	
 	@RequestMapping(value = "/join/{gameRoomId}")
-	public String joinGameRoom(@PathVariable("gameRoomId") GameRoom gameRoom){
+	public String joinGameRoom(@PathVariable("gameRoomId") GameRoom gameRoom, 
+			RedirectAttributes attributes){
 		try{
 			logger.info("adding current logged user to game room with details of: " +gameRoom);
-			lobbyService.joinGameRoom(gameRoom);
+			gameRoom = lobbyService.joinGameRoom(gameRoom);
 			logger.info("routing for backgammon board page");
-			return "backgammon";
+			attributes.addAttribute("gameRoomId", gameRoom.getGameRoomId());
+			return "redirect:/backgammon/";
 		}
 		catch (Exception ex) {
 			logger.error(ex.getMessage());

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
+import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.repositories.entities.BasicUser;
 import org.springframework.stereotype.Component;

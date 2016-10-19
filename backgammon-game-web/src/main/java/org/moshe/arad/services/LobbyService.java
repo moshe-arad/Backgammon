@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.components.GameRooms;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
@@ -26,8 +27,9 @@ import org.springframework.stereotype.Service;
 public class LobbyService {
 
 	private final Logger logger = LogManager.getLogger(LobbyService.class);
-	
-	private Map<Long, GameRoom> gameRooms = new ConcurrentHashMap<>(1000, 0.75F, 1000);
+	@Autowired
+	private GameRooms gameRooms;
+//	private Map<Long, GameRoom> gameRooms = new ConcurrentHashMap<>(1000, 0.75F, 1000);
 	private static AtomicLong roomlabel = new AtomicLong(1);
 	
 	@Autowired
@@ -37,17 +39,13 @@ public class LobbyService {
 	@Autowired
 	private SecurityRepository securityRepository;
 	
-	@PostConstruct
-	public void init(){
-		gameRooms.putAll(lobbyRepository.getAllGameRooms());
-	}
-	
 	public GameRoom addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
 		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		lobbyRepository.createNewGroupForNewRoom(roomInDb);
 		logger.info("New game room was added to DB, details: " + gameRoom);
-		gameRooms.put(roomInDb.getGameRoomId(), roomInDb);
+//		gameRooms.put(roomInDb.getGameRoomId(), roomInDb);
+		gameRooms.addGameRoom(roomInDb);
 		logger.info("game room was added successfully, details: " + gameRoom);
 		return roomInDb;
 	}
@@ -61,41 +59,32 @@ public class LobbyService {
 	}
 
 	public List<GameRoom> getAllGameRooms() {
-		return gameRooms.values().stream().collect(Collectors.toList());
+//		return gameRooms.values().stream().collect(Collectors.toList());
+		return gameRooms.getAllGameRooms();
 	}
 
 	public boolean isHasLoggedInUser() {
 		return homeRepository.isHasLoggedInUser();
 	}
 
-	public void joinGameRoom(GameRoom gameRoom) {
+	public GameRoom joinGameRoom(GameRoom gameRoom) {
 		lobbyRepository.addSecondPlayer(gameRoom);
 		lobbyRepository.addAuthoritiesForSecondPlayer(gameRoom);
 		reloadGameRoom(gameRoom);
+		return gameRooms.getGameRoomById(gameRoom);
 	}
 	
 	private void reloadGameRoom(GameRoom gameRoom){
-		gameRoom = lobbyRepository.getGameRoom(gameRoom);
-		gameRooms.replace(gameRoom.getGameRoomId(), gameRoom);
+//		gameRoom = lobbyRepository.getGameRoom(gameRoom);
+//		gameRooms.replace(gameRoom.getGameRoomId(), gameRoom);
+		gameRooms.reloadGameRoom(gameRoom);
 	}
 	
-	private void beginGameInRoom(GameRoom gameRoom){
-		gameRoom = gameRooms.get(gameRoom.getGameRoomId());
-		
-		GameUser white =  securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
-		Player playerWhite = new BackgammonPlayer(white.getFirstName(),
-				white.getLastName(), 100, BackgammonTurn.getInstance(), 
-				true);
-		
-
-		GameUser black =  securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
-		Player playerBlack = new BackgammonPlayer(black.getFirstName(),
-				black.getLastName(), 100, BackgammonTurn.getInstance(), 
-				false);
-		
-		((Backgammon)gameRoom.getGame()).setFirstPlayer(playerWhite);
-		((Backgammon)gameRoom.getGame()).setSecondPlayer(playerBlack);
-		Backgammon backgammonGame = (Backgammon) gameRoom.getGame();
-		backgammonGame.start();
+	private void beginGameInRoom(GameRoom gameRoom){		
+//		gameRoom = gameRooms.get(gameRoom.getGameRoomId());
+		gameRoom = gameRooms.getGameRoomById(gameRoom);
+		GameUser white  =securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
+		GameUser black  =securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
+		gameRoom.initAndStartGame(white, black);
 	}
 }

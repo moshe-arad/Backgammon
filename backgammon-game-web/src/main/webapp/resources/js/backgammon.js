@@ -1,3 +1,7 @@
+var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+var csrfToken = $("meta[name='_csrf']").attr("content");
+
 $(document).ready(function(){
 	$(loadDomEvents);
 });
@@ -6,6 +10,7 @@ $(document).ready(function(){
 function loadDomEvents(){
 	checkUntilReady();
 }
+
 var gameRoomId = $("#gameRoomId").html();
 var remoteServer = $("#remoteServer").html();
 
@@ -24,13 +29,60 @@ function checkIsReadyToPlay(){
 function checkIsReadyToPlayCallback(isReady){
 	isReadyToPlay = Boolean(isReady);
 	console.log("Game Room is "+ isReadyToPlay +" ready to play with");
-	if(isReadyToPlay) clearInterval(stopCheckIsReady);
+	if(isReadyToPlay) {
+		clearInterval(stopCheckIsReady);
+		console.log("register to server");
+		registerToBackgammonDispatcher();
+	}
 }
 
 var stopCheckIsReady;
 
 function checkUntilReady(){
 	if(gameRoomId) stopCheckIsReady = setInterval(checkIsReadyToPlay, 1000);
+}
+
+/*****************************************/
+
+var headers = {};
+headers[csrfHeader] = csrfToken;
+
+function registerToBackgammonDispatcher(){
+	$.ajax({
+		url:"http://localhost:8080/backgammon-game-web/backgammon_dispatcher/register",
+		contentType: "application/json",
+		dataType: "json",
+		data: JSON.stringify({}),
+		type: "POST",
+		success: msgFromServer,
+		timeout: 60000,
+		error: registerFailure,
+		headers: headers
+	});
+	return false;
+}
+
+var failAttemptsToRegister = 0;
+
+function msgFromServer(obj){
+	failAttemptsToRegister = 0;
+	handleMoveFromServer(obj);
+	registerToBackgammonDispatcher();
+}
+
+function registerFailure(){
+	failAttemptsToRegister++;
+	if(failAttemptsToRegister < 3) registerToBackgammonDispatcher();
+}
+
+function handleMoveFromServer(obj){
+	var from = obj.from.index; 
+	var to = obj.to.index;
+	
+	if(from == -2 && to == -2){
+		$("#txtFromServer").removeClass("hidden");
+		$("#txtFromServer").append("White player it's your turn to play.");
+	}
 }
 //function loadDomEvents(){
 //	$("#identifyBtn").click(identifyMeFunc);

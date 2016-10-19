@@ -82,6 +82,7 @@ public class LobbyController {
 		
 		gameRoom = lobbyService.addNewGameRoom(gameRoom);
 		attributes.addAttribute("gameRoomId", gameRoom.getGameRoomId());
+		attributes.addAttribute("player", "white");
 		return "redirect:/backgammon/";
 	}
 	
@@ -93,6 +94,7 @@ public class LobbyController {
 			gameRoom = lobbyService.joinGameRoom(gameRoom);
 			logger.info("routing for backgammon board page");
 			attributes.addAttribute("gameRoomId", gameRoom.getGameRoomId());
+			attributes.addAttribute("player", "black");
 			return "redirect:/backgammon/";
 		}
 		catch (Exception ex) {

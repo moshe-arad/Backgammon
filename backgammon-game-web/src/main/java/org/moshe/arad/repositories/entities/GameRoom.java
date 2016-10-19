@@ -125,7 +125,7 @@ public class GameRoom {
 		game.setFirstPlayer(playerWhite);
 		game.setSecondPlayer(playerBlack);
 		
-		game.start();
+//		game.start();
 	}
 	
 	public Group getGroup() {

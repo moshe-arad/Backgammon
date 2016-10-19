@@ -31,255 +31,27 @@
 		</div>
 		
 		<div class="container">
-			<div class="row">	
-				<table class="table">
-
-					<tr class="board-edge-black"><td colspan="15">test</td></tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr>
-						<td class="board-edge-brown">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						
-						<td class="board-edge-brown">e</td>
-						
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="text-center">e</td>
-						<td class="board-edge-brown">e</td>
-					</tr>
-				
-					<tr class="board-edge-black"><td colspan="15">test</td></tr>
-				</table>
-			</div>	
-		</div>
-		
-		
-		<div class="container">
 			<div class="row">
 				<div class="col-lg-5"></div>
 				<div class="col-lg-2">
-					<button id="identifyBtn" type="button" class="btn btn-primary">Identify me!</button>
-					<br/>
-					<button id="userMoveBtn" type="button" class="btn btn-primary">Test User Move</button>
-					<br/>
-					<button id="registerBtn" type="button" class="btn btn-primary">Register for messages</button>
+					<p id="txtFromServer" class="bg-primary hidden"></p>
 				</div>
 				<div class="col-lg-5"></div>					
 			</div>
 		</div>
 		
-		
-		
-		
-		
+		<div class="container">
+			<div class="row">			
+				<c:choose>
+					<c:when test='${player == "white"}'>
+						<jsp:include page="white_board.jsp"></jsp:include>											
+					</c:when>
+					<c:otherwise>
+						<jsp:include page="black_board.jsp"></jsp:include>
+					</c:otherwise>
+				</c:choose>	
+			</div>	
+		</div>	
 		
 	<script src="<spring:url value="/resources/js/backgammon.js" />"></script>	
 	</body>

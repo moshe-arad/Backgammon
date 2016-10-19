@@ -4,6 +4,9 @@ import javax.annotation.PostConstruct;
 
 import org.moshe.arad.backgammon_dispatcher.UserMoveQueuesManager;
 import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
+import org.moshe.arad.game.move.BackgammonBoardLocation;
+import org.moshe.arad.game.move.Move;
+import org.moshe.arad.repositories.entities.BasicUser;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.services.BackgammonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class BackgammonController {
 
 	@Autowired
-	private UserMoveQueuesManager userMoveQueues;
-	@Autowired
 	private BackgammonService backgammonService;
 	
-	@RequestMapping(value = "/", params = {"gameRoomId"})
-	public String goGame(Model model, @RequestParam("gameRoomId") Long gameRoomId){
+	@RequestMapping(value = "/", params = {"gameRoomId", "player"})
+	public String goGame(Model model, @RequestParam("gameRoomId") Long gameRoomId,
+			@RequestParam("player") String player){
 		model.addAttribute("gameRoomId", gameRoomId);
+		model.addAttribute("player", player);
 		return "backgammon";
 	}
 	
@@ -54,7 +57,11 @@ public class BackgammonController {
 	@RequestMapping(value = "/init/{gameRoomId}")
 	@ResponseBody
 	public Boolean isReadyToPlay(@PathVariable("gameRoomId") GameRoom gameRoom){
-		Boolean isReady = backgammonService.isBothPlayersOnRoom(gameRoom); 		
+		Boolean isReady = backgammonService.isBothPlayersOnRoom(gameRoom); 
+		if(isReady) {
+			backgammonService.startGame(gameRoom);
+			backgammonService.notifyWhiteSendMove(gameRoom);
+		}
 		return isReady;
 	}
 }

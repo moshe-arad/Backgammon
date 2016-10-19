@@ -79,12 +79,4 @@ public class LobbyService {
 //		gameRooms.replace(gameRoom.getGameRoomId(), gameRoom);
 		gameRooms.reloadGameRoom(gameRoom);
 	}
-	
-	private void beginGameInRoom(GameRoom gameRoom){		
-//		gameRoom = gameRooms.get(gameRoom.getGameRoomId());
-		gameRoom = gameRooms.getGameRoomById(gameRoom);
-		GameUser white  =securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
-		GameUser black  =securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
-		gameRoom.initAndStartGame(white, black);
-	}
 }

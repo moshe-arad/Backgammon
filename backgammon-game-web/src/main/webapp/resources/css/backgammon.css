@@ -11,3 +11,7 @@
 td{
 	border-width: 0px !important;
 }
+
+.empty-cell{
+	color: white;
+}

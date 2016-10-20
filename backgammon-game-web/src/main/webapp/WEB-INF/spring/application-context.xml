@@ -9,4 +9,5 @@
 	<context:component-scan base-package="org.moshe.arad" />
 	<import resource="classpath:persistence-context.xml"/>
 	<import resource="classpath:spring-data-context.xml"/>
+	<import resource="classpath:backgammon-web-context.xml"/>
 </beans>

@@ -15,16 +15,20 @@ public class BackgammonTurn implements Turn {
 	@Resource
 	private BackgammonDice secondDice;
 	
-	private BackgammonTurn(){
-		
-	}
 	
-	public static BackgammonTurn getInstance(){
+	
+	public BackgammonTurn(BackgammonDice firstDice, BackgammonDice secondDice) {
+		this.firstDice = firstDice;
+		this.secondDice = secondDice;
+	}
+
+	public static BackgammonTurn getInstance(BackgammonDice first,
+			BackgammonDice second){
 		
 		if(instance == null){
 			synchronized (BackgammonTurn.class) {
 				if(instance == null){
-					instance = new BackgammonTurn();
+					instance = new BackgammonTurn(first, second);
 				}
 			}
 		}

@@ -6,15 +6,22 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
+import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
+import org.moshe.arad.game.turn.TurnOrderable;
 
 public class Backgammon extends ClassicBoardGame {
 
+	public Backgammon(Board board, TurnOrderable turnOrderManager) {
+		super(board, turnOrderManager);
+	}
+
 	private final Logger logger = LogManager.getLogger("org.moshe.arad");
+	private Object locker = new Object();
 	
 	@Override
 	public void playGameTurn(Player player) {
@@ -25,14 +32,27 @@ public class Backgammon extends ClassicBoardGame {
 		String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName() + ": ";
 		
 		logger.info(name + "it's your turn. roll the dices.");
-		player.rollDices();
-		logger.info(name + "you rolled - " + first.getValue() + ": " + second.getValue());
+		
+		synchronized (locker) {
+			try {
+				locker.wait();
+				player.rollDices();
+				logger.info(name + "you rolled - " + first.getValue() + ": " + second.getValue());
+			} catch (InterruptedException e) {
+				logger.error(e.getMessage());
+				logger.error(e);
+			}
+		}
 		
 		try {
 			while(isCanKeepPlay(player)){
 				logger.info("The board as follows:");
 				logger.info(board);
-				Move move = enterNextMove(player, reader);
+				Move move = null;
+				synchronized (locker) {
+					locker.wait(30000);
+					move = enterNextMove(player, reader);
+				}
 				if(board.isValidMove(player, move)){
 					board.executeMove(player, move);
 					player.makePlayed(move);
@@ -89,5 +109,9 @@ public class Backgammon extends ClassicBoardGame {
 			String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName();
 			logger.warn(name + ": you made invalid move. try again.");
 		}
+	}
+
+	public Object getLocker() {
+		return locker;
 	}
 }

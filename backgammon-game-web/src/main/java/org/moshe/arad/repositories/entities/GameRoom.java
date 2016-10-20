@@ -3,6 +3,7 @@ package org.moshe.arad.repositories.entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -26,14 +27,17 @@ import org.hibernate.validator.constraints.Range;
 import org.moshe.arad.game.BasicGame;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.player.BackgammonPlayer;
+import org.moshe.arad.game.player.ClassicGamePlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.BackgammonTurn;
+import org.moshe.arad.game.turn.ClassicGameTurnOrderManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.stereotype.Component;
 
 @Entity
 @Table(name ="game_rooms")
@@ -69,9 +73,11 @@ public class GameRoom {
 	private Integer speed;
 	
 	@Transient
-	@Autowired
 	private Backgammon game;
 	
+	@Transient
+	private Boolean isGameRoomReady;
+
 	@LastModifiedDate
 	@Column(name="last_modified_date")
 	@NotNull
@@ -100,6 +106,7 @@ public class GameRoom {
 	private Group group;
 	
 	public GameRoom() {
+		this.isGameRoomReady = false;
 	}
 	
 	public GameRoom(String gameRoomName, Boolean isPrivateRoom, Long openedBy,
@@ -111,21 +118,27 @@ public class GameRoom {
 		this.white = white;
 		this.black = black;
 		this.speed = speed;
+		this.isGameRoomReady = false;
 	}
 
-	public void initAndStartGame(GameUser white, GameUser black){
+	public void initGame(GameUser white, GameUser black, BackgammonTurn turn){
+		
 		Player playerWhite = new BackgammonPlayer(white.getFirstName(),
-				white.getLastName(), 100, ((BackgammonTurn)this.game.getTurnOrderManager()).getInstance(), 
+				white.getLastName(), 100, turn, 
 				true);
 		
 		Player playerBlack = new BackgammonPlayer(black.getFirstName(),
-				black.getLastName(), 100, ((BackgammonTurn)this.game.getTurnOrderManager()).getInstance(), 
+				black.getLastName(), 100, turn, 
 				false);
 		
-		game.setFirstPlayer(playerWhite);
-		game.setSecondPlayer(playerBlack);
+		LinkedList<ClassicGamePlayer> backgammonPlayers = new LinkedList<>();
+		backgammonPlayers.add((BackgammonPlayer) playerWhite);
+		backgammonPlayers.add((BackgammonPlayer) playerBlack);
+				
+		((ClassicGameTurnOrderManager)game.getTurnOrderManager()).setOrder(backgammonPlayers);
 		
-//		game.start();
+		game.setFirstPlayer(playerWhite);
+		game.setSecondPlayer(playerBlack);		
 	}
 	
 	public Group getGroup() {
@@ -240,6 +253,14 @@ public class GameRoom {
 		this.createdBy = createdBy;
 	}
 
+	public Boolean getIsGameRoomReady() {
+		return isGameRoomReady;
+	}
+
+	public void setIsGameRoomReady(Boolean isGameRoomReady) {
+		this.isGameRoomReady = isGameRoomReady;
+	}
+	
 	@Override
 	public String toString() {
 		return "GameRoom [gameRoomId=" + gameRoomId + ", gameRoomName=" + gameRoomName + ", isPrivateRoom="

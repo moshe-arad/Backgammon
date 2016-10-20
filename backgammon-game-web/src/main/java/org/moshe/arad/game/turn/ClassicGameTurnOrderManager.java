@@ -9,7 +9,6 @@ import org.moshe.arad.game.player.Player;
 
 public class ClassicGameTurnOrderManager implements TurnOrderable {
 
-	@Resource
 	private LinkedList<ClassicGamePlayer> order;
 	
 	@Override
@@ -32,5 +31,13 @@ public class ClassicGameTurnOrderManager implements TurnOrderable {
 	@Override
 	public Player howIsNextInTurn() {
 		return (order.peek().getTurn() != null) ? order.peekLast() : null;
+	}
+
+	public LinkedList<ClassicGamePlayer> getOrder() {
+		return order;
+	}
+
+	public void setOrder(LinkedList<ClassicGamePlayer> order) {
+		this.order = order;
 	}
 }

@@ -33,7 +33,7 @@ public class BackgammonDispatcherService {
 	public Move respondToUser(){
 		BasicUser loggedInBasicUser = securityRepository.getLoggedInBasicUser();
 		Future<UserMove> userMoveResult = handleUserMoveRequest(loggedInBasicUser);
-		return getMoveFromQueue(userMoveResult);
+		return getMoveFromQueue(userMoveResult, loggedInBasicUser);
 	}
 	
 	private Future<UserMove> handleUserMoveRequest(BasicUser basicUser){
@@ -43,10 +43,10 @@ public class BackgammonDispatcherService {
 		return requestsPool.submit(userMoveTask);
 	}
 	
-	private Move getMoveFromQueue(Future<UserMove> userMoveFromQueue){
+	private Move getMoveFromQueue(Future<UserMove> userMoveFromQueue, BasicUser loggedInBasicUser){
 		int attempts = 0;
 		Move move = null;
-		
+	
 		while(attempts < 30){
 			try {
 				attempts++;
@@ -54,7 +54,7 @@ public class BackgammonDispatcherService {
 				if(move != null) break;				
 			}
 			catch(TimeoutException ex){	
-				logger.info("Tried to grab move from queue - attempt #" + attempts);				
+				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}

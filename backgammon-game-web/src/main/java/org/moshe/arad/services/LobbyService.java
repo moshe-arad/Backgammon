@@ -21,6 +21,8 @@ import org.moshe.arad.repositories.SecurityRepository;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.repositories.entities.GameUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +40,7 @@ public class LobbyService {
 	private HomeRepository homeRepository;
 	@Autowired
 	private SecurityRepository securityRepository;
-	
+			
 	public GameRoom addNewGameRoom(GameRoom gameRoom) {
 		logger.info("New game room was opened, details: " + gameRoom);
 		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
@@ -67,7 +69,7 @@ public class LobbyService {
 		return homeRepository.isHasLoggedInUser();
 	}
 
-	public GameRoom joinGameRoom(GameRoom gameRoom) {
+	public GameRoom joinGameRoom(GameRoom gameRoom) {		
 		lobbyRepository.addSecondPlayer(gameRoom);
 		lobbyRepository.addAuthoritiesForSecondPlayer(gameRoom);
 		reloadGameRoom(gameRoom);

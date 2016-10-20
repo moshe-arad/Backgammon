@@ -32,11 +32,14 @@
 		
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-5"></div>
+				<div class="col-lg-4"></div>
 				<div class="col-lg-2">
 					<p id="txtFromServer" class="bg-primary hidden"></p>
 				</div>
-				<div class="col-lg-5"></div>					
+				<div class="col-lg-2">
+					<button id="rollDicesBtn" type="button" class="btn btn-success hidden">Roll dices</button>
+				</div>
+				<div class="col-lg-4"></div>					
 			</div>
 		</div>
 		

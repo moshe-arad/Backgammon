@@ -13,6 +13,8 @@ public class UserMove {
 
 	private Move move;
 	private BasicUser user;
+	public final static int WHITE_PLAYER_TURN = -2;
+	public final static int BLACK_PLAYER_TURN = -3;
 	
 	public UserMove() {
 

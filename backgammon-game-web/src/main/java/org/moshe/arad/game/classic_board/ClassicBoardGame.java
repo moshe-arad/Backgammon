@@ -28,13 +28,18 @@ public abstract class ClassicBoardGame extends BasicGame {
 //	private Player secondPlayer;
 	
 	
+	public ClassicBoardGame(Board board, TurnOrderable turnOrderManager) {
+		this.board = board;
+		this.turnOrderManager = turnOrderManager;
+	}
+	
 	@Override
 	public void initGame() {
 		logger.info("Initializing board...");
 		board.initBoard();
 		logger.info("Board initializing completed...");
-	}
-	
+	}	
+
 	@Override
 	public void play(){
 		logger.info("Game is about to begin...");

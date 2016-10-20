@@ -77,7 +77,7 @@ public class BackgammonService {
 			synchronized (gameRoom) {
 				if(gameRoom.getGame() == null){
 					logger.info("Starting game.");
-					initGame(gameRoom);
+					gameRoom = initGame(gameRoom);
 					notifyWhiteSendMove(gameRoom);
 					startGame(gameRoom);
 				}				
@@ -90,7 +90,7 @@ public class BackgammonService {
 		gameRoom.getGame().start();
 	}
 	
-	private void initGame(GameRoom gameRoom) {
+	private GameRoom initGame(GameRoom gameRoom) {
 		gameRoom = gameRooms.getGameRoomById(gameRoom);
 		gameRoom.setGame(gameContext.getBean(Backgammon.class));
 		GameUser white = securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
@@ -101,6 +101,7 @@ public class BackgammonService {
 		logger.info("initializing queues for usesr.");
 		userMoveQueues.createNewQueueForUser(white.getBasicUser());
 		userMoveQueues.createNewQueueForUser(black.getBasicUser());
+		return gameRoom;
 	}
 	
 	private void notifyWhiteSendMove(GameRoom gameRoom) {

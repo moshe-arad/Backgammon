@@ -92,7 +92,8 @@ public class BackgammonController {
 	@ResponseBody
 	public PairBackgammonDices rollDices(@RequestBody String gameRoomId){
 		GameRoom gameRoom = backgammonService.getGameRoomByJsonId(gameRoomId);
-		return backgammonService.rollDices(gameRoom);
+		PairBackgammonDices dices = backgammonService.rollDices(gameRoom);
+		return dices;
 	}	
 }
 

@@ -128,8 +128,26 @@ function rollDices(){
 function dicePairFromServer(obj){
 	failAttemptsToRegister = 0;
 	$("#txtFromServer").removeClass("hidden");
-	$("#txtFromServer").append("White player you rolled: " + obj.first.value + ":" + obj.second.value);
+	$("#txtFromServer").append("White player you rolled: " + obj.first.value + ":" + obj.second.value + 
+			" Select your move.");
+	$("table.board td").click(selectMove);
 	registerToBackgammonDispatcher();
+}
+
+var from;
+var to;
+
+function selectMove(e){
+	var col = $(e.target).attr("class");
+	console.log(col);
+	var beginIndex = col.search("backgammon-col-");
+	console.log("begin index is " + beginIndex);
+	col = col.substring(beginIndex, col.length);
+	console.log("col is equal to " + col);
+	if(col.length == 17) col = col.substring(15,17);
+	else col = col.substring(15,16);
+	
+	console.log("you selected column " + col);
 }
 
 

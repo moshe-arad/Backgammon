@@ -4,15 +4,19 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.UserMoveQueue;
-import org.moshe.arad.backgammon_dispatcher.UserMoveQueuesManager;
-import org.moshe.arad.backgammon_dispatcher.UserMoveTask;
-import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUsersQueuesManager;
+import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
+import org.moshe.arad.backgammon_dispatcher.entities.EmptyMessage;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUserTask;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.repositories.SecurityRepository;
 import org.moshe.arad.repositories.entities.BasicUser;
@@ -25,33 +29,53 @@ public class BackgammonDispatcherService {
 
 	private final Logger logger = LogManager.getLogger(BackgammonDispatcherService.class);
 	@Autowired
-	private UserMoveQueuesManager userMoveQueues;
+	private BackgammonUsersQueuesManager userMoveQueues;
 	@Autowired
 	private SecurityRepository securityRepository;
-	private ExecutorService requestsPool = Executors.newCachedThreadPool();
+	private ThreadPoolExecutor requestsPool = (ThreadPoolExecutor)Executors.newCachedThreadPool();
 	
-	public Move respondToUser(){
+	public DispatchableEntity respondToUser(){
 		BasicUser loggedInBasicUser = securityRepository.getLoggedInBasicUser();
-		Future<UserMove> userMoveResult = handleUserMoveRequest(loggedInBasicUser);
-		return getMoveFromQueue(userMoveResult, loggedInBasicUser);
+		Future<DispatchableEntity> userMoveResult = handleUserMoveRequest(loggedInBasicUser);
+		if(userMoveResult != null){
+			return getMoveFromQueue(userMoveResult, loggedInBasicUser, userMoveQueues.getUserMoveQueue(loggedInBasicUser));
+		}
+		else return new EmptyMessage();				
 	}
 	
-	private Future<UserMove> handleUserMoveRequest(BasicUser basicUser){
-		UserMoveQueue userMoveQueue = userMoveQueues.getUserMoveQueue(basicUser);
-		if(userMoveQueue == null) userMoveQueue = userMoveQueues.createNewQueueForUser(basicUser);
-		UserMoveTask userMoveTask = new UserMoveTask(userMoveQueue);
-		return requestsPool.submit(userMoveTask);
+	private Future<DispatchableEntity> handleUserMoveRequest(BasicUser basicUser){		
+		BackgammonUserQueue userQueue = userMoveQueues.getUserMoveQueue(basicUser);
+		if(userQueue == null) userQueue = userMoveQueues.createNewQueueForUser(basicUser);
+		
+		boolean gotLock = userQueue.getRegisterRequestLocker().tryLock();
+		BackgammonUserTask task = new BackgammonUserTask(userQueue);
+		return gotLock ? requestsPool.submit(task) : null;
+		
+//		if(userQueue.getRegisterRequestLocker().tryLock())
+//		{
+//			try{
+//				BackgammonUserTask task = new BackgammonUserTask(userQueue);
+//				return requestsPool.submit(task);
+//			}
+//			finally {
+//				userQueue.getRegisterRequestLocker().unlock();
+//			}
+//		}
+//		else return null;	
 	}
 	
-	private Move getMoveFromQueue(Future<UserMove> userMoveFromQueue, BasicUser loggedInBasicUser){
+	private DispatchableEntity getMoveFromQueue(Future<DispatchableEntity> fromQueue, BasicUser loggedInBasicUser, BackgammonUserQueue backgammonUserQueue){
 		int attempts = 0;
-		Move move = null;
+		DispatchableEntity entity = null;
 	
 		while(attempts < 30){
 			try {
 				attempts++;
-				move = userMoveFromQueue.get(2, TimeUnit.SECONDS).getMove();
-				if(move != null) break;				
+				entity = fromQueue.get(2, TimeUnit.SECONDS);
+				if(entity != null){
+					backgammonUserQueue.getRegisterRequestLocker().unlock();
+					break;				
+				}
 			}
 			catch(TimeoutException ex){	
 				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
@@ -59,7 +83,7 @@ public class BackgammonDispatcherService {
 				e.printStackTrace();
 			}
 		}
-		return move;
+		return entity;
 	}
 	
 	public void shutDownRequestsPool(){

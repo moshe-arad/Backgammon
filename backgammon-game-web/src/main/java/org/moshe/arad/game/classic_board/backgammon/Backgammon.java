@@ -5,27 +5,78 @@ import java.util.Scanner;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
+import org.moshe.arad.backgammon_dispatcher.entities.BasicDetails;
+import org.moshe.arad.backgammon_dispatcher.entities.DiceRolling;
+import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
+import org.moshe.arad.backgammon_dispatcher.entities.InvalidMove;
+import org.moshe.arad.backgammon_dispatcher.entities.ValidMove;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
+import org.moshe.arad.game.instrument.BackgammonBoard;
 import org.moshe.arad.game.instrument.Board;
 import org.moshe.arad.game.instrument.Dice;
 import org.moshe.arad.game.move.BackgammonBoardLocation;
+import org.moshe.arad.game.move.BoardLocation;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.TurnOrderable;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-public class Backgammon extends ClassicBoardGame {
+public class Backgammon extends ClassicBoardGame implements Runnable{
 
+	private Move move = null;	
+	
+	private BackgammonUserQueue whiteQueue = null;
+	private BackgammonUserQueue blackQueue = null;
+	
+	private final Logger logger = LogManager.getLogger("org.moshe.arad");
+//	private Object locker = new Object();
+	
+	private Object diceLocker = new Object();
+	private Object nextMoveLocker = new Object();
+	
+	private ApplicationContext gameContext = new ClassPathXmlApplicationContext("backgammon-web-context.xml");
+	
 	public Backgammon(Board board, TurnOrderable turnOrderManager) {
 		super(board, turnOrderManager);
+	}	
+	
+	@Override
+	public void run() {
+		super.startGame();
 	}
-
-	private final Logger logger = LogManager.getLogger("org.moshe.arad");
-	private Object locker = new Object();
 	
 	@Override
 	public void playGameTurn(Player player) {
-		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
+		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
+		
+		BasicDetails basicDetailsWhite = gameContext.getBean("basicDetails", BasicDetails.class);
+		BasicDetails basicDetailsBlack = gameContext.getBean("basicDetails", BasicDetails.class);
+		
+		
+		if(backgammonPlayer.isWhite()){
+			basicDetailsWhite.setIsYourTurn(true);
+			basicDetailsWhite.setColor("white");
+			
+			basicDetailsBlack.setColor("black");
+			basicDetailsBlack.setIsYourTurn(false);
+		}
+		else {
+			basicDetailsWhite.setIsYourTurn(false);
+			basicDetailsWhite.setColor("white");
+			
+			basicDetailsBlack.setColor("black");
+			basicDetailsBlack.setIsYourTurn(true);
+		}
+		
+		basicDetailsWhite.setMessageToken(1);
+		basicDetailsBlack.setMessageToken(1);
+		
+		whiteQueue.putMoveIntoQueue(basicDetailsWhite);
+		blackQueue.putMoveIntoQueue(basicDetailsBlack);
+		
 		Dice first = backgammonPlayer.getTurn().getFirstDice();
 		Dice second = backgammonPlayer.getTurn().getSecondDice();
 		Scanner reader = new Scanner(System.in);
@@ -33,11 +84,45 @@ public class Backgammon extends ClassicBoardGame {
 		
 		logger.info(name + "it's your turn. roll the dices.");
 		
-		synchronized (locker) {
+		synchronized (diceLocker) {
 			try {
-				locker.wait();
-				player.rollDices();
+				diceLocker.wait();
+				player.rollDices();				
 				logger.info(name + "you rolled - " + first.getValue() + ": " + second.getValue());
+				
+				DiceRolling diceRollingWhite = gameContext.getBean("diceRolling", DiceRolling.class);
+				DiceRolling diceRollingBlack = gameContext.getBean("diceRolling", DiceRolling.class);
+				
+				if(backgammonPlayer.isWhite()){
+					diceRollingWhite.setColor("white");
+					diceRollingWhite.setIsYourTurn(true);
+					diceRollingWhite.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
+					diceRollingWhite.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					
+					diceRollingBlack.setColor("black");
+					diceRollingBlack.setIsYourTurn(false);
+					diceRollingBlack.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
+					diceRollingBlack.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+				}
+				else
+				{
+					diceRollingWhite.setColor("white");
+					diceRollingWhite.setIsYourTurn(false);
+					diceRollingWhite.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
+					diceRollingWhite.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					
+					diceRollingBlack.setColor("black");
+					diceRollingBlack.setIsYourTurn(true);
+					diceRollingBlack.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
+					diceRollingBlack.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+				}
+				 
+				diceRollingBlack.setMessageToken(2);
+				diceRollingWhite.setMessageToken(2);
+				
+				whiteQueue.putMoveIntoQueue(diceRollingWhite);
+				blackQueue.putMoveIntoQueue(diceRollingBlack);
+				
 			} catch (InterruptedException e) {
 				logger.error(e.getMessage());
 				logger.error(e);
@@ -48,18 +133,80 @@ public class Backgammon extends ClassicBoardGame {
 			while(isCanKeepPlay(player)){
 				logger.info("The board as follows:");
 				logger.info(board);
-				Move move = null;
-				synchronized (locker) {
-					locker.wait(30000);
-					move = enterNextMove(player, reader);
-				}
-				if(board.isValidMove(player, move)){
+				
+				synchronized (nextMoveLocker) {
+					nextMoveLocker.wait();
+					//move = enterNextMove(player, reader);
+				}	
+				if(board.isValidMove(player, move)){					
 					board.executeMove(player, move);
-					player.makePlayed(move);
+					player.makePlayed(move);					
 					logger.info("A move was made...");
 					logger.info("************************************");
+					
+					
+					ValidMove validMoveWhite = gameContext.getBean("validMove", ValidMove.class);
+					ValidMove validMoveBlack = gameContext.getBean("validMove", ValidMove.class);
+					
+					if(backgammonPlayer.isWhite()){
+						validMoveWhite.setColor("white");
+						validMoveWhite.setIsYourTurn(true);
+						validMoveWhite.setFrom(((BackgammonBoardLocation)move.getFrom()).getIndex());
+						validMoveWhite.setTo(((BackgammonBoardLocation)move.getTo()).getIndex());
+						validMoveWhite.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
+						validMoveWhite.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
+						validMoveWhite.setHasMoreMoves(isCanKeepPlay(player));
+						
+						validMoveBlack.setColor("black");
+						validMoveBlack.setIsYourTurn(false);
+						validMoveBlack.setFrom(((BackgammonBoardLocation)move.getFrom()).getIndex());
+						validMoveBlack.setTo(((BackgammonBoardLocation)move.getTo()).getIndex());
+						validMoveBlack.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
+						validMoveBlack.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
+						validMoveBlack.setHasMoreMoves(isCanKeepPlay(player));
+					}
+					else{
+						validMoveWhite.setColor("white");
+						validMoveWhite.setIsYourTurn(false);
+						validMoveWhite.setFrom(((BackgammonBoardLocation)move.getFrom()).getIndex());
+						validMoveWhite.setTo(((BackgammonBoardLocation)move.getTo()).getIndex());
+						validMoveWhite.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
+						validMoveWhite.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
+						validMoveWhite.setHasMoreMoves(isCanKeepPlay(player));
+						
+						validMoveBlack.setColor("black");
+						validMoveBlack.setIsYourTurn(true);
+						validMoveBlack.setFrom(((BackgammonBoardLocation)move.getFrom()).getIndex());
+						validMoveBlack.setTo(((BackgammonBoardLocation)move.getTo()).getIndex());
+						validMoveBlack.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
+						validMoveBlack.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
+						validMoveBlack.setHasMoreMoves(isCanKeepPlay(player));
+					}
+					
+					whiteQueue.putMoveIntoQueue(validMoveWhite);
+					blackQueue.putMoveIntoQueue(validMoveBlack);
 				}
-				else notifyOnInvalidMove(player);
+				else{
+					InvalidMove invalidMoveWhite = gameContext.getBean("invalidMove", InvalidMove.class);
+					InvalidMove invalidMoveBlack = gameContext.getBean("invalidMove", InvalidMove.class);
+					
+					invalidMoveWhite.setColor("white");
+					invalidMoveWhite.setIsYourTurn(true);
+					invalidMoveWhite.setIsInvalid(true);
+					
+					invalidMoveBlack.setColor("black");
+					invalidMoveBlack.setIsYourTurn(true);
+					invalidMoveBlack.setIsInvalid(true);
+					
+					invalidMoveBlack.setMessageToken(3);
+					invalidMoveWhite.setMessageToken(3);
+					
+					if(backgammonPlayer.isWhite()) whiteQueue.putMoveIntoQueue(invalidMoveWhite);
+					else if(!backgammonPlayer.isWhite()) blackQueue.putMoveIntoQueue(invalidMoveBlack);
+					
+					notifyOnInvalidMove(player);
+				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -75,6 +222,7 @@ public class Backgammon extends ClassicBoardGame {
 	 * need to remove Scanner object from method signature.
 	 */
 
+	@Deprecated
 	private Move enterNextMove(Player player, Scanner reader) {
 		if(player == null) return null;
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
@@ -91,6 +239,7 @@ public class Backgammon extends ClassicBoardGame {
 		return move;
 	}
 
+	@Deprecated
 	private String getMoveInput(String name, Scanner reader, String msg) {
 		logger.info(name+": " + msg);
 		String input = reader.next();
@@ -111,7 +260,39 @@ public class Backgammon extends ClassicBoardGame {
 		}
 	}
 
-	public Object getLocker() {
-		return locker;
+//	public Object getLocker() {
+//		return locker;
+//	}
+	
+	public Move getMove() {
+		return move;
+	}
+
+	public void setMove(Move move) {
+		this.move = move;
+	}
+	
+	public BackgammonUserQueue getWhiteQueue() {
+		return whiteQueue;
+	}
+
+	public void setWhiteQueue(BackgammonUserQueue whiteQueue) {
+		this.whiteQueue = whiteQueue;
+	}
+
+	public BackgammonUserQueue getBlackQueue() {
+		return blackQueue;
+	}
+
+	public void setBlackQueue(BackgammonUserQueue blackQueue) {
+		this.blackQueue = blackQueue;
+	}	
+	
+	public Object getDiceLocker() {
+		return diceLocker;
+	}
+
+	public Object getNextMoveLocker() {
+		return nextMoveLocker;
 	}
 }

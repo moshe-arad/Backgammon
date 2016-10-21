@@ -1,5 +1,6 @@
 package org.moshe.arad.controllers;
 
+import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.services.BackgammonDispatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,7 @@ public class BackgammonDispatcherController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST, headers = {"Content-Type=application/json"})
 	@ResponseBody
-	public Move registerAndDispatch(){		
+	public DispatchableEntity registerAndDispatch(){		
 		return backgammonDispatcherService.respondToUser();	
-	}
-	
-	@RequestMapping(value = "/test")
-	public String goHome(){
-		return "redirect:/home";
 	}
 }

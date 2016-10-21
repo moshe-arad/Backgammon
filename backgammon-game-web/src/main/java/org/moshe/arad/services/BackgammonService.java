@@ -1,15 +1,18 @@
 package org.moshe.arad.services;
 
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.UserMoveQueuesManager;
-import org.moshe.arad.backgammon_dispatcher.entities.PairBackgammonDices;
-import org.moshe.arad.backgammon_dispatcher.entities.UserMove;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
+import org.moshe.arad.backgammon_dispatcher.BackgammonUsersQueuesManager;
 import org.moshe.arad.components.GameRooms;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
-import org.moshe.arad.game.move.BackgammonBoardLocation;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.turn.BackgammonTurn;
@@ -37,31 +40,45 @@ public class BackgammonService {
 	@Autowired
 	private GameRoomRepository gameRoomRepository;
 	@Autowired
-	private UserMoveQueuesManager userMoveQueues;
+	private BackgammonUsersQueuesManager userMoveQueues;
 	
 	private ApplicationContext gameContext = new ClassPathXmlApplicationContext("backgammon-web-context.xml");
 	
-	public PairBackgammonDices rollDices(GameRoom gameRoom){
-		PairBackgammonDices pair = null;
+	public void setMoveFromClient(Move move, Long gameRoomId){
+		GameRoom gameRoom = gameRooms.getGameRoomById(gameRoomId);
+		gameRoom.getGame().setMove(move);
+		synchronized (gameRoom.getGame().getNextMoveLocker()) {
+			logger.info("System is about to calculate next backgammon move, next move locker released.");
+			gameRoom.getGame().getNextMoveLocker().notify();
+		}
+	}
+	
+	public GameRoom getGameRoomById(Long gameRoomId){
+		return gameRooms.getGameRoomById(gameRoomId);
+	}
+	
+	public void rollDices(GameRoom gameRoom){
+//		PairBackgammonDices pair = null;
 		
 		if(isPlayerWithTurnWhite(gameRoom) && isLoogedUserWhite(gameRoom)){			
-			synchronized (gameRoom.getGame().getLocker()) {
-				gameRoom.getGame().getLocker().notify();
+			synchronized (gameRoom.getGame().getDiceLocker()) {
+				logger.info("System is about to roll dices, dices locker released.");
+				gameRoom.getGame().getDiceLocker().notify();
 			}
 			
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			synchronized (gameRoom.getGame().getLocker()) {
-				BackgammonTurn turn = (BackgammonTurn) gameRoom.getGame().getFirstPlayer().getTurn();
-				pair = new PairBackgammonDices(turn.getFirstDice(), turn.getSecondDice()); 
-			}
+//			try {
+//				Thread.sleep(500);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			
+//			synchronized (gameRoom.getGame().getLocker()) {
+//				BackgammonTurn turn = (BackgammonTurn) gameRoom.getGame().getFirstPlayer().getTurn();
+//				pair = new PairBackgammonDices(turn.getFirstDice(), turn.getSecondDice()); 
+//			}
 		}
 		
-		return pair;
+//		return pair;
 	}
 	
 	public GameRoom getGameRoomByJsonId(String gameRoomId){
@@ -69,48 +86,37 @@ public class BackgammonService {
 		return getGameRoomById(gameRoomIdFromClient);
 	}
 	
-	public Boolean initAndStartGame(GameRoom gameRoom) {
+	public Boolean initAndStartGame(Long gameRoomId) {
+		GameRoom gameRoom = gameRooms.getGameRoomById(gameRoomId);
+		
 		if(!gameRoom.getIsGameRoomReady()) 
 			gameRoom.setIsGameRoomReady(isBothPlayersOnRoom(gameRoom));
 			
-		if(gameRoom.getIsGameRoomReady() && gameRoom.getGame() == null) {
-			synchronized (gameRoom) {
-				if(gameRoom.getGame() == null){
-					logger.info("Starting game.");
-					gameRoom = initGame(gameRoom);
-					notifyWhiteSendMove(gameRoom);
-					startGame(gameRoom);
-				}				
-			}			
+		if(gameRoom.getIsGameRoomReady() && gameRoom.getGame() != null) {
+			logger.info("Starting game.");
+			gameRoom = initGame(gameRoom);
+//			notifyWhiteSendMove(gameRoom);
+			new Thread(gameRoom.getGame()).start();
 		}
 		return gameRoom.getIsGameRoomReady();
 	}
 	
-	private void startGame(GameRoom gameRoom) {
-		gameRoom.getGame().start();
-	}
-	
 	private GameRoom initGame(GameRoom gameRoom) {
-		gameRoom = gameRooms.getGameRoomById(gameRoom);
-		gameRoom.setGame(gameContext.getBean(Backgammon.class));
 		GameUser white = securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
 		logger.info("White is with ID of: " + white.getUserId());
 		GameUser black = securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
 		logger.info("Black is with ID of: " + black.getUserId());
 		gameRoom.initGame(white, black, gameContext.getBean(BackgammonTurn.class));
 		logger.info("initializing queues for usesr.");
-		userMoveQueues.createNewQueueForUser(white.getBasicUser());
-		userMoveQueues.createNewQueueForUser(black.getBasicUser());
 		return gameRoom;
 	}
 	
-	private void notifyWhiteSendMove(GameRoom gameRoom) {
-		BasicUser white = getWhiteBasicUser(gameRoom);
-		Move move = new Move(new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN),
-				new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN));
-		UserMove userMove = new UserMove(move, white);
-		userMoveQueues.putMoveIntoQueue(white, userMove);
-	}
+//	private void notifyWhiteSendMove(GameRoom gameRoom) {
+//		BasicUser white = getWhiteBasicUser(gameRoom);
+//		Move move = new Move(new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN),
+//				new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN));
+//		userMoveQueues.putMoveIntoQueue(white, move);
+//	}
 	
 	private boolean isBothPlayersOnRoom(GameRoom gameRoom){
 		Long white = gameRoomRepository.selectWhiteFromGameRoom(gameRoom.getGameRoomId());
@@ -118,10 +124,6 @@ public class BackgammonService {
 		if(white != null) logger.info("White player is on room and ready to play.");
 		if(black != null) logger.info("Black player is on room and ready to play.");
 		return (white != null && black != null);
-	}
-	
-	private GameRoom getGameRoomById(Long gameRoomId){
-		return gameRooms.getGameRoomById(gameRoomId);
 	}
 	
 	private boolean isPlayerWithTurnWhite(GameRoom gameRoom){

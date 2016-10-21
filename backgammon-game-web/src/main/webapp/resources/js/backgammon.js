@@ -2,16 +2,6 @@ var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
 var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 var csrfToken = $("meta[name='_csrf']").attr("content");
 
-$(document).ready(function(){
-	$(loadDomEvents);
-});
-
-
-function loadDomEvents(){
-	checkUntilReady();
-	$("#rollDicesBtn").click(rollDices);
-}
-
 var gameRoomId = $("#gameRoomId").html();
 var remoteServer = $("#remoteServer").html();
 
@@ -22,45 +12,14 @@ headers[csrfHeader] = csrfToken;
 
 var failAttemptsToInit = 0;
 
-function checkIsReadyToPlay(){
-	console.log("sending is ready message to " + remoteServer + "/init");
-	$.ajax({
-			url: remoteServer + "/init",
-			success: checkIsReadyToPlayCallback,
-			timeout: 1000,
-			data: JSON.stringify({gameRoomId:gameRoomId}),
-			type: "POST",
-			dataType: "json",
-			contentType: "application/json",
-			error: initFailure,
-			headers: headers
-		});
-	return false;
-}
 
-function initFailure(xmlhttprequest, textstatus, message){
-	if(textstatus == "timeout") {
-		failAttemptsToInit++;
-		console.log("Timeout CheckIsReady")
-		if(failAttemptsToInit == 3) clearInterval(stopCheckIsReady);
-	}
-	else console.log("ABORTED - reason: " + textstatus + ", message: " + message);
-} 
+$(document).ready(function(){
+	$(loadDomEvents);
+});
 
-function checkIsReadyToPlayCallback(isReady){
-	isReadyToPlay = Boolean(isReady);
-	console.log("Game Room is "+ isReadyToPlay +" ready to play with");
-	if(isReadyToPlay) {
-		clearInterval(stopCheckIsReady);
-		console.log("register to server");
-		registerToBackgammonDispatcher();
-	}
-}
-
-var stopCheckIsReady;
-
-function checkUntilReady(){
-	if(gameRoomId) stopCheckIsReady = setInterval(checkIsReadyToPlay, 1000);
+function loadDomEvents(){
+	registerToBackgammonDispatcher();
+	$("#rollDicesBtn").click(rollDices);
 }
 
 /*****************************************/
@@ -74,7 +33,7 @@ function registerToBackgammonDispatcher(){
 		type: "POST",
 		success: msgFromServer,
 		timeout: 60000,
-		error: registerFailure,
+		error: failureFromServer,
 		headers: headers
 	});
 	return false;
@@ -88,20 +47,142 @@ function msgFromServer(obj){
 	registerToBackgammonDispatcher();
 }
 
-function registerFailure(xmlhttprequest, textstatus, message){
+function failureFromServer(xmlhttprequest, textstatus, message){
 	console.log("ABORTED - reason: " + textstatus + ", message: " + message);
 	failAttemptsToRegister++;
 	if(failAttemptsToRegister < 3) registerToBackgammonDispatcher();
 }
 
 function handleMoveFromServer(obj){
-	var from = obj.from.index; 
-	var to = obj.to.index;
+	var token = obj.messageToken;
 	
-	if(from == -2 && to == -2){
-		$("#txtFromServer").removeClass("hidden");
-		$("#txtFromServer").append("White player it's your turn to play.");
+	switch(Number(token)){
+		case 1:{
+			handleBasicDetails(obj);
+			break;
+		}
+		case 2:{
+			handleDiceRolling(obj);
+			break;
+		}
+		case 3:{
+			handleInvalidMove(obj);
+			break;
+		}
+		case 4:
+			handleValidMove(obj);
+			break;
+		default:
+			console.log("Failed to match token message from server.");
+	}
+}
+
+function handleBasicDetails(obj){
+	var color = obj.color;
+	var isYourTurn = obj.isYourTurn;
+	
+	if(color == "white" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("White player it's your turn to play. roll the dices.");
 		$("#rollDicesBtn").removeClass("hidden");
+	}
+	else if(color == "white" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("This is Black's player turn to play.");
+	}
+	else if(color == "black" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("Black player it's your turn to play. roll the dices.");
+		$("#rollDicesBtn").removeClass("hidden");
+	}
+	else if(color == "black" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("This is White's player turn to play.");
+	}
+	$("#txtFromServer").removeClass("hidden");	
+}
+
+function handleDiceRolling(obj){
+	var color = obj.color;
+	var isYourTurn = obj.isYourTurn;
+	var firstDice = obj.firstDice;
+	var secondDice = obj.secondDice;
+	
+	if(color == "white" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("White player you rolled the dices and came up with, " + firstDice + ":" + secondDice);
+		$("#rollDicesBtn").addClass("hidden");
+	}
+	else if(color == "white" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("White, Black player rolled the dices and came up with, " + firstDice + ":" + secondDice);
+	}
+	else if(color == "black" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("Black player you rolled the dices and came up with, " + firstDice + ":" + secondDice);
+		$("#rollDicesBtn").addClass("hidden");
+	}
+	else if(color == "black" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("Black, White player rolled the dices and came up with, " + firstDice + ":" + secondDice);
+	}
+	
+	$("table.board td").bind("click", selectMove);
+}
+
+
+function handleInvalidMove(){
+	$("#txtFromServer").removeClass("hidden");
+	$("#txtFromServer").html("You made invalid move, try again.");
+}
+
+function handleValidMove(obj){
+	var color = obj.color;
+	var isYourTurn = obj.isYourTurn;
+	var from = obj.from.index
+	var to = obj.to.index;
+	var columnSizeOnFrom = obj.columnSizeOnFrom;
+	var columnSizeOnTo = obj.columnSizeOnTo;
+	var isHasMoreMoves = obj.isHasMoreMoves;
+	
+	if(color == "white" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("White player you made a move from " + from + " to " + to); 
+	}
+	else if(color == "white" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("White, Black player made a move from " + from + " to " + to);
+	}
+	else if(color == "black" && Boolean(isYourTurn)){
+		$("#txtFromServer").html("Black player you made a move from " + from + " to " + to);
+	}
+	else if(color == "black" && !Boolean(isYourTurn)){
+		$("#txtFromServer").html("Black, White player made a move from " + from + " to " + to);
+	}
+	$("#txtFromServer").removeClass("hidden");
+	
+	removePawnFrom(color, from , columnSizeOnFrom);
+	addPawnTo(color, to , columnSizeOnTo);
+	
+	if(!Boolean(isHasMoreMoves)) $("table.board td").unbind("click", selectMove);
+}
+
+function removePawnFrom(color, from , columnSizeOnFrom){
+	var arr = $("table.board td[class~='backgammon-col-" + from + "']");
+	if(columnSizeOnFrom < 5){
+		if(arr[0].hasClass("bottom-col-backgammon")){
+			var item = arr[(arr.length - 1) + (5-columnSizeOnFrom)];
+		}
+		else{
+			var item = arr[5-columnSizeOnFrom];
+		}
+		$(item).addClass("empty-cell");
+		$(item).html("e");
+	}
+}
+
+function addPawnTo(color, to , columnSizeOnTo){
+	var arr = $("table.board td[class~='backgammon-col-" + to + "']");
+	if(columnSizeOnTo <=5){
+		if(arr[0].hasClass("bottom-col-backgammon")){
+			var item = arr[(arr.length - 1) + (5-columnSizeOnFrom)];
+		}
+		else{
+			var item = arr[5-columnSizeOnFrom];
+		}
+		$(item).removeClass("empty-cell");
+		if(color == "white") $(item).html("W");
+		else if(color == "black") $(item).html("B");
 	}
 }
 
@@ -117,37 +198,81 @@ function rollDices(){
 		dataType: "json",
 		data: JSON.stringify({gameRoomId:gameRoomId}),
 		type: "POST",
-		success: dicePairFromServer,
+		success: successDices,
 		timeout: 60000,
-		error: registerFailure,
+		error: failureDices,
 		headers: headers
 	});
 	return false;
 }
 
-function dicePairFromServer(obj){
-	failAttemptsToRegister = 0;
-	$("#txtFromServer").removeClass("hidden");
-	$("#txtFromServer").append("White player you rolled: " + obj.first.value + ":" + obj.second.value + 
-			" Select your move.");
-	$("table.board td").click(selectMove);
-	registerToBackgammonDispatcher();
+function successDices(text){
+	console.log("Roll dices requested was accepted by server.")
 }
 
-var from;
-var to;
+function failureDices(){
+	$("#txtFromServer").html("Failed to roll dices, try again.")
+	$("#txtFromServer").removeClass("hidden");
+	$("#rollDicesBtn").removeClass("hidden");
+}
+
+/*********************************************/
+var from = undefined;
+var to = undefined;
 
 function selectMove(e){
 	var col = $(e.target).attr("class");
-	console.log(col);
+	
 	var beginIndex = col.search("backgammon-col-");
-	console.log("begin index is " + beginIndex);
 	col = col.substring(beginIndex, col.length);
-	console.log("col is equal to " + col);
+	
 	if(col.length == 17) col = col.substring(15,17);
 	else col = col.substring(15,16);
 	
 	console.log("you selected column " + col);
+	if(from === undefined) {
+		$("#txtFromServer").html("You selected to move from column " + col);
+		from = col;
+	}
+	else if(to === undefined){
+		to = col;
+		$("#txtFromServer").html("You selected to move from column " + col + 
+				"to column " + to);
+		sendMoveToServer(from,to);
+	}
+}
+
+function sendMoveToServer(from,to){
+	$("#txtFromServer").addClass("hidden");
+	
+//	var basicUser = {userName:"", password:"", enabled:""};
+//	var move = {move:{from:{index:from}, to:{index:to}}}; 
+//	var userMove = {user:basicUser, move:move};
+//	var param = userMove;
+	
+	var move = {move:{from:{index:from}, to:{index:to}}}; 
+	var param = {move:move, gameRoomId:gameRoomId};
+
+	
+	$.ajax({
+		url:"http://localhost:8080/backgammon-game-web/backgammon/move",
+		contentType: "application/json",
+		dataType: "json",
+		data: JSON.stringify(param),
+		type: "POST",
+		success: successFromServer,
+		timeout: 60000,
+		error: failureFromServer,
+		headers: headers
+	});
+	
+	from = undefined;
+	to = undefined;
+	return false;
+}
+
+function successFromServer(){
+	failAttemptsToRegister = 0;
 }
 
 

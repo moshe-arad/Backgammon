@@ -7,7 +7,7 @@ public abstract class BasicGame implements BasicGameable{
 
 	private final Logger logger = LogManager.getLogger("org.moshe.arad");
 	@Override
-	public void start(){
+	public void startGame(){
 		logger.info("Template pattern begins.");
 		initGame();
 		play();

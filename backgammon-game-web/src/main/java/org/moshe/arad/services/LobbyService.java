@@ -72,7 +72,9 @@ public class LobbyService {
 	public GameRoom joinGameRoom(GameRoom gameRoom) {		
 		lobbyRepository.addSecondPlayer(gameRoom);
 		lobbyRepository.addAuthoritiesForSecondPlayer(gameRoom);
-		reloadGameRoom(gameRoom);
+		gameRoom.setGame(gameRooms.getGameRoomById(gameRoom).getGame());
+		gameRooms.addGameRoom(gameRoom);
+//		reloadGameRoom(gameRoom);
 		return gameRooms.getGameRoomById(gameRoom);
 	}
 	

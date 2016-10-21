@@ -15,5 +15,5 @@ public interface BasicGameable {
 	
 	public boolean isHasWinner();
 
-	public void start();
+	public void startGame();
 }

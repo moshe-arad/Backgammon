@@ -9,7 +9,11 @@
 	
 	<bean id="conversionService" 
 		class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
-		
+	
+	<mvc:interceptors>
+		<bean class="org.moshe.arad.general.BackgammonInterceptor" />
+	</mvc:interceptors>	
+	
 	<mvc:annotation-driven conversion-service="conversionService" 
 		ignore-default-model-on-redirect="true"/>
 	<context:component-scan base-package="org.moshe.arad" />

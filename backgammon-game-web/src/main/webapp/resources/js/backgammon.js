@@ -118,6 +118,10 @@ function handleMoveFromServer(obj){
 			console.log("Ignoring this empty message.");
 			break;
 		}
+		case 6:{
+			emptyMessagesArrivalNum = 0;
+			$("#rollDicesBtn").removeClass("hidden");
+		}
 		default:{
 			console.log("Failed to match token message from server.");
 			break;
@@ -131,14 +135,14 @@ function handleBasicDetails(obj){
 	
 	if(color == "white" && Boolean(isYourTurn)){
 		$("#txtFromServer").html("White player it's your turn to play. roll the dices.");
-		$("#rollDicesBtn").removeClass("hidden");
+//		$("#rollDicesBtn").removeClass("hidden");
 	}
 	else if(color == "white" && !Boolean(isYourTurn)){
 		$("#txtFromServer").html("This is Black's player turn to play.");
 	}
 	else if(color == "black" && Boolean(isYourTurn)){
 		$("#txtFromServer").html("Black player it's your turn to play. roll the dices.");
-		$("#rollDicesBtn").removeClass("hidden");
+//		$("#rollDicesBtn").removeClass("hidden");
 	}
 	else if(color == "black" && !Boolean(isYourTurn)){
 		$("#txtFromServer").html("This is White's player turn to play.");
@@ -162,14 +166,14 @@ function handleDiceRolling(obj){
 	
 	if(color == "white" && Boolean(isYourTurn)){
 		$("#txtFromServer").html("White player you rolled the dices and came up with, " + firstDice + ":" + secondDice);
-		$("#rollDicesBtn").addClass("hidden");
+//		$("#rollDicesBtn").addClass("hidden");
 	}
 	else if(color == "white" && !Boolean(isYourTurn)){
 		$("#txtFromServer").html("White, Black player rolled the dices and came up with, " + firstDice + ":" + secondDice);
 	}
 	else if(color == "black" && Boolean(isYourTurn)){
 		$("#txtFromServer").html("Black player you rolled the dices and came up with, " + firstDice + ":" + secondDice);
-		$("#rollDicesBtn").addClass("hidden");
+//		$("#rollDicesBtn").addClass("hidden");
 	}
 	else if(color == "black" && !Boolean(isYourTurn)){
 		$("#txtFromServer").html("Black, White player rolled the dices and came up with, " + firstDice + ":" + secondDice);

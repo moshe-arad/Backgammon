@@ -20,6 +20,7 @@ import org.moshe.arad.backgammon_dispatcher.entities.BasicDetails;
 import org.moshe.arad.backgammon_dispatcher.entities.DiceRolling;
 import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
 import org.moshe.arad.backgammon_dispatcher.entities.InvalidMove;
+import org.moshe.arad.backgammon_dispatcher.entities.ShowDiceButton;
 import org.moshe.arad.backgammon_dispatcher.entities.ValidMove;
 import org.moshe.arad.game.classic_board.ClassicBoardGame;
 import org.moshe.arad.game.instrument.BackgammonBoard;
@@ -101,6 +102,21 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 		
 		synchronized (diceLocker) {
 			try {
+				
+				
+				ShowDiceButton showDiceButton = null;
+				
+				if(backgammonPlayer.isWhite()){
+					logger.info("Send to white player request to display roll dices button. " + showDiceButton);
+					showDiceButton = new ShowDiceButton(6,"white",true,true);
+					whiteQueue.putMoveIntoQueue(showDiceButton);
+				}
+				else{
+					logger.info("Send to white black request to display roll dices button. " + showDiceButton);
+					showDiceButton = new ShowDiceButton(6,"black",true,true);
+					blackQueue.putMoveIntoQueue(showDiceButton);
+				}
+				
 				logger.info("Game Reached to dice locker.");
 				diceLocker.wait();
 				logger.info("Dice locker released, game continues.");

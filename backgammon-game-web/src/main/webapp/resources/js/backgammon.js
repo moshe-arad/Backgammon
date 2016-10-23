@@ -188,6 +188,10 @@ function handleDiceRolling(obj){
 	$("table.board td").bind("click", selectMove);
 	$("#whiteEaten").bind("click", selectMove);
 	$("#blackEaten").bind("click", selectMove);
+	
+	
+	$("#whiteOut").bind("click", selectMove);
+	$("#blackOut").bind("click", selectMove);
 }
 
 function handleInvalidMove(){
@@ -245,6 +249,8 @@ function handleValidMove(obj){
 		$("table.board td").unbind("click", selectMove);
 		$("#whiteEaten").unbind("click", selectMove);
 		$("#blackEaten").unbind("click", selectMove);
+		$("#whiteOut").unbind("click", selectMove);
+		$("#blackOut").unbind("click", selectMove);
 		$("#txtFromServer").html("");
 	}
 	else{

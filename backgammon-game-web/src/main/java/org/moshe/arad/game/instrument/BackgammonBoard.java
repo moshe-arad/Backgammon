@@ -575,17 +575,40 @@ public class BackgammonBoard implements Board {
 	}
 	
 	private boolean checkBlackHasMoreMoves(Dice first, Dice second, BackgammonPlayer player) {
-		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first) && !isBlackHasMoreMoves(second)) return false;
-		else if(first.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(first)) return false;
-		else if(second.getValue() != BackgammonDice.NONE && !isBlackHasMoreMoves(second)) return false;
-		else return true;
+		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE){
+			if(!isBlackHasMoreMoves(first) && !isBlackHasMoreMoves(second)) return false;
+			else return true;
+		}
+		
+		if(first.getValue() != BackgammonDice.NONE){
+			if(!isBlackHasMoreMoves(first)) return false;
+			else return true;
+		}
+		
+		if(second.getValue() != BackgammonDice.NONE){
+			if(!isBlackHasMoreMoves(second)) return false;
+			else return true;
+		}
+		
+		return false;
 	}
 
 	private boolean checkWhiteHasMoreMoves(Dice first, Dice second, BackgammonPlayer player) {
-		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
-		else if(first.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(first)) return false;
-		else if(second.getValue() != BackgammonDice.NONE && !isWhiteHasMoreMoves(second)) return false;
-		else return true;
+		if(first.getValue() != BackgammonDice.NONE && second.getValue() != BackgammonDice.NONE){
+			if(!isWhiteHasMoreMoves(first) && !isWhiteHasMoreMoves(second)) return false;
+			else return true;
+		}
+		
+		if(first.getValue() != BackgammonDice.NONE){
+			if(!isWhiteHasMoreMoves(first)) return false;
+			else return true;
+		}
+		
+		if(second.getValue() != BackgammonDice.NONE){
+			if(!isWhiteHasMoreMoves(second)) return false;
+			else return true;
+		}
+		return false;
 	}
 
 	private boolean isWhiteHasMoreMoves(Dice dice){

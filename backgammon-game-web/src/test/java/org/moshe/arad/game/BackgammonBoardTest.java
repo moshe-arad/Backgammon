@@ -1071,7 +1071,7 @@ public class BackgammonBoardTest {
 	}
 	
 	@Test
-	public void isHasMoreMoves() throws Exception{
+	public void isHasMoreMovesBug1() throws Exception{
 		BackgammonTurn turnMock = mock(BackgammonTurn.class);
 		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
 		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
@@ -1091,5 +1091,34 @@ public class BackgammonBoardTest {
 		board.display();
 		
 		assertFalse(board.isHasMoreMoves(firstPlayer));
+	}
+	
+	@Test
+	public void isHasMoreMovesBug2() throws Exception{
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		secondPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(6);
+		when(secondDiceMock.getValue()).thenReturn(1);
+	
+		
+		board.addBlackPawnToEatenQueue(testContext.getBean(BlackBackgammonPawn.class));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+		board.setPawn(testContext.getBean(WhiteBackgammonPawn.class), new BackgammonBoardLocation(5));
+
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(4));
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(4));
+
+		
+		board.display();
+		
+		assertTrue(board.isHasMoreMoves(secondPlayer));
 	}
 }

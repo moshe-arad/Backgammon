@@ -156,6 +156,7 @@ var secondDice;
 function handleDiceRolling(obj){
 	var color = obj.color;
 	var isYourTurn = obj.isYourTurn;
+	var isCanPlay = obj.canPlay;
 	
 	console.log("color = " +color + " isYourTurn = " + isYourTurn);
 	firstDice = obj.firstDice;
@@ -163,6 +164,11 @@ function handleDiceRolling(obj){
 	console.log("first dice = " +firstDice + " secondDice = " + secondDice);
 	
 	$("#txtFromServer").removeClass("hidden");	
+	
+	if(!Boolean(isCanPlay)){
+		$("#txtFromServer").html("you rolled the dices and came up with, " + firstDice + ":" + secondDice + ". But the turn passed to other player because you can't make a valid play.");
+		return;
+	}
 	
 	if(color == "white" && Boolean(isYourTurn)){
 		$("#txtFromServer").html("White player you rolled the dices and came up with, " + firstDice + ":" + secondDice);
@@ -182,10 +188,6 @@ function handleDiceRolling(obj){
 	$("table.board td").bind("click", selectMove);
 	$("#whiteEaten").bind("click", selectMove);
 	$("#blackEaten").bind("click", selectMove);
-}
-
-function clickNum(){
-	console.log("click ##################################");
 }
 
 function handleInvalidMove(){
@@ -255,7 +257,7 @@ function removePawnFrom(color, from , columnSizeOnFrom){
 	if(from == 24){
 		whiteEatenNum--;
 		if(whiteEatenNum == 0){
-			$("#whiteEaten").html("Outs of white");
+			$("#whiteEaten").html("Eaten of white");
 		}
 		else{
 			$("#whiteEaten").html("You have " + whiteEatenNum + "eaten pawns");
@@ -264,7 +266,7 @@ function removePawnFrom(color, from , columnSizeOnFrom){
 	else if(from == -1){
 		blackEatenNum--;
 		if(blackEatenNum == 0){
-			$("#blackEaten").html("Outs of black");
+			$("#blackEaten").html("Eaten of black");
 		}
 		else{
 			$("#blackEaten").html("You have " + blackEatenNum + "eaten pawns");

@@ -106,14 +106,14 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 				
 				ShowDiceButton showDiceButton = null;
 				
-				if(backgammonPlayer.isWhite()){
-					logger.info("Send to white player request to display roll dices button. " + showDiceButton);
+				if(backgammonPlayer.isWhite()){					
 					showDiceButton = new ShowDiceButton(6,"white",true,true);
+					logger.info("Send to white player request to display roll dices button. " + showDiceButton);
 					whiteQueue.putMoveIntoQueue(showDiceButton);
 				}
-				else{
-					logger.info("Send to white black request to display roll dices button. " + showDiceButton);
+				else{					
 					showDiceButton = new ShowDiceButton(6,"black",true,true);
+					logger.info("Send to black request to display roll dices button. " + showDiceButton);
 					blackQueue.putMoveIntoQueue(showDiceButton);
 				}
 				
@@ -132,11 +132,13 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 					diceRollingWhite.setIsYourTurn(true);
 					diceRollingWhite.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
 					diceRollingWhite.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					diceRollingWhite.setCanPlay(board.isHasMoreMoves(backgammonPlayer));
 					
 					diceRollingBlack.setColor("black");
 					diceRollingBlack.setIsYourTurn(false);
 					diceRollingBlack.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
 					diceRollingBlack.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					diceRollingBlack.setCanPlay(board.isHasMoreMoves(backgammonPlayer));
 				}
 				else
 				{
@@ -144,11 +146,13 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 					diceRollingWhite.setIsYourTurn(false);
 					diceRollingWhite.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
 					diceRollingWhite.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					diceRollingWhite.setCanPlay(board.isHasMoreMoves(backgammonPlayer));
 					
 					diceRollingBlack.setColor("black");
 					diceRollingBlack.setIsYourTurn(true);
 					diceRollingBlack.setFirstDice(backgammonPlayer.getTurn().getFirstDice().getValue());
 					diceRollingBlack.setSecondDice(backgammonPlayer.getTurn().getSecondDice().getValue());
+					diceRollingBlack.setCanPlay(board.isHasMoreMoves(backgammonPlayer));
 				}
 				 
 				diceRollingBlack.setMessageToken(2);
@@ -160,7 +164,7 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 				whiteQueue.putMoveIntoQueue(diceRollingWhite);
 				blackQueue.putMoveIntoQueue(diceRollingBlack);
 				
-			} catch (InterruptedException e) {
+			} catch (Exception e) {
 				logger.error(e.getMessage());
 				logger.error(e);
 			}

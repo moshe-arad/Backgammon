@@ -248,21 +248,19 @@ function handleValidMove(obj){
 
 function removePawnFrom(color, from , columnSizeOnFrom){
 	var arr = $("table.board td[class~='backgammon-col-" + from + "']");
-	if(from == -1){
+	if(from == 24){
 		whiteEatenNum--;
 		if(whiteEatenNum == 0){
-			$("#whiteEaten").html("");
-//			$("#whiteEaten").addClass("hidden");
+			$("#whiteEaten").html("Outs of white");
 		}
 		else{
 			$("#whiteEaten").html("You have " + whiteEatenNum + "eaten pawns");
 		}
 	}
-	else if(from == 24){
+	else if(from == -1){
 		blackEatenNum--;
 		if(blackEatenNum == 0){
-			$("#blackEaten").html("");
-//			$("#blackEaten").addClass("hidden");
+			$("#blackEaten").html("Outs of black");
 		}
 		else{
 			$("#blackEaten").html("You have " + blackEatenNum + "eaten pawns");
@@ -312,10 +310,6 @@ var from = undefined;
 var to = undefined;
 
 function selectMove(e){
-	console.log(e.type + ":" + e.which);
-	console.log(e.target);
-	console.log(from);
-	console.log(to);
 	var col = $(e.target).attr("class");
 	
 	

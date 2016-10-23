@@ -108,10 +108,10 @@ public class BackgammonBoardTest {
 		BlackBackgammonPawn pawn2 = testContext.getBean(BlackBackgammonPawn.class);
 		BlackBackgammonPawn pawn3 = testContext.getBean(BlackBackgammonPawn.class);
 		BlackBackgammonPawn pawn4 = testContext.getBean(BlackBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(4));
-		board.setPawn(pawn2, new BackgammonBoardLocation(4));
-		board.setPawn(pawn3, new BackgammonBoardLocation(2));
-		board.setPawn(pawn4, new BackgammonBoardLocation(2));
+		board.setPawn(pawn1, new BackgammonBoardLocation(19));
+		board.setPawn(pawn2, new BackgammonBoardLocation(19));
+		board.setPawn(pawn3, new BackgammonBoardLocation(21));
+		board.setPawn(pawn4, new BackgammonBoardLocation(21));
 		WhiteBackgammonPawn pawn5 = testContext.getBean(WhiteBackgammonPawn.class);
 		board.addWhitePawnToEatenQueue(pawn5);
 		
@@ -193,8 +193,8 @@ public class BackgammonBoardTest {
 		
 		BlackBackgammonPawn pawn1 = testContext.getBean(BlackBackgammonPawn.class);
 		BlackBackgammonPawn pawn2 = testContext.getBean(BlackBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(4));
-		board.setPawn(pawn2, new BackgammonBoardLocation(4));
+		board.setPawn(pawn1, new BackgammonBoardLocation(19));
+		board.setPawn(pawn2, new BackgammonBoardLocation(19));
 		WhiteBackgammonPawn pawn5 = testContext.getBean(WhiteBackgammonPawn.class);
 		board.addWhitePawnToEatenQueue(pawn5);
 		
@@ -275,8 +275,8 @@ public class BackgammonBoardTest {
 		
 		BlackBackgammonPawn pawn1 = testContext.getBean(BlackBackgammonPawn.class);
 		BlackBackgammonPawn pawn2 = testContext.getBean(BlackBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(4));
-		board.setPawn(pawn2, new BackgammonBoardLocation(4));
+		board.setPawn(pawn1, new BackgammonBoardLocation(19));
+		board.setPawn(pawn2, new BackgammonBoardLocation(19));
 		WhiteBackgammonPawn pawn5 = testContext.getBean(WhiteBackgammonPawn.class);
 		board.addWhitePawnToEatenQueue(pawn5);
 		
@@ -376,10 +376,10 @@ public class BackgammonBoardTest {
 		WhiteBackgammonPawn pawn2 = testContext.getBean(WhiteBackgammonPawn.class);
 		WhiteBackgammonPawn pawn3 = testContext.getBean(WhiteBackgammonPawn.class);
 		WhiteBackgammonPawn pawn4 = testContext.getBean(WhiteBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(19));
-		board.setPawn(pawn2, new BackgammonBoardLocation(19));
-		board.setPawn(pawn3, new BackgammonBoardLocation(21));
-		board.setPawn(pawn4, new BackgammonBoardLocation(21));
+		board.setPawn(pawn1, new BackgammonBoardLocation(2));
+		board.setPawn(pawn2, new BackgammonBoardLocation(2));
+		board.setPawn(pawn3, new BackgammonBoardLocation(4));
+		board.setPawn(pawn4, new BackgammonBoardLocation(4));
 		BlackBackgammonPawn pawn5 = testContext.getBean(BlackBackgammonPawn.class);
 		board.addBlackPawnToEatenQueue(pawn5);
 		
@@ -461,8 +461,8 @@ public class BackgammonBoardTest {
 		
 		WhiteBackgammonPawn pawn1 = testContext.getBean(WhiteBackgammonPawn.class);
 		WhiteBackgammonPawn pawn2 = testContext.getBean(WhiteBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(19));
-		board.setPawn(pawn2, new BackgammonBoardLocation(19));
+		board.setPawn(pawn1, new BackgammonBoardLocation(4));
+		board.setPawn(pawn2, new BackgammonBoardLocation(4));
 		BlackBackgammonPawn pawn5 = testContext.getBean(BlackBackgammonPawn.class);
 		board.addBlackPawnToEatenQueue(pawn5);
 		
@@ -543,8 +543,8 @@ public class BackgammonBoardTest {
 		
 		WhiteBackgammonPawn pawn1 = testContext.getBean(WhiteBackgammonPawn.class);
 		WhiteBackgammonPawn pawn2 = testContext.getBean(WhiteBackgammonPawn.class);
-		board.setPawn(pawn1, new BackgammonBoardLocation(19));
-		board.setPawn(pawn2, new BackgammonBoardLocation(19));
+		board.setPawn(pawn1, new BackgammonBoardLocation(4));
+		board.setPawn(pawn2, new BackgammonBoardLocation(4));
 		BlackBackgammonPawn pawn5 = testContext.getBean(BlackBackgammonPawn.class);
 		board.addBlackPawnToEatenQueue(pawn5);
 		
@@ -1068,5 +1068,28 @@ public class BackgammonBoardTest {
 		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(0));
 		assertTrue(board.isWinner(firstPlayer));
 		assertFalse(board.isWinner(secondPlayer));
+	}
+	
+	@Test
+	public void isHasMoreMoves() throws Exception{
+		BackgammonTurn turnMock = mock(BackgammonTurn.class);
+		BackgammonDice firstDiceMock = mock(BackgammonDice.class);
+		BackgammonDice secondDiceMock = mock(BackgammonDice.class);
+		
+		firstPlayer.setTurn(turnMock);
+		when(turnMock.getFirstDice()).thenReturn(firstDiceMock);
+		when(turnMock.getSecondDice()).thenReturn(secondDiceMock);
+		when(firstDiceMock.getValue()).thenReturn(6);
+		when(secondDiceMock.getValue()).thenReturn(6);
+	
+		
+		board.addWhitePawnToEatenQueue(testContext.getBean(WhiteBackgammonPawn.class));
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(18));
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(18));
+		board.setPawn(testContext.getBean(BlackBackgammonPawn.class), new BackgammonBoardLocation(18));
+		
+		board.display();
+		
+		assertFalse(board.isHasMoreMoves(firstPlayer));
 	}
 }

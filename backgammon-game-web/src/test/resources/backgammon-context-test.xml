@@ -8,7 +8,6 @@
 	<context:annotation-config />
 	
 	<bean id="firstPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
-		<constructor-arg name="id" value="021777777" />
 		<constructor-arg name="firstName" value="Moshe-test" />
 		<constructor-arg name="lastName" value="Arad-test" />
 		<constructor-arg name="age" value="13" />
@@ -18,7 +17,6 @@
 
 	<bean id="secondPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
 		<qualifier value="secondPlayer" />
-		<constructor-arg name="id" value="056666663" />
 		<constructor-arg name="firstName" value="James-test" />
 		<constructor-arg name="lastName" value="Brown-test" />
 		<constructor-arg name="age" value="12" />
@@ -26,7 +24,11 @@
 		<constructor-arg name="isWhite" value="false" />
 	</bean>
 	
-	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" />
+	<bean id="turn" class="org.moshe.arad.game.turn.BackgammonTurn" factory-method="getInstance" >
+		<constructor-arg ref="firstDice"/>
+		<constructor-arg ref="secondDice"/>
+	</bean>
+	
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" />
 	<bean class="org.moshe.arad.game.instrument.BlackBackgammonPawn" scope="prototype"/>

@@ -589,14 +589,14 @@ public class BackgammonBoard implements Board {
 	}
 
 	private boolean isWhiteHasMoreMoves(Dice dice){
-		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(OUT_WHITE +dice.getValue());
+		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(EATEN_WHITE - dice.getValue());
 		
 		if(eatenWhites.size() > 0 && !isPawnCanBeSetIn(eatenWhites.peek(), toLocation)) return false;
 		return true;
 	}
 	
 	private boolean isBlackHasMoreMoves(Dice dice){
-		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(OUT_BLACK - dice.getValue());
+		BackgammonBoardLocation toLocation = new BackgammonBoardLocation(EATEN_BLACK + dice.getValue());
 		
 		if(eatenBlacks.size() > 0 && !isPawnCanBeSetIn(eatenBlacks.peek(), toLocation)) return false;
 		return true;

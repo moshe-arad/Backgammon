@@ -42,14 +42,20 @@ public class BackgammonService {
 	@Autowired
 	private BackgammonUsersQueuesManager userMoveQueues;
 	
+	private ExecutorService gamesPool = Executors.newFixedThreadPool(8);
+	
 	private ApplicationContext gameContext = new ClassPathXmlApplicationContext("backgammon-web-context.xml");
 	
 	public void setMoveFromClient(Move move, Long gameRoomId){
 		GameRoom gameRoom = gameRooms.getGameRoomById(gameRoomId);
-		gameRoom.getGame().setMove(move);
-		synchronized (gameRoom.getGame().getNextMoveLocker()) {
-			logger.info("System is about to calculate next backgammon move, next move locker released.");
-			gameRoom.getGame().getNextMoveLocker().notify();
+		
+		if((isPlayerWithTurnWhite(gameRoom) && isLoogedUserWhite(gameRoom)) ||
+				(isPlayerWithTurnBlack(gameRoom) && isLoogedUserBlack(gameRoom))){
+			gameRoom.getGame().setMove(move);
+			synchronized (gameRoom.getGame().getNextMoveLocker()) {
+				logger.info("System is about to calculate next backgammon move, next move locker released.");
+				gameRoom.getGame().getNextMoveLocker().notify();
+			}
 		}
 	}
 	
@@ -58,27 +64,13 @@ public class BackgammonService {
 	}
 	
 	public void rollDices(GameRoom gameRoom){
-//		PairBackgammonDices pair = null;
-		
-		if(isPlayerWithTurnWhite(gameRoom) && isLoogedUserWhite(gameRoom)){			
+		if((isPlayerWithTurnWhite(gameRoom) && isLoogedUserWhite(gameRoom)) ||
+				(isPlayerWithTurnBlack(gameRoom) && isLoogedUserBlack(gameRoom))){			
 			synchronized (gameRoom.getGame().getDiceLocker()) {
 				logger.info("System is about to roll dices, dices locker released.");
 				gameRoom.getGame().getDiceLocker().notify();
 			}
-			
-//			try {
-//				Thread.sleep(500);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			synchronized (gameRoom.getGame().getLocker()) {
-//				BackgammonTurn turn = (BackgammonTurn) gameRoom.getGame().getFirstPlayer().getTurn();
-//				pair = new PairBackgammonDices(turn.getFirstDice(), turn.getSecondDice()); 
-//			}
 		}
-		
-//		return pair;
 	}
 	
 	public GameRoom getGameRoomByJsonId(String gameRoomId){
@@ -95,8 +87,8 @@ public class BackgammonService {
 		if(gameRoom.getIsGameRoomReady() && gameRoom.getGame() != null) {
 			logger.info("Starting game.");
 			gameRoom = initGame(gameRoom);
-//			notifyWhiteSendMove(gameRoom);
-			new Thread(gameRoom.getGame()).start();
+			
+			gamesPool.submit(gameRoom.getGame());
 		}
 		return gameRoom.getIsGameRoomReady();
 	}
@@ -111,13 +103,6 @@ public class BackgammonService {
 		return gameRoom;
 	}
 	
-//	private void notifyWhiteSendMove(GameRoom gameRoom) {
-//		BasicUser white = getWhiteBasicUser(gameRoom);
-//		Move move = new Move(new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN),
-//				new BackgammonBoardLocation(UserMove.WHITE_PLAYER_TURN));
-//		userMoveQueues.putMoveIntoQueue(white, move);
-//	}
-	
 	private boolean isBothPlayersOnRoom(GameRoom gameRoom){
 		Long white = gameRoomRepository.selectWhiteFromGameRoom(gameRoom.getGameRoomId());
 		Long black = gameRoomRepository.selectBlackFromGameRoom(gameRoom.getGameRoomId());
@@ -131,11 +116,25 @@ public class BackgammonService {
 		return playerWithTurn.isWhite() ? true : false;
 	}
 	
+	private boolean isPlayerWithTurnBlack(GameRoom gameRoom){
+		BackgammonPlayer playerWithTurn = (BackgammonPlayer) gameRoom.getGame().getTurnOrderManager().howHasTurn();
+		return playerWithTurn.isWhite() ? false : true;
+	}
+	
 	private boolean isLoogedUserWhite(GameRoom gameRoom){
 		return getWhiteGameUser(gameRoom).equals(getLoggedInGameUser());
 	}
+	
+	private boolean isLoogedUserBlack(GameRoom gameRoom){
+		return getBlackGameUser(gameRoom).equals(getLoggedInGameUser());
+	}
+	
 	private GameUser getWhiteGameUser(GameRoom gameRoom) {		
 		return securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
+	}
+	
+	private GameUser getBlackGameUser(GameRoom gameRoom) {		
+		return securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
 	}
 	
 	private BasicUser getWhiteBasicUser(GameRoom gameRoom) {		

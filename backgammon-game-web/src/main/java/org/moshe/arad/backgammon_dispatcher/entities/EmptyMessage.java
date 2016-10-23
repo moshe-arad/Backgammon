@@ -1,11 +1,15 @@
 package org.moshe.arad.backgammon_dispatcher.entities;
 
-public class EmptyMessage implements DispatchableEntity {
+public class EmptyMessage extends BasicDetails {
 
 	private boolean isEmpty = true;
 	
 	public EmptyMessage() {
-		isEmpty = true;
+	}
+	
+	public EmptyMessage(int messageToken) {
+		super(messageToken, "", false);
+		this.isEmpty = isEmpty;
 	}
 
 	public boolean isEmpty() {

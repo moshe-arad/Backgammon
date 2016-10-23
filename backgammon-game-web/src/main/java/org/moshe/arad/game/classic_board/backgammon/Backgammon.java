@@ -3,8 +3,18 @@ package org.moshe.arad.game.classic_board.backgammon;
 import java.util.Scanner;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.log4j.Appender;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.ThreadContext;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.xml.XmlConfiguration;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
 import org.moshe.arad.backgammon_dispatcher.entities.BasicDetails;
 import org.moshe.arad.backgammon_dispatcher.entities.DiceRolling;
@@ -27,12 +37,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Backgammon extends ClassicBoardGame implements Runnable{
 
 	private Move move = null;	
+	private String gameRoomName;
 	
 	private BackgammonUserQueue whiteQueue = null;
 	private BackgammonUserQueue blackQueue = null;
 	
-	private final Logger logger = LogManager.getLogger("org.moshe.arad");
-//	private Object locker = new Object();
+	private Logger logger = LogManager.getLogger(Backgammon.class);
 	
 	private Object diceLocker = new Object();
 	private Object nextMoveLocker = new Object();
@@ -41,8 +51,8 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 	
 	public Backgammon(Board board, TurnOrderable turnOrderManager) {
 		super(board, turnOrderManager);
-	}	
-	
+	}		
+
 	@Override
 	public void run() {
 		super.startGame();
@@ -130,23 +140,35 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 		}
 		
 		try {
-			while(isCanKeepPlay(player)){
-				logger.info("The board as follows:");
-				logger.info(board);
-				
+			logger.info("The board as follows:");
+			logger.info(board);
+			
+			while(isCanKeepPlay(player)){				
 				synchronized (nextMoveLocker) {
 					nextMoveLocker.wait();
 					//move = enterNextMove(player, reader);
-				}	
+				}
+				
+				int eatenWhite = ((BackgammonBoard)board).getWhiteEatenSize();
+				int eatenBlack = ((BackgammonBoard)board).getBlackEatenSize();
+				
+				logger.info("Before move, white outs = " + eatenWhite);
+				logger.info("Before move, black outs = " + eatenBlack);
 				if(board.isValidMove(player, move)){					
 					board.executeMove(player, move);
 					player.makePlayed(move);					
 					logger.info("A move was made...");
 					logger.info("************************************");
-					
+					logger.info(board);
 					
 					ValidMove validMoveWhite = gameContext.getBean("validMove", ValidMove.class);
 					ValidMove validMoveBlack = gameContext.getBean("validMove", ValidMove.class);
+					
+					boolean isEatenWhite =  (eatenWhite + 1) == ((BackgammonBoard)board).getWhiteEatenSize() ? true : false;
+					boolean isEatenBlack =  (eatenBlack + 1) == ((BackgammonBoard)board).getBlackEatenSize() ? true : false;
+					
+					logger.info("After move, white outs = " + eatenWhite);
+					logger.info("After move, black outs = " + eatenBlack);
 					
 					if(backgammonPlayer.isWhite()){
 						validMoveWhite.setColor("white");
@@ -156,6 +178,7 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 						validMoveWhite.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
 						validMoveWhite.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
 						validMoveWhite.setHasMoreMoves(isCanKeepPlay(player));
+						validMoveWhite.setEaten(isEatenBlack);
 						
 						validMoveBlack.setColor("black");
 						validMoveBlack.setIsYourTurn(false);
@@ -164,6 +187,7 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 						validMoveBlack.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
 						validMoveBlack.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
 						validMoveBlack.setHasMoreMoves(isCanKeepPlay(player));
+						validMoveBlack.setEaten(isEatenBlack);
 					}
 					else{
 						validMoveWhite.setColor("white");
@@ -173,6 +197,7 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 						validMoveWhite.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
 						validMoveWhite.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
 						validMoveWhite.setHasMoreMoves(isCanKeepPlay(player));
+						validMoveWhite.setEaten(isEatenWhite);
 						
 						validMoveBlack.setColor("black");
 						validMoveBlack.setIsYourTurn(true);
@@ -181,8 +206,11 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 						validMoveBlack.setColumnSizeOnFrom(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getFrom()));
 						validMoveBlack.setColumnSizeOnTo(((BackgammonBoard)(super.board)).getSizeOfColumn((BackgammonBoardLocation)move.getTo()));
 						validMoveBlack.setHasMoreMoves(isCanKeepPlay(player));
+						validMoveBlack.setEaten(isEatenWhite);
 					}
 					
+					validMoveWhite.setMessageToken(4);
+					validMoveBlack.setMessageToken(4);
 					whiteQueue.putMoveIntoQueue(validMoveWhite);
 					blackQueue.putMoveIntoQueue(validMoveBlack);
 				}
@@ -259,10 +287,6 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 			logger.warn(name + ": you made invalid move. try again.");
 		}
 	}
-
-//	public Object getLocker() {
-//		return locker;
-//	}
 	
 	public Move getMove() {
 		return move;
@@ -294,5 +318,13 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 
 	public Object getNextMoveLocker() {
 		return nextMoveLocker;
+	}
+	
+	public String getGameRoomName() {
+		return gameRoomName;
+	}
+
+	public void setGameRoomName(String gameRoomName) {
+		this.gameRoomName = gameRoomName;
 	}
 }

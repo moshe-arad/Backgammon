@@ -26,7 +26,9 @@ public class BackgammonUserQueue {
 		try {
 			moveFromQueue = userQueue.take();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			logger.info("This task may have been canceled.");
+			logger.error(e.getMessage());
+			logger.error(e);
 		}
 		return moveFromQueue;
 	}

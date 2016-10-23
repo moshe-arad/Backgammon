@@ -105,21 +105,21 @@
 
 	<tr>
 		<td class="board-edge-brown">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
 		
 		<td class="board-edge-brown">e</td>
 		
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
 		<td class="board-edge-brown">e</td>
 	</tr>
 

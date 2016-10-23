@@ -7,17 +7,18 @@ public class ValidMove extends BasicDetails {
 	private int columnSizeOnFrom;
 	private int columnSizeOnTo;
 	private boolean isHasMoreMoves;
+	private boolean isEaten;
 	
 	public ValidMove() {
-	}
+	}	
 
-	public ValidMove(int from, int to, int columnSizeOnFrom, int columnSizeOnTo, boolean isHasMoreMoves) {
-		super();
+	public ValidMove(int from, int to, int columnSizeOnFrom, int columnSizeOnTo, boolean isHasMoreMoves, boolean isEaten) {
 		this.from = from;
 		this.to = to;
 		this.columnSizeOnFrom = columnSizeOnFrom;
 		this.columnSizeOnTo = columnSizeOnTo;
 		this.isHasMoreMoves = isHasMoreMoves;
+		this.isEaten = isEaten;
 	}
 
 	public int getFrom() {
@@ -52,6 +53,12 @@ public class ValidMove extends BasicDetails {
 	public void setHasMoreMoves(boolean isHasMoreMoves) {
 		this.isHasMoreMoves = isHasMoreMoves;
 	}
-	
-	
+
+	public boolean isEaten() {
+		return isEaten;
+	}
+
+	public void setEaten(boolean isEaten) {
+		this.isEaten = isEaten;
+	}
 }

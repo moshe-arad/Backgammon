@@ -38,9 +38,11 @@ public class BackgammonDispatcherService {
 		BasicUser loggedInBasicUser = securityRepository.getLoggedInBasicUser();
 		Future<DispatchableEntity> userMoveResult = handleUserMoveRequest(loggedInBasicUser);
 		if(userMoveResult != null){
-			return getMoveFromQueue(userMoveResult, loggedInBasicUser, userMoveQueues.getUserMoveQueue(loggedInBasicUser));
+			DispatchableEntity response = getMoveFromQueue(userMoveResult, loggedInBasicUser, userMoveQueues.getUserMoveQueue(loggedInBasicUser));
+			if(response == null) return new EmptyMessage(5);
+			else return response;
 		}
-		else return new EmptyMessage();				
+		else return new EmptyMessage(5);				
 	}
 	
 	private Future<DispatchableEntity> handleUserMoveRequest(BasicUser basicUser){		
@@ -50,18 +52,6 @@ public class BackgammonDispatcherService {
 		boolean gotLock = userQueue.getRegisterRequestLocker().tryLock();
 		BackgammonUserTask task = new BackgammonUserTask(userQueue);
 		return gotLock ? requestsPool.submit(task) : null;
-		
-//		if(userQueue.getRegisterRequestLocker().tryLock())
-//		{
-//			try{
-//				BackgammonUserTask task = new BackgammonUserTask(userQueue);
-//				return requestsPool.submit(task);
-//			}
-//			finally {
-//				userQueue.getRegisterRequestLocker().unlock();
-//			}
-//		}
-//		else return null;	
 	}
 	
 	private DispatchableEntity getMoveFromQueue(Future<DispatchableEntity> fromQueue, BasicUser loggedInBasicUser, BackgammonUserQueue backgammonUserQueue){
@@ -83,12 +73,7 @@ public class BackgammonDispatcherService {
 				e.printStackTrace();
 			}
 		}
+		fromQueue.cancel(true);
 		return entity;
-	}
-	
-	public void shutDownRequestsPool(){
-		if(!requestsPool.isShutdown()){
-			requestsPool.shutdown();
-		}
 	}
 }

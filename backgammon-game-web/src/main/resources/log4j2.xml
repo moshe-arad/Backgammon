@@ -4,6 +4,9 @@
     <Console name="Backgammon_OUT" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %red{%-5level %logger{36} [line - %L]} - %blue{%msg}%n"/>
     </Console>
+    <File name="backgammonFile" fileName="logs/backgammon.log" immediateFlush="true">
+    	<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %red{%-5level %logger{36} [line - %L]} - %blue{%msg}%n"/>
+    </File>
   </Appenders>
   <Loggers>
   	<Logger name="org.moshe.arad" level="info" additivity="false">

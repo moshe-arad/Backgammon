@@ -2,6 +2,9 @@ package org.moshe.arad.controllers;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
+import org.moshe.arad.backgammon_dispatcher.entities.EmptyMessage;
+import org.moshe.arad.backgammon_dispatcher.entities.MoveAndGameRoomId;
 import org.moshe.arad.repositories.entities.GameRoom;
 import org.moshe.arad.services.BackgammonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,28 +32,20 @@ public class BackgammonController {
 		return "backgammon";
 	}
 	
-//	@RequestMapping(value = "/init", method = RequestMethod.POST, headers = {"Content-Type=application/json"})
-//	@ResponseBody
-//	public Boolean isReadyToPlay(@RequestBody String gameRoomId){
-//		GameRoom gameRoom = backgammonService.getGameRoomByJsonId(gameRoomId);
-//		return backgammonService.initAndStartGame(gameRoom);
-//	}
-	
 	@RequestMapping(value = "/roll_dices", method = RequestMethod.POST, headers = {"Content-Type=application/json"})
 	@ResponseBody
-	public String rollDices(@RequestBody String gameRoomId){
+	public DispatchableEntity rollDices(@RequestBody String gameRoomId){
 		GameRoom gameRoom = backgammonService.getGameRoomByJsonId(gameRoomId);
-//		PairBackgammonDices dices = backgammonService.rollDices(gameRoom);
 		backgammonService.rollDices(gameRoom);
-		return "";
+		return new EmptyMessage(5);
 	}
 	
-//	@RequestMapping(value = "/move", method = RequestMethod.POST, headers = {"Content-Type=application/json"})
-//	@ResponseBody
-//	public String rollDices(@RequestBody MoveAndGameRoomId moveAndId){
-//		backgammonService.setMoveFromClient(moveAndId.getMove(), moveAndId.getGameRoomId());
-//		return "";
-//	}
+	@RequestMapping(value = "/move", method = RequestMethod.POST, headers = {"Content-Type=application/json"})
+	@ResponseBody
+	public DispatchableEntity rollDices(@RequestBody MoveAndGameRoomId moveAndId){
+		backgammonService.setMoveFromClient(moveAndId.getMove(), moveAndId.getGameRoomId());
+		return new EmptyMessage(5);
+	}
 }
 
 

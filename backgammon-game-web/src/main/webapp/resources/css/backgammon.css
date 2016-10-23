@@ -10,8 +10,16 @@
 
 td{
 	border-width: 0px !important;
+	border-right: 1px solid black !important;
+	border-left: 1px solid black !important;
 }
 
 .empty-cell{
 	color: white;
+	opacity: 0.0;
+}
+
+.middle-cell{
+	color: white;
+	border-width: 0px !important;
 }

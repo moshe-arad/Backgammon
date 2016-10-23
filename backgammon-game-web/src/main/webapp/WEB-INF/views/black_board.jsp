@@ -4,121 +4,121 @@
 
 	<tr>
 		<td class="board-edge-brown">e</td>
-		<td class="text-center backgammon-col-23 bottom-col-backgammon">W</td>
-		<td class="text-center empty-cell backgammon-col-22 bottom-col-backgammon">e</td>
-		<td class="text-center empty-cell backgammon-col-21 bottom-col-backgammon">e</td>
-		<td class="text-center empty-cell backgammon-col-20 bottom-col-backgammon">e</td>
-		<td class="text-center backgammon-col-19 bottom-col-backgammon">B</td>
-		<td class="text-center empty-cell backgammon-col-18 bottom-col-backgammon">e</td>
-		
-		<td class="board-edge-brown">e</td>
-		
-		<td class="text-center backgammon-col-17 bottom-col-backgammon">B</td>
-		<td class="text-center empty-cell backgammon-col-16 bottom-col-backgammon">e</td>
-		<td class="text-center empty-cell backgammon-col-15 bottom-col-backgammon">e</td>
-		<td class="text-center empty-cell backgammon-col-14 bottom-col-backgammon">e</td>
-		<td class="text-center empty-cell backgammon-col-13 bottom-col-backgammon">e</td>
 		<td class="text-center backgammon-col-12 bottom-col-backgammon">W</td>
+		<td class="text-center empty-cell backgammon-col-13 bottom-col-backgammon">e</td>
+		<td class="text-center empty-cell backgammon-col-14 bottom-col-backgammon">e</td>
+		<td class="text-center empty-cell backgammon-col-15 bottom-col-backgammon">e</td>
+		<td class="text-center backgammon-col-16 bottom-col-backgammon">B</td>
+		<td class="text-center empty-cell backgammon-col-17 bottom-col-backgammon">e</td>
+		
+		<td class="board-edge-brown">e</td>
+		
+		<td class="text-center backgammon-col-18 bottom-col-backgammon">B</td>
+		<td class="text-center empty-cell backgammon-col-19 bottom-col-backgammon">e</td>
+		<td class="text-center empty-cell backgammon-col-20 bottom-col-backgammon">e</td>
+		<td class="text-center empty-cell backgammon-col-21 bottom-col-backgammon">e</td>
+		<td class="text-center empty-cell backgammon-col-22 bottom-col-backgammon">e</td>
+		<td class="text-center backgammon-col-23 bottom-col-backgammon">W</td>
 		<td class="board-edge-brown">e</td>
 	</tr>
 
 	<tr>
 		<td class="board-edge-brown">e</td>
-		<td class="text-center backgammon-col-23">W</td>
-		<td class="text-center empty-cell backgammon-col-22">e</td>
-		<td class="text-center empty-cell backgammon-col-21">e</td>
-		<td class="text-center empty-cell backgammon-col-20">e</td>
-		<td class="text-center backgammon-col-19">B</td>
-		<td class="text-center empty-cell backgammon-col-18">e</td>
-		
-		<td class="board-edge-brown">e</td>
-		
-		<td class="text-center backgammon-col-17">B</td>
-		<td class="text-center empty-cell backgammon-col-16">e</td>
-		<td class="text-center empty-cell backgammon-col-15">e</td>
-		<td class="text-center empty-cell backgammon-col-14">e</td>
-		<td class="text-center empty-cell backgammon-col-13">e</td>
 		<td class="text-center backgammon-col-12">W</td>
-		<td class="board-edge-brown">e</td>
-	</tr>
-
-	<tr>
-		<td class="board-edge-brown">e</td>
-		<td class="text-center backgammon-col-23">W</td>
-		<td class="text-center empty-cell backgammon-col-22">e</td>
-		<td class="text-center empty-cell backgammon-col-21">e</td>
-		<td class="text-center empty-cell backgammon-col-20">e</td>
-		<td class="text-center backgammon-col-19">B</td>
-		<td class="text-center empty-cell backgammon-col-18">e</td>
-		
-		<td class="board-edge-brown">e</td>
-		
-		<td class="text-center backgammon-col-17">B</td>
-		<td class="text-center empty-cell backgammon-col-16">e</td>
-		<td class="text-center empty-cell backgammon-col-15">e</td>
-		<td class="text-center empty-cell backgammon-col-14">e</td>
 		<td class="text-center empty-cell backgammon-col-13">e</td>
-		<td class="text-center empty-cell backgammon-col-12">e</td>
+		<td class="text-center empty-cell backgammon-col-14">e</td>
+		<td class="text-center empty-cell backgammon-col-15">e</td>
+		<td class="text-center backgammon-col-16">B</td>
+		<td class="text-center empty-cell backgammon-col-17">e</td>
+		
 		<td class="board-edge-brown">e</td>
-	</tr>
-
-	<tr>
-		<td class="board-edge-brown">e</td>
-		<td class="text-center backgammon-col-23">W</td>
-		<td class="text-center empty-cell backgammon-col-22">e</td>
-		<td class="text-center empty-cell backgammon-col-21">e</td>
-		<td class="text-center empty-cell backgammon-col-20">e</td>
+		
+		<td class="text-center backgammon-col-18">B</td>
 		<td class="text-center empty-cell backgammon-col-19">e</td>
-		<td class="text-center empty-cell backgammon-col-18">e</td>
-		
-		<td class="board-edge-brown">e</td>
-		
-		<td class="text-center backgammon-col-17">B</td>
-		<td class="text-center empty-cell backgammon-col-16">e</td>
-		<td class="text-center empty-cell backgammon-col-15">e</td>
-		<td class="text-center empty-cell backgammon-col-14">e</td>
-		<td class="text-center empty-cell backgammon-col-13">e</td>
-		<td class="text-center empty-cell backgammon-col-12">e</td>
-		<td class="board-edge-brown">e</td>
-	</tr>
-
-	<tr>
-		<td class="board-edge-brown">e</td>
-		<td class="text-center backgammon-col-23">W</td>
-		<td class="text-center empty-cell backgammon-col-22">e</td>
-		<td class="text-center empty-cell backgammon-col-21">e</td>
 		<td class="text-center empty-cell backgammon-col-20">e</td>
-		<td class="text-center empty-cell backgammon-col-19">e</td>
-		<td class="text-center empty-cell backgammon-col-18">e</td>
-		
-		<td class="board-edge-brown">e</td>
-		
-		<td class="text-center backgammon-col-17">B</td>
-		<td class="text-center empty-cell backgammon-col-16">e</td>
-		<td class="text-center empty-cell backgammon-col-15">e</td>
-		<td class="text-center empty-cell backgammon-col-14">e</td>
-		<td class="text-center empty-cell backgammon-col-13">e</td>
-		<td class="text-center empty-cell backgammon-col-12">e</td>
+		<td class="text-center empty-cell backgammon-col-21">e</td>
+		<td class="text-center empty-cell backgammon-col-22">e</td>
+		<td class="text-center backgammon-col-23">W</td>
 		<td class="board-edge-brown">e</td>
 	</tr>
 
 	<tr>
 		<td class="board-edge-brown">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
+		<td class="text-center backgammon-col-12">W</td>
+		<td class="text-center empty-cell backgammon-col-13">e</td>
+		<td class="text-center empty-cell backgammon-col-14">e</td>
+		<td class="text-center empty-cell backgammon-col-15">e</td>
+		<td class="text-center backgammon-col-16">B</td>
+		<td class="text-center empty-cell backgammon-col-17">e</td>
 		
 		<td class="board-edge-brown">e</td>
 		
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
-		<td class="text-center empty-cell">e</td>
+		<td class="text-center backgammon-col-18">B</td>
+		<td class="text-center empty-cell backgammon-col-19">e</td>
+		<td class="text-center empty-cell backgammon-col-20">e</td>
+		<td class="text-center empty-cell backgammon-col-21">e</td>
+		<td class="text-center empty-cell backgammon-col-22">e</td>
+		<td class="text-center empty-cell backgammon-col-23">e</td>
+		<td class="board-edge-brown">e</td>
+	</tr>
+
+	<tr>
+		<td class="board-edge-brown">e</td>
+		<td class="text-center backgammon-col-12">W</td>
+		<td class="text-center empty-cell backgammon-col-13">e</td>
+		<td class="text-center empty-cell backgammon-col-14">e</td>
+		<td class="text-center empty-cell backgammon-col-15">e</td>
+		<td class="text-center empty-cell backgammon-col-16">e</td>
+		<td class="text-center empty-cell backgammon-col-17">e</td>
+		
+		<td class="board-edge-brown">e</td>
+		
+		<td class="text-center backgammon-col-18">B</td>
+		<td class="text-center empty-cell backgammon-col-19">e</td>
+		<td class="text-center empty-cell backgammon-col-20">e</td>
+		<td class="text-center empty-cell backgammon-col-21">e</td>
+		<td class="text-center empty-cell backgammon-col-22">e</td>
+		<td class="text-center empty-cell backgammon-col-23">e</td>
+		<td class="board-edge-brown">e</td>
+	</tr>
+
+	<tr>
+		<td class="board-edge-brown">e</td>
+		<td class="text-center backgammon-col-12">W</td>
+		<td class="text-center empty-cell backgammon-col-13">e</td>
+		<td class="text-center empty-cell backgammon-col-14">e</td>
+		<td class="text-center empty-cell backgammon-col-15">e</td>
+		<td class="text-center empty-cell backgammon-col-16">e</td>
+		<td class="text-center empty-cell backgammon-col-17">e</td>
+		
+		<td class="board-edge-brown">e</td>
+		
+		<td class="text-center backgammon-col-18">B</td>
+		<td class="text-center empty-cell backgammon-col-19">e</td>
+		<td class="text-center empty-cell backgammon-col-20">e</td>
+		<td class="text-center empty-cell backgammon-col-21">e</td>
+		<td class="text-center empty-cell backgammon-col-22">e</td>
+		<td class="text-center empty-cell backgammon-col-23">e</td>
+		<td class="board-edge-brown">e</td>
+	</tr>
+
+	<tr>
+		<td class="board-edge-brown">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		
+		<td class="board-edge-brown">e</td>
+		
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
+		<td class="text-center empty-cell middle-cell">e</td>
 		<td class="board-edge-brown">e</td>
 	</tr>
 

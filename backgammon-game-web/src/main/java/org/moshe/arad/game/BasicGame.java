@@ -2,10 +2,12 @@ package org.moshe.arad.game;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.FileAppender;
 
 public abstract class BasicGame implements BasicGameable{
 
 	private final Logger logger = LogManager.getLogger("org.moshe.arad");
+	
 	@Override
 	public void startGame(){
 		logger.info("Template pattern begins.");
@@ -26,5 +28,4 @@ public abstract class BasicGame implements BasicGameable{
 
 	@Override
 	public abstract boolean isHasWinner();
-
 }

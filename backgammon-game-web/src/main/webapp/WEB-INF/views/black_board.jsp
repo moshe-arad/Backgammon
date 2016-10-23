@@ -1,3 +1,23 @@
+<div class="container">
+	<div class="row">
+		<div class="col-lg-2">
+			<p id="blackEaten" class="lead text-success backgammon-col--1">Eaten of black</p>
+		</div>
+		<div class="col-lg-2"></div>
+		<div class="col-lg-2">
+			<p id="txtFromServer" class="bg-primary"></p>
+		</div>
+		<div class="col-lg-2">
+			<button id="rollDicesBtn" type="button" class="btn btn-success hidden">Roll dices</button>
+		</div>
+		<div class="col-lg-2"></div>
+		<div class="col-lg-2">
+			<p id="blackOut" class="lead text-success backgammon-col-24">Outs of black</p>
+		</div>					
+	</div>
+</div>
+
+
 <table class="table board">
 
 	<tr class="board-edge-black"><td colspan="15">test</td></tr>
@@ -224,3 +244,12 @@
 
 	<tr class="board-edge-black"><td colspan="15">test</td></tr>
 </table>
+
+<div class="container">
+	<div class="row">
+		<div class="col-lg-2">
+			<p id="whiteEaten" class="lead text-success">Eaten of white</p>
+		</div>
+		<div class="col-lg-10"></div>					
+	</div>
+</div>

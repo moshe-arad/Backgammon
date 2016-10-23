@@ -19,6 +19,10 @@ public class EmptyMessage extends BasicDetails {
 	public void setEmpty(boolean isEmpty) {
 		this.isEmpty = isEmpty;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "EmptyMessage [isEmpty=" + isEmpty + ", getColor()=" + getColor() + ", getIsYourTurn()="
+				+ getIsYourTurn() + ", getMessageToken()=" + getMessageToken() + "]";
+	}
 }

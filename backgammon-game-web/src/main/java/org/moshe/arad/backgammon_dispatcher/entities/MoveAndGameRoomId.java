@@ -30,6 +30,9 @@ public class MoveAndGameRoomId {
 	public void setGameRoomId(Long gameRoomId) {
 		this.gameRoomId = gameRoomId;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "MoveAndGameRoomId [move=" + move + ", gameRoomId=" + gameRoomId + "]";
+	}
 }

@@ -61,4 +61,12 @@ public class ValidMove extends BasicDetails {
 	public void setEaten(boolean isEaten) {
 		this.isEaten = isEaten;
 	}
+
+	@Override
+	public String toString() {
+		return "ValidMove [from=" + from + ", to=" + to + ", columnSizeOnFrom=" + columnSizeOnFrom + ", columnSizeOnTo="
+				+ columnSizeOnTo + ", isHasMoreMoves=" + isHasMoreMoves + ", isEaten=" + isEaten + ", getColor()="
+				+ getColor() + ", getIsYourTurn()=" + getIsYourTurn() + ", getMessageToken()=" + getMessageToken()
+				+ "]";
+	}
 }

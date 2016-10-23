@@ -22,10 +22,6 @@ public abstract class ClassicBoardGame extends BasicGame {
 	private boolean isPlaying = true;
 	private Player firstPlayer;
 	private Player secondPlayer;
-//	@Resource
-//	private Player firstPlayer;
-//	@Resource
-//	private Player secondPlayer;
 	
 	
 	public ClassicBoardGame(Board board, TurnOrderable turnOrderManager) {
@@ -44,10 +40,12 @@ public abstract class ClassicBoardGame extends BasicGame {
 	public void play(){
 		logger.info("Game is about to begin...");
 		try{
-			while(isPlaying){
+			while(isPlaying){				
 				Player playerWithTurn = turnOrderManager.howHasTurn();
+				logger.info("Turn passed to " + playerWithTurn);
 				playGameTurn(playerWithTurn);
-				if(!isHasWinner()) turnOrderManager.passTurn();
+				logger.info("Turn was played.");
+				if(!isHasWinner()) turnOrderManager.passTurn();				
 				else isPlaying = false;
 			}
 		}
@@ -58,7 +56,7 @@ public abstract class ClassicBoardGame extends BasicGame {
 	}
 
 	@Override
-	public void doWinnerActions() {
+	public void doWinnerActions() {		
 		logger.info("we have a winner");
 	}
 

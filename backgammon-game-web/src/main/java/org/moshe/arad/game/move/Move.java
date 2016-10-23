@@ -44,5 +44,10 @@ public class Move {
 
 	public Date getCreateDate() {
 		return createDate;
-	}	
+	}
+
+	@Override
+	public String toString() {
+		return "Move [from=" + from + ", to=" + to + ", createDate=" + createDate + "]";
+	}
 }

@@ -18,4 +18,9 @@ public class BackgammonBoardLocation implements BoardLocation{
 	public void setIndex(Integer index) {
 		this.index = index;
 	}
+
+	@Override
+	public String toString() {
+		return "BackgammonBoardLocation [index=" + index + "]";
+	}
 }

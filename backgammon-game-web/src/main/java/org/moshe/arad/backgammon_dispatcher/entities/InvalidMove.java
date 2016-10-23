@@ -20,4 +20,10 @@ public class InvalidMove extends BasicDetails {
 	public void setIsInvalid(Boolean isInvalid) {
 		this.isInvalid = isInvalid;
 	}
+
+	@Override
+	public String toString() {
+		return "InvalidMove [isInvalid=" + isInvalid + ", getColor()=" + getColor() + ", getIsYourTurn()="
+				+ getIsYourTurn() + ", getMessageToken()=" + getMessageToken() + "]";
+	}
 }

@@ -35,4 +35,9 @@ public class BasicDetails implements DispatchableEntity {
 	public void setMessageToken(int messageToken) {
 		this.messageToken = messageToken;
 	}
+
+	@Override
+	public String toString() {
+		return "BasicDetails [messageToken=" + messageToken + ", color=" + color + ", isYourTurn=" + isYourTurn + "]";
+	}
 }

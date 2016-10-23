@@ -62,6 +62,8 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 	public void playGameTurn(Player player) {
 		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player;
 		
+		logger.info("This is turn of " + backgammonPlayer);
+		
 		BasicDetails basicDetailsWhite = gameContext.getBean("basicDetails", BasicDetails.class);
 		BasicDetails basicDetailsBlack = gameContext.getBean("basicDetails", BasicDetails.class);
 		
@@ -84,6 +86,9 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 		basicDetailsWhite.setMessageToken(1);
 		basicDetailsBlack.setMessageToken(1);
 		
+		logger.info("Server sends message with token=1 to white player with " + basicDetailsWhite);
+		logger.info("Server sends message with token=1 to black player with " + basicDetailsBlack);
+		
 		whiteQueue.putMoveIntoQueue(basicDetailsWhite);
 		blackQueue.putMoveIntoQueue(basicDetailsBlack);
 		
@@ -96,7 +101,10 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 		
 		synchronized (diceLocker) {
 			try {
+				logger.info("Game Reached to dice locker.");
 				diceLocker.wait();
+				logger.info("Dice locker released, game continues.");
+				
 				player.rollDices();				
 				logger.info(name + "you rolled - " + first.getValue() + ": " + second.getValue());
 				
@@ -130,6 +138,9 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 				diceRollingBlack.setMessageToken(2);
 				diceRollingWhite.setMessageToken(2);
 				
+				logger.info("Server sends message with token=2 to white player with " + diceRollingWhite);
+				logger.info("Server sends message with token=2 to black player with " + diceRollingBlack);
+				
 				whiteQueue.putMoveIntoQueue(diceRollingWhite);
 				blackQueue.putMoveIntoQueue(diceRollingBlack);
 				
@@ -140,25 +151,32 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 		}
 		
 		try {
-			logger.info("The board as follows:");
+			logger.info("The board before making move:");
 			logger.info(board);
 			
-			while(isCanKeepPlay(player)){				
+			while(isCanKeepPlay(player)){
+				logger.info("Player can make more moves, and can keep play.");
 				synchronized (nextMoveLocker) {
+					
+					logger.info("Game Reached to next move locker.");
 					nextMoveLocker.wait();
-					//move = enterNextMove(player, reader);
+					logger.info("Next move locker released, game continues.");
+					logger.info("Game continues with move = " + move);
 				}
 				
 				int eatenWhite = ((BackgammonBoard)board).getWhiteEatenSize();
 				int eatenBlack = ((BackgammonBoard)board).getBlackEatenSize();
 				
-				logger.info("Before move, white outs = " + eatenWhite);
-				logger.info("Before move, black outs = " + eatenBlack);
-				if(board.isValidMove(player, move)){					
+				logger.info("Before applying move, white has eaten = " + eatenWhite);
+				logger.info("Before applying move, black has eaten = " + eatenBlack);
+				
+				if(board.isValidMove(player, move)){
+					logger.info("The move passed validation.");
 					board.executeMove(player, move);
 					player.makePlayed(move);					
 					logger.info("A move was made...");
 					logger.info("************************************");
+					logger.info("The board after making move:");
 					logger.info(board);
 					
 					ValidMove validMoveWhite = gameContext.getBean("validMove", ValidMove.class);
@@ -167,8 +185,8 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 					boolean isEatenWhite =  (eatenWhite + 1) == ((BackgammonBoard)board).getWhiteEatenSize() ? true : false;
 					boolean isEatenBlack =  (eatenBlack + 1) == ((BackgammonBoard)board).getBlackEatenSize() ? true : false;
 					
-					logger.info("After move, white outs = " + eatenWhite);
-					logger.info("After move, black outs = " + eatenBlack);
+					logger.info("After move, white has eaten = " + eatenWhite);
+					logger.info("After move, black has eaten = " + eatenBlack);
 					
 					if(backgammonPlayer.isWhite()){
 						validMoveWhite.setColor("white");
@@ -211,10 +229,15 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 					
 					validMoveWhite.setMessageToken(4);
 					validMoveBlack.setMessageToken(4);
+					
+					logger.info("Server sends message with token=4 to white player with " + validMoveWhite);
+					logger.info("Server sends message with token=4 to black player with " + validMoveBlack);
+					
 					whiteQueue.putMoveIntoQueue(validMoveWhite);
 					blackQueue.putMoveIntoQueue(validMoveBlack);
 				}
 				else{
+					logger.info("The move did not passed validation.");
 					InvalidMove invalidMoveWhite = gameContext.getBean("invalidMove", InvalidMove.class);
 					InvalidMove invalidMoveBlack = gameContext.getBean("invalidMove", InvalidMove.class);
 					
@@ -228,11 +251,16 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 					
 					invalidMoveBlack.setMessageToken(3);
 					invalidMoveWhite.setMessageToken(3);
+										
+					if(backgammonPlayer.isWhite()) {
+						logger.info("Server sends message with token=3 to white player with " + invalidMoveWhite);						
+						whiteQueue.putMoveIntoQueue(invalidMoveWhite);
+					}
+					else if(!backgammonPlayer.isWhite()){
+						logger.info("Server sends message with token=3 to black player with " + invalidMoveBlack);
+						blackQueue.putMoveIntoQueue(invalidMoveBlack);
+					}
 					
-					if(backgammonPlayer.isWhite()) whiteQueue.putMoveIntoQueue(invalidMoveWhite);
-					else if(!backgammonPlayer.isWhite()) blackQueue.putMoveIntoQueue(invalidMoveBlack);
-					
-					notifyOnInvalidMove(player);
 				}
 				
 			}
@@ -244,50 +272,7 @@ public class Backgammon extends ClassicBoardGame implements Runnable{
 	private boolean isCanKeepPlay(Player player) throws Exception {
 		return !board.isWinner(player) && board.isHasMoreMoves(player);
 	}
-	
-	/**
-	 * TODO to write test, after get rid of final class Scanner 
-	 * need to remove Scanner object from method signature.
-	 */
 
-	@Deprecated
-	private Move enterNextMove(Player player, Scanner reader) {
-		if(player == null) return null;
-		BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
-		String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName();
-		Move move = new Move();
-		
-		logger.info(name+": enter your next move.");
-		String msg = "from where to move? (index -1:24).";
-		String input = getMoveInput(name, reader, msg);
-		move.setFrom(new BackgammonBoardLocation(Integer.parseInt(input)));
-		msg = "where move to? (index -1:24).";
-		input = getMoveInput(name, reader, msg);
-		move.setTo(new BackgammonBoardLocation(Integer.parseInt(input)));
-		return move;
-	}
-
-	@Deprecated
-	private String getMoveInput(String name, Scanner reader, String msg) {
-		logger.info(name+": " + msg);
-		String input = reader.next();
-		while(!NumberUtils.isNumber(input) || Integer.parseInt(input) <= -2 || Integer.parseInt(input) >= 25){
-			logger.warn("Your input is invalid. try again.");
-			input = reader.next();
-		}
-		return input;
-	}
-
-
-	public void notifyOnInvalidMove(Player player) {		
-		if(player == null) logger.error("Player is null.");
-		else{
-			BackgammonPlayer backgammonPlayer = (BackgammonPlayer)player; 
-			String name = backgammonPlayer.getFirstName() + " " + backgammonPlayer.getLastName();
-			logger.warn(name + ": you made invalid move. try again.");
-		}
-	}
-	
 	public Move getMove() {
 		return move;
 	}

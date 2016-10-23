@@ -31,25 +31,6 @@
 		</div>
 		
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-2">
-					<p id="whiteEaten" class="lead text-success backgammon-col-24">Outs of white</p>
-				</div>
-				<div class="col-lg-2"></div>
-				<div class="col-lg-2">
-					<p id="txtFromServer" class="bg-primary"></p>
-				</div>
-				<div class="col-lg-2">
-					<button id="rollDicesBtn" type="button" class="btn btn-success hidden">Roll dices</button>
-				</div>
-				<div class="col-lg-2"></div>
-				<div class="col-lg-2">
-					<p id="blackEaten" class="lead text-success backgammon-col--1">Outs of black</p>
-				</div>					
-			</div>
-		</div>
-		
-		<div class="container">
 			<div class="row">			
 				<c:choose>
 					<c:when test='${player == "white"}'>

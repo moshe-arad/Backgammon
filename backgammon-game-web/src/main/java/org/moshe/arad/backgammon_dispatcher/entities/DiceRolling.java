@@ -26,6 +26,10 @@ public class DiceRolling extends BasicDetails {
 	public void setSecondDice(int secondDice) {
 		this.secondDice = secondDice;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "DiceRolling [firstDice=" + firstDice + ", secondDice=" + secondDice + ", getColor()=" + getColor()
+				+ ", getIsYourTurn()=" + getIsYourTurn() + ", getMessageToken()=" + getMessageToken() + "]";
+	}	
 }

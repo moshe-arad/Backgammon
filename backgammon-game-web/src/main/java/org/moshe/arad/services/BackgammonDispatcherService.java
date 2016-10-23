@@ -58,6 +58,8 @@ public class BackgammonDispatcherService {
 		int attempts = 0;
 		DispatchableEntity entity = null;
 	
+		logger.info("Trying to grab move from queue of - " + loggedInBasicUser.getUserName());
+		
 		while(attempts < 30){
 			try {
 				attempts++;
@@ -68,7 +70,7 @@ public class BackgammonDispatcherService {
 				}
 			}
 			catch(TimeoutException ex){	
-				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
+//				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}

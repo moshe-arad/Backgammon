@@ -233,7 +233,7 @@ function handleValidMove(obj){
 	}
 	
 	removePawnFrom(color, from , columnSizeOnFrom);
-	addPawnTo(color, to , columnSizeOnTo, isYourTurn);
+	if(to != -1 || to !=24) addPawnTo(color, to , columnSizeOnTo, isYourTurn);
 	
 	if(!Boolean(isHasMoreMoves)){
 		$("table.board td").unbind("click", selectMove);

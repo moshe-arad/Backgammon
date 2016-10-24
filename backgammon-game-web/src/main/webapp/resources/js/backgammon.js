@@ -70,22 +70,16 @@ function registerToBackgammonDispatcher(){
 	return false;
 }
 
-var failAttemptsToRegister = 0;
-
-var emptyMessagesArrivalNum = 0;
-
 function msgFromServer(obj){
-	failAttemptsToRegister = 0;
 	handleMoveFromServer(obj);
-	if(emptyMessagesArrivalNum < 30 && !Boolean(isHaveWinner)) registerToBackgammonDispatcher();
+	if(!Boolean(isHaveWinner)) registerToBackgammonDispatcher();
 	else console.log("Register requests has stopped.")
 }
 
 function failureFromServer(jqXHR, textStatus, errorThrown){
 	$("#txtFromServer").html(" ABORTED - textStatus=" + textStatus + ", errorThrown= " + errorThrown);
 	console.log(" ABORTED - textStatus=" + textStatus + ", errorThrown= " + errorThrown);
-	failAttemptsToRegister++;
-	if(failAttemptsToRegister < 3 && emptyMessagesArrivalNum < 30) registerToBackgammonDispatcher();
+	registerToBackgammonDispatcher();
 }
 
 function handleMoveFromServer(obj){
@@ -95,37 +89,31 @@ function handleMoveFromServer(obj){
 	
 	switch(Number(token)){
 		case 1:{
-			emptyMessagesArrivalNum = 0;
 			handleBasicDetails(obj);
 			confirmMessageArrival(obj);
 			break;
 		}
 		case 2:{
-			emptyMessagesArrivalNum = 0;
 			handleDiceRolling(obj);
 			confirmMessageArrival(obj);
 			break;
 		}
 		case 3:{
-			emptyMessagesArrivalNum = 0;
 			handleInvalidMove(obj);
 			confirmMessageArrival(obj);
 			break;
 		}
 		case 4:{
-			emptyMessagesArrivalNum = 0;
 			handleValidMove(obj);
 			confirmMessageArrival(obj);
 			break;
 		}
 		case 5:{
-			emptyMessagesArrivalNum++;
 			console.log("Ignoring this empty message.");
 			break;
 		}
 		case 6:{
 			confirmMessageArrival(obj);
-			emptyMessagesArrivalNum = 0;
 			$("#rollDicesBtn").removeClass("hidden");
 			break;
 		}

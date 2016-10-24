@@ -76,7 +76,7 @@ public class BackgammonDispatcherService {
 				}
 			}
 			catch(TimeoutException ex){	
-//				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
+				logger.info("Tried to grab move from queue of - " + loggedInBasicUser.getUserName() + " - attempt #" + attempts);				
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}

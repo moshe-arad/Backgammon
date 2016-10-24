@@ -2,7 +2,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-lg-2">
-			<p id="whiteEaten" class="lead text-success backgammon-col-24">Eaten of white</p>
+			<button id="whiteEaten" type="button" class="btn btn-primary backgammon-col-24">Eaten of white</button>
 		</div>
 		<div class="col-lg-2"></div>
 		<div class="col-lg-2">
@@ -13,8 +13,11 @@
 		</div>
 		<div class="col-lg-2"></div>
 		<div class="col-lg-2">
-			<p id="whiteOut" class="lead text-success backgammon-col--1">Outs of white</p>
+			<button id="whiteOut" type="button" class="btn btn-primary backgammon-col--1">Outs of white</button>
 		</div>					
+	</div>
+	<div class="row">
+		<div>&nbsp;</div>
 	</div>
 </div>
 		
@@ -248,7 +251,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-lg-2">
-			<p id="blackEaten" class="lead text-success">Eaten of black</p>
+			<span id="blackEaten" class="label label-success backgammon-col--1">Eaten of black</span>
 		</div>
 		<div class="col-lg-10"></div>					
 	</div>

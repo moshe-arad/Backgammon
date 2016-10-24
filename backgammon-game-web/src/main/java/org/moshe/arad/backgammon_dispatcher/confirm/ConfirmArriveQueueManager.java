@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 public class ConfirmArriveQueueManager {
 
 	private Map<UUID, DispatchableEntity> unconfirmedMessages = new ConcurrentHashMap<>(1000, 0.75F, 1000);
-//	private Map<UUID, Thread> messageArrivedThreads = new ConcurrentHashMap<>(1000, 0.75F, 1000);
-//	private ThreadPoolExecutor messageArrivedPool = (ThreadPoolExecutor)Executors.newCachedThreadPool();
 	
 	public ConfirmArriveQueueManager() {
 	
@@ -23,9 +21,6 @@ public class ConfirmArriveQueueManager {
 	
 	public void putMessageToBeConfirmed(DispatchableEntity message){
 		unconfirmedMessages.put(((BasicDetails)message).getUuid(), message);
-//		IsArrivedMessage task = new IsArrivedMessage(((BasicDetails)message).getUuid());
-//		messageArrivedThreads.put(((BasicDetails)message).getUuid(), task);
-//		messageArrivedPool.submit(task);
 	}
 	
 	public boolean isContainsMessageWithUUID(UUID uuid){
@@ -34,7 +29,5 @@ public class ConfirmArriveQueueManager {
 	
 	public void markConfirmedMessageWithUUID(UUID uuid){
 		unconfirmedMessages.remove(uuid);
-//		messageArrivedThreads.get(uuid).interrupt();
-//		messageArrivedThreads.remove(uuid);
 	}
 }

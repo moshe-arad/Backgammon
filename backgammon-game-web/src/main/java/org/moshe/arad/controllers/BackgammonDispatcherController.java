@@ -1,9 +1,7 @@
 package org.moshe.arad.controllers;
 
-import org.moshe.arad.backgammon_dispatcher.entities.BasicDetails;
 import org.moshe.arad.backgammon_dispatcher.entities.BasicDetailsAndGameRoomId;
 import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
-import org.moshe.arad.game.move.Move;
 import org.moshe.arad.services.BackgammonDispatcherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

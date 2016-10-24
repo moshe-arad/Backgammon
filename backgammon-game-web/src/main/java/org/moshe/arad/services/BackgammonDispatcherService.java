@@ -45,7 +45,10 @@ public class BackgammonDispatcherService {
 			if(response == null) return new EmptyMessage(5);
 			else return response;
 		}
-		else return new EmptyMessage(5);				
+		else{
+			logger.info("Returning empty message");
+			return new EmptyMessage(5);				
+		}
 	}
 	
 	private Future<DispatchableEntity> handleUserMoveRequest(BasicUser basicUser){		
@@ -69,7 +72,7 @@ public class BackgammonDispatcherService {
 				entity = fromQueue.get(2, TimeUnit.SECONDS);
 				if(entity != null){
 					backgammonUserQueue.getRegisterRequestLocker().unlock();
-					break;				
+					return entity;				
 				}
 			}
 			catch(TimeoutException ex){	
@@ -79,6 +82,7 @@ public class BackgammonDispatcherService {
 			}
 		}
 		fromQueue.cancel(true);
+		backgammonUserQueue.getRegisterRequestLocker().unlock();
 		return entity;
 	}
 

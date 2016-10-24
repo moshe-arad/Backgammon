@@ -6,9 +6,6 @@ public class DiceRolling extends BasicDetails {
 	private int secondDice;
 	private boolean isCanPlay;
 	
-	public DiceRolling() {
-	}
-	
 	public DiceRolling(int messageToken, String color, Boolean isYourTurn, int firstDice, int secondDice,
 			boolean isCanPlay) {
 		super(messageToken, color, isYourTurn);
@@ -30,7 +27,6 @@ public class DiceRolling extends BasicDetails {
 		this.secondDice = secondDice;
 	}
 
-	
 	public boolean isCanPlay() {
 		return isCanPlay;
 	}

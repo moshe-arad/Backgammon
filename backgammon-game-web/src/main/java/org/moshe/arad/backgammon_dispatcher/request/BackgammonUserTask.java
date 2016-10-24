@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon_dispatcher;
+package org.moshe.arad.backgammon_dispatcher.request;
 
 import java.util.concurrent.Callable;
 

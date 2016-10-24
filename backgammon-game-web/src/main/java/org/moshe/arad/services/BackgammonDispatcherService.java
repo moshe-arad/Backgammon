@@ -1,25 +1,24 @@
 package org.moshe.arad.services;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUsersQueuesManager;
+import org.moshe.arad.backgammon_dispatcher.confirm.ConfirmArriveQueueManager;
+import org.moshe.arad.backgammon_dispatcher.entities.BasicDetailsAndGameRoomId;
 import org.moshe.arad.backgammon_dispatcher.entities.DispatchableEntity;
 import org.moshe.arad.backgammon_dispatcher.entities.EmptyMessage;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUserTask;
-import org.moshe.arad.game.move.Move;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUserQueue;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUserTask;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUsersQueuesManager;
 import org.moshe.arad.repositories.SecurityRepository;
 import org.moshe.arad.repositories.entities.BasicUser;
+import org.moshe.arad.repositories.entities.GameRoom;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +32,10 @@ public class BackgammonDispatcherService {
 	@Autowired
 	private SecurityRepository securityRepository;
 	private ThreadPoolExecutor requestsPool = (ThreadPoolExecutor)Executors.newCachedThreadPool();
+	@Autowired
+	private ConfirmArriveQueueManager confirmArriveQueueManager;
+	@Autowired
+	private BackgammonService backgammonService;
 	
 	public DispatchableEntity respondToUser(){
 		BasicUser loggedInBasicUser = securityRepository.getLoggedInBasicUser();
@@ -77,5 +80,22 @@ public class BackgammonDispatcherService {
 		}
 		fromQueue.cancel(true);
 		return entity;
+	}
+
+	public DispatchableEntity confirmMessage(BasicDetailsAndGameRoomId basicDetailsAndGameRoomId) {
+		confirmArriveQueueManager.markConfirmedMessageWithUUID(basicDetailsAndGameRoomId.getUuid());
+		GameRoom gameRoom = backgammonService.getGameRoomById(basicDetailsAndGameRoomId.getGameRoomId());
+		
+		if(backgammonService.isLoogedUserWhite(gameRoom)){
+			synchronized (gameRoom.getGame().getWhiteConfirmLocker()) {
+				gameRoom.getGame().getWhiteConfirmLocker().notify();
+			}
+		}
+		else{
+			synchronized (gameRoom.getGame().getBlackConfirmLocker()) {
+				gameRoom.getGame().getBlackConfirmLocker().notify();
+			}
+		}
+		return new EmptyMessage(5);
 	}
 }

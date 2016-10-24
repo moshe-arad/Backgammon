@@ -1,15 +1,16 @@
 package org.moshe.arad.backgammon_dispatcher.entities;
 
+import java.util.UUID;
+
 public class BasicDetails implements DispatchableEntity {
 
+	private UUID uuid;
 	private int messageToken;
 	private String color;
 	private Boolean isYourTurn;
 	
-	public BasicDetails() {
-	}
-	
 	public BasicDetails(int messageToken, String color, Boolean isYourTurn) {
+		this.uuid = UUID.randomUUID();
 		this.messageToken = messageToken;
 		this.color = color;
 		this.isYourTurn = isYourTurn;
@@ -35,9 +36,18 @@ public class BasicDetails implements DispatchableEntity {
 	public void setMessageToken(int messageToken) {
 		this.messageToken = messageToken;
 	}
+	
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
 
 	@Override
 	public String toString() {
-		return "BasicDetails [messageToken=" + messageToken + ", color=" + color + ", isYourTurn=" + isYourTurn + "]";
+		return "BasicDetails [uuid=" + uuid + ", messageToken=" + messageToken + ", color=" + color + ", isYourTurn="
+				+ isYourTurn + "]";
 	}
 }

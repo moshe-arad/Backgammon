@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon_dispatcher;
+package org.moshe.arad.backgammon_dispatcher.request;
 
 import java.util.Comparator;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -13,12 +13,12 @@ import org.moshe.arad.game.move.Move;
 public class BackgammonUserQueue {
 	
 	private final Logger logger = LogManager.getLogger(BackgammonUserQueue.class);
-	private Lock registerRequestLocker = new ReentrantLock();
+	private Lock registerRequestLocker = new ReentrantLock(); //used in service
 	private PriorityBlockingQueue<DispatchableEntity> userQueue; 
 	
 	public BackgammonUserQueue() {
 		Comparator<DispatchableEntity> movesByCreateDate = (item1, item2) -> { return item2.createDate.compareTo(item1.createDate);};
-		userQueue = new PriorityBlockingQueue<>(100, movesByCreateDate);
+		userQueue = new PriorityBlockingQueue<>(1000, movesByCreateDate);
 	}
 	
 	public DispatchableEntity takeMoveFromQueue(){
@@ -50,6 +50,4 @@ public class BackgammonUserQueue {
 	public Lock getRegisterRequestLocker() {
 		return registerRequestLocker;
 	}
-	
-	
 }

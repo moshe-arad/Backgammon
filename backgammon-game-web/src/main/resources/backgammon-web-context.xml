@@ -20,12 +20,4 @@
 	<bean id="firstDice" class="org.moshe.arad.game.instrument.BackgammonDice" scope="prototype"/>
 	<bean id="secondDice" class="org.moshe.arad.game.instrument.BackgammonDice" scope="prototype"/>
 	
-	<bean id="basicDetails" class="org.moshe.arad.backgammon_dispatcher.entities.BasicDetails" scope="prototype"/>
-	
-	<bean id="diceRolling" class="org.moshe.arad.backgammon_dispatcher.entities.DiceRolling" scope="prototype"/>
-	
-	<bean id="invalidMove" class="org.moshe.arad.backgammon_dispatcher.entities.InvalidMove" scope="prototype"/>
-	
-	<bean id="validMove" class="org.moshe.arad.backgammon_dispatcher.entities.ValidMove" scope="prototype"/>
-	
 </beans>

@@ -5,8 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUsersQueuesManager;
+import org.moshe.arad.backgammon_dispatcher.confirm.ConfirmArriveQueueManager;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUserQueue;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUsersQueuesManager;
 import org.moshe.arad.components.GameRooms;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.repositories.SecurityRepository;
@@ -30,6 +31,8 @@ public class BackgammonInterceptor extends HandlerInterceptorAdapter {
 	private BackgammonUsersQueuesManager userMoveQueues;
 	@Autowired
 	private GameRooms gameRooms;
+	@Autowired
+	private ConfirmArriveQueueManager confirmArriveQueueManager;
 	
 	private ApplicationContext gameContext = new ClassPathXmlApplicationContext("backgammon-web-context.xml");
 	
@@ -48,6 +51,7 @@ public class BackgammonInterceptor extends HandlerInterceptorAdapter {
 			
 			if(color.equals("white")){
 				gameRoom.setGame(gameContext.getBean(Backgammon.class));
+				gameRoom.getGame().setConfirmArriveQueueManager(confirmArriveQueueManager);
 				GameUser white = securityRepository.getGameUserByGameUserId(gameRoom.getWhite());
 				BackgammonUserQueue whiteQueue = userMoveQueues.createNewQueueForUser(white.getBasicUser());
 				gameRoom.getGame().setWhiteQueue(whiteQueue);

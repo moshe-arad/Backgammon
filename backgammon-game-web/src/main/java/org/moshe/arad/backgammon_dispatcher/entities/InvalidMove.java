@@ -4,13 +4,9 @@ public class InvalidMove extends BasicDetails {
 
 	private Boolean isInvalid;
 	
-	public InvalidMove() {
-
-	}
-	
-	public InvalidMove(int messageToken, String color, Boolean isYourTurn, Boolean isInvalid) {
+	public InvalidMove(int messageToken, String color, Boolean isYourTurn) {
 		super(messageToken, color, isYourTurn);
-		this.isInvalid = isInvalid;
+		this.isInvalid = true;
 	}
 
 	public Boolean getIsInvalid() {

@@ -7,12 +7,11 @@ public class ValidMove extends BasicDetails {
 	private int columnSizeOnFrom;
 	private int columnSizeOnTo;
 	private boolean isHasMoreMoves;
-	private boolean isEaten;
-	
-	public ValidMove() {
-	}	
+	private boolean isEaten;	
 
-	public ValidMove(int from, int to, int columnSizeOnFrom, int columnSizeOnTo, boolean isHasMoreMoves, boolean isEaten) {
+	public ValidMove(int messageToken, String color, Boolean isYourTurn, int from, int to, int columnSizeOnFrom,
+			int columnSizeOnTo, boolean isHasMoreMoves, boolean isEaten) {
+		super(messageToken, color, isYourTurn);
 		this.from = from;
 		this.to = to;
 		this.columnSizeOnFrom = columnSizeOnFrom;

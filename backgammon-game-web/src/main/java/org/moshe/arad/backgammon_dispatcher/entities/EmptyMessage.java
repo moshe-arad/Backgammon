@@ -2,14 +2,11 @@ package org.moshe.arad.backgammon_dispatcher.entities;
 
 public class EmptyMessage extends BasicDetails {
 
-	private boolean isEmpty = true;
-	
-	public EmptyMessage() {
-	}
+	private boolean isEmpty;
 	
 	public EmptyMessage(int messageToken) {
 		super(messageToken, "", false);
-		this.isEmpty = isEmpty;
+		this.isEmpty = true;
 	}
 
 	public boolean isEmpty() {

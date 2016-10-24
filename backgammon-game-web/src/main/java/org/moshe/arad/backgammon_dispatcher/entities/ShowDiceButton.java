@@ -3,9 +3,6 @@ package org.moshe.arad.backgammon_dispatcher.entities;
 public class ShowDiceButton extends BasicDetails{
 
 	private boolean isToShowDiceButton;
-
-	public ShowDiceButton() {
-	}
 	
 	public ShowDiceButton(int messageToken, String color, Boolean isYourTurn, boolean isToShowDiceButton) {
 		super(messageToken, color, isYourTurn);

@@ -77,7 +77,8 @@ var emptyMessagesArrivalNum = 0;
 function msgFromServer(obj){
 	failAttemptsToRegister = 0;
 	handleMoveFromServer(obj);
-	if(emptyMessagesArrivalNum < 30) registerToBackgammonDispatcher();
+	if(emptyMessagesArrivalNum < 30 && !Boolean(isHaveWinner)) registerToBackgammonDispatcher();
+	else console.log("Register requests has stopped.")
 }
 
 function failureFromServer(jqXHR, textStatus, errorThrown){
@@ -96,21 +97,25 @@ function handleMoveFromServer(obj){
 		case 1:{
 			emptyMessagesArrivalNum = 0;
 			handleBasicDetails(obj);
+			confirmMessageArrival(obj);
 			break;
 		}
 		case 2:{
 			emptyMessagesArrivalNum = 0;
 			handleDiceRolling(obj);
+			confirmMessageArrival(obj);
 			break;
 		}
 		case 3:{
 			emptyMessagesArrivalNum = 0;
 			handleInvalidMove(obj);
+			confirmMessageArrival(obj);
 			break;
 		}
 		case 4:{
 			emptyMessagesArrivalNum = 0;
 			handleValidMove(obj);
+			confirmMessageArrival(obj);
 			break;
 		}
 		case 5:{
@@ -119,13 +124,41 @@ function handleMoveFromServer(obj){
 			break;
 		}
 		case 6:{
+			confirmMessageArrival(obj);
 			emptyMessagesArrivalNum = 0;
 			$("#rollDicesBtn").removeClass("hidden");
+			break;
+		}
+		case 10:{
+			handleWinner(obj);
+			break;
 		}
 		default:{
 			console.log("Failed to match token message from server.");
 			break;
 		}
+	}
+}
+
+function confirmMessageArrival(obj){
+	
+	var confirm = {color:obj.color, isYourTurn:obj.isYourTurn, token:obj.messageToken, uuid:obj.uuid}; 
+	var param = {confirm:confirm, gameRoomId:gameRoomId};
+
+	if(obj.messageToken != 5){
+		
+		$.ajax({
+			url:"http://localhost:8080/backgammon-game-web/backgammon_dispatcher/confirm",
+			contentType: "application/json",
+			dataType: "json",
+			data: JSON.stringify(param),
+			type: "POST",
+			success: successPassMove,
+			timeout: 60000,
+			headers: headers
+		});
+		
+		return false;
 	}
 }
 
@@ -360,13 +393,25 @@ function sendMoveToServer(from,to){
 		headers: headers
 	});
 	
-	
+	return false;
 }
 
 function successPassMove(){
-//	$("#txtFromServer").addClass("hidden");
 	from = undefined;
 	to = undefined;
 }
+
+var isHaveWinner;
+
+function handleWinner(obj){
+	var color = obj.color;
+	var isWinner = obj.winner;
+	
+	if(Boolean(isWinner)) $("#txtFromServer").html(color + " player you are the winner of this game.")
+	else $("#txtFromServer").html(color + " player you lost this game. Looser.");
+	
+	isHaveWinner = true;
+}
+
 
 

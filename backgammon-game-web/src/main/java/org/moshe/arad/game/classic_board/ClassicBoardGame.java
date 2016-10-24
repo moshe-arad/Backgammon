@@ -23,6 +23,7 @@ public abstract class ClassicBoardGame extends BasicGame {
 	private Player firstPlayer;
 	private Player secondPlayer;
 	
+	private Player winner;
 	
 	public ClassicBoardGame(Board board, TurnOrderable turnOrderManager) {
 		this.board = board;
@@ -46,7 +47,10 @@ public abstract class ClassicBoardGame extends BasicGame {
 				playGameTurn(playerWithTurn);
 				logger.info("Turn was played.");
 				if(!isHasWinner()) turnOrderManager.passTurn();				
-				else isPlaying = false;
+				else {
+					winner = playerWithTurn;
+					isPlaying = false;
+				}
 			}
 		}
 		catch (Exception e) {
@@ -56,9 +60,7 @@ public abstract class ClassicBoardGame extends BasicGame {
 	}
 
 	@Override
-	public void doWinnerActions() {		
-		logger.info("we have a winner");
-	}
+	public abstract void doWinnerActions();
 
 	@Override
 	public boolean isHasWinner() {
@@ -96,5 +98,9 @@ public abstract class ClassicBoardGame extends BasicGame {
 
 	public TurnOrderable getTurnOrderManager() {
 		return turnOrderManager;
+	}
+
+	public Player getWinner() {
+		return winner;
 	}	
 }

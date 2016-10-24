@@ -1,18 +1,13 @@
 package org.moshe.arad.services;
 
-import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
-
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUserQueue;
-import org.moshe.arad.backgammon_dispatcher.BackgammonUsersQueuesManager;
+import org.moshe.arad.backgammon_dispatcher.request.BackgammonUsersQueuesManager;
 import org.moshe.arad.components.GameRooms;
-import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.turn.BackgammonTurn;
@@ -121,11 +116,11 @@ public class BackgammonService {
 		return playerWithTurn.isWhite() ? false : true;
 	}
 	
-	private boolean isLoogedUserWhite(GameRoom gameRoom){
+	public boolean isLoogedUserWhite(GameRoom gameRoom){
 		return getWhiteGameUser(gameRoom).equals(getLoggedInGameUser());
 	}
 	
-	private boolean isLoogedUserBlack(GameRoom gameRoom){
+	public boolean isLoogedUserBlack(GameRoom gameRoom){
 		return getBlackGameUser(gameRoom).equals(getLoggedInGameUser());
 	}
 	

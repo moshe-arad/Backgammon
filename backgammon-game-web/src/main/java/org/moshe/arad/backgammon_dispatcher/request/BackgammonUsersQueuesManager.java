@@ -1,4 +1,4 @@
-package org.moshe.arad.backgammon_dispatcher;
+package org.moshe.arad.backgammon_dispatcher.request;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,7 +40,7 @@ public class BackgammonUsersQueuesManager {
 			return;
 		}
 		usersQueues.get(basicUser.getUserName()).putMoveIntoQueue(entity);
-		logger.error("Message was put on queue for user: " + basicUser.getUserName());
+		logger.info("Message was put on queue for user: " + basicUser.getUserName());
 	}
 	
 	public BackgammonUserQueue getUserMoveQueue(BasicUser basicUser){

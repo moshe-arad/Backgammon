@@ -1,5 +1,9 @@
 package org.moshe.arad.services;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,6 +29,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+
 @Service
 public class LobbyService {
 
@@ -46,7 +57,6 @@ public class LobbyService {
 		GameRoom roomInDb = lobbyRepository.createNewGameRoomWithLoggedInUser(gameRoom);
 		lobbyRepository.createNewGroupForNewRoom(roomInDb);
 		logger.info("New game room was added to DB, details: " + gameRoom);
-//		gameRooms.put(roomInDb.getGameRoomId(), roomInDb);
 		gameRooms.addGameRoom(roomInDb);
 		logger.info("game room was added successfully, details: " + gameRoom);
 		return roomInDb;
@@ -61,8 +71,25 @@ public class LobbyService {
 	}
 
 	public List<GameRoom> getAllGameRooms() {
-//		return gameRooms.values().stream().collect(Collectors.toList());
 		return gameRooms.getAllGameRooms();
+	}
+	
+	public String getAllGameRoomsJson() {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		String result ="";
+		try {			
+			ObjectMapper mapper = new ObjectMapper();
+			List<GameRoom> gameRoomsList = gameRooms.getAllGameRooms();
+			Collections.shuffle(gameRoomsList);
+			mapper.writeValue(out, gameRoomsList);
+		} catch (IOException ex) {
+			logger.error(ex.getMessage());
+			logger.error(ex);
+		}
+				
+		result = new String(out.toByteArray());
+		result = result.replaceAll("\"", "\'");
+		return result;
 	}
 
 	public boolean isHasLoggedInUser() {
@@ -74,13 +101,6 @@ public class LobbyService {
 		lobbyRepository.addAuthoritiesForSecondPlayer(gameRoom);
 		gameRoom.setGame(gameRooms.getGameRoomById(gameRoom).getGame());
 		gameRooms.addGameRoom(gameRoom);
-//		reloadGameRoom(gameRoom);
 		return gameRooms.getGameRoomById(gameRoom);
-	}
-	
-	private void reloadGameRoom(GameRoom gameRoom){
-//		gameRoom = lobbyRepository.getGameRoom(gameRoom);
-//		gameRooms.replace(gameRoom.getGameRoomId(), gameRoom);
-		gameRooms.reloadGameRoom(gameRoom);
 	}
 }

@@ -2,10 +2,8 @@ package org.moshe.arad.repositories.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,24 +22,27 @@ import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
-import org.moshe.arad.game.BasicGame;
 import org.moshe.arad.game.classic_board.backgammon.Backgammon;
 import org.moshe.arad.game.player.BackgammonPlayer;
 import org.moshe.arad.game.player.ClassicGamePlayer;
 import org.moshe.arad.game.player.Player;
 import org.moshe.arad.game.turn.BackgammonTurn;
 import org.moshe.arad.game.turn.ClassicGameTurnOrderManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.moshe.arad.general.CreateDateJsonSerializer;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @Entity
 @Table(name ="game_rooms")
 @EntityListeners(AuditingEntityListener.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GameRoom {
 
 	@Id
@@ -73,34 +74,43 @@ public class GameRoom {
 	private Integer speed;
 	
 	@Transient
+	@JsonIgnore
 	private Backgammon game;
 	
 	@Transient
+	@JsonIgnore
 	private Boolean isGameRoomReady;
 
+	@JsonIgnore
 	@LastModifiedDate
 	@Column(name="last_modified_date")
 	@NotNull
 	private Date lastModifiedDate;
 	
+	@JsonIgnore
 	@LastModifiedBy
 	@Column(name="last_modified_by")
 	@NotNull
 	private String lastModifiedBy;
 	
+//	@JsonIgnore
+	@JsonSerialize(using = CreateDateJsonSerializer.class)
 	@CreatedDate
 	@Column(name="created_date", updatable=false)
 	@NotNull
 	private Date createdDate;
 	
+	@JsonIgnore
 	@CreatedBy
 	@Column(name="created_by", updatable=false)
 	@NotNull
 	private String createdBy;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "gameRooms")
 	private List<GameUser> users = new ArrayList<>(1000);
 	
+	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "group_id")
 	private Group group;

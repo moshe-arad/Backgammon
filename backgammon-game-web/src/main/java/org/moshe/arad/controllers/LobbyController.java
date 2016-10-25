@@ -35,12 +35,17 @@ public class LobbyController {
 	@RequestMapping(value = "/")
 	public String goLobby(){
 		logger.info("Routing to lobby page.");
-		return "lobby";
+		return "lobby-ng";
 	}
 	
+//	@ModelAttribute("gameRooms")
+//	public List<GameRoom> getGameRooms(){
+//		return lobbyService.getAllGameRooms();
+//	}
+	
 	@ModelAttribute("gameRooms")
-	public List<GameRoom> getGameRooms(){
-		return lobbyService.getAllGameRooms();
+	public String getGameRooms(){
+		return lobbyService.getAllGameRoomsJson();
 	}
 	
 	@ModelAttribute("speedOptions")

@@ -43,7 +43,8 @@ public class HomeController {
 		}
 		else{
 			logger.info("Routing for home page.");
-			return "home";
+//			return "home";
+			return "/ng/ng-views/home-ng.html";
 		}
 	}
 	
@@ -97,7 +98,7 @@ public class HomeController {
 			}
 			else {
 				logger.info("User name not available can't register.");
-				return "User name is not availbale.";
+				return "User name is not available.";
 			}
 		}
 		catch (Exception ex) {

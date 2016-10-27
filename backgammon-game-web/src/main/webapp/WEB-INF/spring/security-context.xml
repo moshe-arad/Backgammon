@@ -7,33 +7,45 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
-	<context:component-scan base-package="org.moshe.arad.services" />
-	<context:component-scan base-package="org.moshe.arad.general" />
+	<context:component-scan base-package="org.moshe.arad" />
 	
 	<bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
 	
 	<security:http auto-config="true" use-expressions="false">
+		
 		<security:form-login login-page="/login" login-processing-url="/login" 
 		username-parameter="userNameLogin" password-parameter="passwordLogin"
 		default-target-url="/lobby/"
 		authentication-failure-url="/home?error=true" />
-		
+		 
 		<security:logout logout-url="/logout" success-handler-ref="logoutHandler"/>
 		<security:intercept-url pattern="/backgammon" access="ROLE_WATCHER"/>
 		<security:intercept-url pattern="/backgammon/*" access="ROLE_WATCHER"/>
 		<security:intercept-url pattern="/lobby" access="ROLE_WATCHER"/>
 		<security:intercept-url pattern="/lobby/*" access="ROLE_WATCHER"/>
+		<security:csrf token-repository-ref="csrfTokenRepository"/>
+		<security:custom-filter ref="CsrfHeaderFilter" before="CSRF_FILTER"/>
 	</security:http>
 	
 	<import resource="classpath:persistence-context.xml"/>
 	
+	<bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.CookieCsrfTokenRepository" factory-method="withHttpOnlyFalse">
+	</bean>
+	<!-- 
+	
+	 
+	 
+	 <bean id="csrfTokenRepository" class="org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository">
+	 	<property name="headerName" value="X-XSRF-TOKEN"></property>
+	 </bean>
+	 -->
 	<security:authentication-manager>
 		<security:authentication-provider>
 			<security:jdbc-user-service data-source-ref="myDataSource"
 			group-authorities-by-username-query="select g.id, g.group_name, ga.authority
 			from groups g, group_members gm, group_authorities ga
 			where gm.username = ? and g.id = ga.group_id and g.id = gm.group_id"
-			/>
+			/>	
 		</security:authentication-provider>
 	</security:authentication-manager>
 	

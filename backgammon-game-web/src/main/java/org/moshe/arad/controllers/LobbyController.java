@@ -35,7 +35,7 @@ public class LobbyController {
 	@RequestMapping(value = "/")
 	public String goLobby(){
 		logger.info("Routing to lobby page.");
-		return "lobby-ng";
+		return "/ng/ng-partials/lobby.html";
 	}
 	
 //	@ModelAttribute("gameRooms")

@@ -14,6 +14,7 @@ import javax.annotation.Resource;
 
 import org.hamcrest.collection.IsIn;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.moshe.arad.game.instrument.BackgammonDice;
@@ -45,6 +46,14 @@ public class BackgammonPlayerTest {
 	Dice secondDice;
 	@Autowired
 	ApplicationContext testContext;
+	
+	@Before
+	public void setup(){
+		((BackgammonDice) firstDice).setTimes(BackgammonDice.NONE);
+		((BackgammonDice) secondDice).setTimes(BackgammonDice.NONE);
+		firstDice.initDice();
+		secondDice.initDice();
+	}
 	
 	@After
 	public void cleanup(){

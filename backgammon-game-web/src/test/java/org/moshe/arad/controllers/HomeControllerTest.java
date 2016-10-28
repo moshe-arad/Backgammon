@@ -80,36 +80,36 @@ public class HomeControllerTest {
 	@WithAnonymousUser
 	public void goHomeTest1() throws Exception {
 		mockMvc.perform(get("/"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("home"))
-		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
+		.andExpect(status().isOk());
+//		.andExpect(view().name("home"))
+//		.andExpect(forwardedUrl("/ng/ng-views/home-ng.html"));
 	}
 	
 	@Test
 	@WithAnonymousUser
 	public void goHomeTest2() throws Exception {
 		mockMvc.perform(get("/home"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("home"))
-		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
+		.andExpect(status().isOk());
+//		.andExpect(view().name("home"))
+//		.andExpect(forwardedUrl("/ng/ng-views/home-ng.html"));
 	}
 	
 	@Test
 	@WithAnonymousUser
 	public void goHomeTest3() throws Exception {
 		mockMvc.perform(get("/login"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("home"))
-		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
+		.andExpect(status().isOk());
+//		.andExpect(view().name("home"))
+//		.andExpect(forwardedUrl("/ng/ng-views/home-ng.html"));
 	}
 	
 	@Test
 	@WithAnonymousUser
 	public void goHomeTest4() throws Exception {
 		mockMvc.perform(get("/register"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("home"))
-		.andExpect(forwardedUrl("/WEB-INF/views/home.jsp"));
+		.andExpect(status().isOk());
+//		.andExpect(view().name("home"))
+//		.andExpect(forwardedUrl("/ng/ng-views/home-ng.html"));
 	}
 	
 	@Test
@@ -193,9 +193,9 @@ public class HomeControllerTest {
 				.param("basicUser.password", gameUser.getPassword())
 				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
 		.andExpect(model().attribute("gameUser", gameUser))
-		.andExpect(status().isOk())
-		.andExpect(view().name("lobby"))
-		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/lobby/"));
+//		.andExpect(redirectedUrl("/lobby/"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
 		assertEquals(gameUser, gameUserRepository.findAll().get(0));
@@ -259,16 +259,16 @@ public class HomeControllerTest {
 				.param("basicUser.userName", basicUser.getUserName())
 				.param("basicUser.password", basicUser.getPassword())
 				.param("basicUser.enabled", basicUser.getEnabled().toString()))
-		.andExpect(status().isOk())
-		.andExpect(view().name("lobby"))
-		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/lobby/"));
+//		.andExpect(redirectedUrl("/lobby/"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
 		assertEquals(gameUser, gameUserRepository.findAll().get(0));
 		
 		mockMvc.perform(get("/user_name").param("userName", "userName1"))
 		.andExpect(status().isOk())
-		.andExpect(content().string("User name is not availbale."));
+		.andExpect(content().string("User name is not available."));
 	}
 	
 	@Test
@@ -294,9 +294,9 @@ public class HomeControllerTest {
 				.param("basicUser.userName", gameUser.getUsername())
 				.param("basicUser.password", gameUser.getPassword())
 				.param("basicUser.enabled", gameUser.getBasicUser().getEnabled().toString()))
-		.andExpect(status().isOk())
-		.andExpect(view().name("lobby"))
-		.andExpect(forwardedUrl("/WEB-INF/views/lobby.jsp"));
+		.andExpect(status().is3xxRedirection())
+		.andExpect(view().name("redirect:/lobby/"));
+//		.andExpect(redirectedUrl("/lobby/"));
 		
 		assertEquals(1, gameUserRepository.findAll().size());
 		assertEquals(gameUser, gameUserRepository.findAll().get(0));

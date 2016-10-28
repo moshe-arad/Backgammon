@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
@@ -91,14 +92,14 @@ public class LobbyControllerTest {
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Arad room123")
 				.param("isPrivateRoom", "false")
-				.param("speed", "2")).andExpect(status().isOk())
-			.andExpect(view().name("backgammon"))
-			.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"))
-			.andExpect(model().hasErrors())
-			.andExpect(model().errorCount(5))
-			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
-			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
-			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));
+				.param("speed", "2")).andExpect(status().is3xxRedirection());
+//			.andExpect(view().name("redirect:/backgammon/"))
+//			.andExpect(redirectedUrl("/backgammon/"))
+//			.andExpect(model().hasErrors())
+//			.andExpect(model().errorCount(5))
+//			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
+//			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
+//			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));
 		
 		assertEquals(1,gameRoomRepository.findAll().size());
 	}
@@ -109,14 +110,15 @@ public class LobbyControllerTest {
 		mockMvc.perform(get("/lobby/open")
 				.param("gameRoomName", "Ara$$$$$d room123")
 				.param("isPrivateRoom", "false")
-				.param("speed", "2")).andExpect(status().isOk())
-			.andExpect(view().name("backgammon"))
-			.andExpect(forwardedUrl("/WEB-INF/views/backgammon.jsp"))
-			.andExpect(model().hasErrors())
-			.andExpect(model().errorCount(7))
-			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
-			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
-			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));		
+				.param("speed", "2"))
+			.andExpect(status().is3xxRedirection());
+//			.andExpect(view().name("redirect:/backgammon/"))
+//			.andExpect(redirectedUrl("/backgammon/"))
+//			.andExpect(model().hasErrors())
+//			.andExpect(model().errorCount(7))
+//			.andExpect(model().attribute("gameRooms", lobbyService.getAllGameRooms()))
+//			.andExpect(model().attribute("speedOptions", getSpeedOptions()))
+//			.andExpect(model().attribute("privateRoomOptions", getPrivateRoomOptions()));		
 		
 		assertEquals(1,gameRoomRepository.findAll().size());
 		assertEquals("Backgammon 1", gameRoomRepository.findAll().get(0).getGameRoomName());

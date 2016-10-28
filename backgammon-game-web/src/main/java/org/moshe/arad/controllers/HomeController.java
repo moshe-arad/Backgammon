@@ -44,7 +44,7 @@ public class HomeController {
 		else{
 			logger.info("Routing for home page.");
 //			return "home";
-			return "/ng/ng-views/home-ng.html";
+			return "/ng/index.html";
 		}
 	}
 	

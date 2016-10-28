@@ -23,9 +23,6 @@ public class CsrfHeaderFilter extends OncePerRequestFilter {
 	    CsrfToken csrf = (CsrfToken) request.getAttribute(CsrfToken.class
 	        .getName());
 	    if (csrf != null) {
-//	    	Cookie cookie = new Cookie("_csrf", csrf.getToken());
-//	        cookie.setPath("/");
-//	        response.addCookie(cookie);
 	      Cookie cookie = WebUtils.getCookie(request, "XSRF-TOKEN");
 	      String token = csrf.getToken();
 	      if (cookie==null || token!=null && !token.equals(cookie.getValue())) {

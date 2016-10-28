@@ -30,6 +30,6 @@
 	 
 	<mvc:resources location="/resources/" mapping="/resources/**" />
 	
-	<mvc:resources location="/ng-components/" mapping="/ng/**" />
+	<mvc:resources location="/backgammon-front-end/" mapping="/ng/**" />
 	
 </beans>

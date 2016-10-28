@@ -5,8 +5,6 @@
 		
 		$scope.user = {};
 		
-		alert($cookies.get("XSRF-TOKEN"));
-		
 		angular.element("#cookie").val($cookies.get("XSRF-TOKEN"));
 		
 		$scope.myToken = $cookies.get("XSRF-TOKEN");
@@ -53,7 +51,7 @@
 					angular.element("#invalidEmail").html("Invalid email address.");
 					angular.element("#invalidEmail").removeClass("hidden");
 				}
-			}, 3000, 0, false, user);
+			}, 1000, 0, false, user);
 		}
 		
 		function checkEmailAvailable(user){

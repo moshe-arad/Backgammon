@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.moshe.arad.backgammon_dispatcher.request.BackgammonUsersQueuesManager;
 import org.moshe.arad.components.GameRooms;
 import org.moshe.arad.game.move.Move;
 import org.moshe.arad.game.player.BackgammonPlayer;
@@ -34,8 +33,6 @@ public class BackgammonService {
 	private SecurityRepository securityRepository;
 	@Autowired
 	private GameRoomRepository gameRoomRepository;
-	@Autowired
-	private BackgammonUsersQueuesManager userMoveQueues;
 	
 	private ExecutorService gamesPool = Executors.newFixedThreadPool(8);
 	
@@ -132,6 +129,7 @@ public class BackgammonService {
 		return securityRepository.getGameUserByGameUserId(gameRoom.getBlack());
 	}
 	
+	@SuppressWarnings("unused")
 	private BasicUser getWhiteBasicUser(GameRoom gameRoom) {		
 		return securityRepository.getGameUserByGameUserId(gameRoom.getWhite()).getBasicUser();
 	}

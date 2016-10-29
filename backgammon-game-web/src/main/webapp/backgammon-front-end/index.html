@@ -14,11 +14,20 @@
 	<script src="/backgammon-game-web/ng/js/angular-route.min.js" ></script>
 	<script src="/backgammon-game-web/ng/js/angular-cookies.min.js" ></script>			
 </head>
-<body ng-controller="HomeController">
+<body>
 	
-	<div id="content" ng-view></div>
+	<div id="header" ng-include="'/backgammon-game-web/ng/app/partials/header.html'" ng-controller="HeaderController"></div>	 
+	<!-- -->
+
+	<div style="margin: 5px" class="alert alert-danger" ng-show="authentication_error">
+    	{{authentication_error}}
+	</div>
+
+	<div id="content" ng-controller="HomeController" ng-view></div>
 	
 	<script src="/backgammon-game-web/ng/app/app.js" ></script>
 	<script src="/backgammon-game-web/ng/app/controllers/homeController.js" ></script>
+	<script src="/backgammon-game-web/ng/app/controllers/headerController.js" ></script>
+	<script src="/backgammon-game-web/ng/app/services/authenticationProvider.js" ></script>
 </body>
 </html>

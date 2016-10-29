@@ -1,21 +1,35 @@
 
 (function(){
 	
-	function HomeController ($scope, $interval, $timeout, $cookies) {
-		
+	function HomeController ($scope, $interval, $timeout, $cookies, $location, $http) {
+	
 		$scope.user = {};
-		
-		angular.element("#cookie").val($cookies.get("XSRF-TOKEN"));
+		$scope.register_error = "";
+
+		angular.element(".XSRF-TOKEN").val($cookies.get("XSRF-TOKEN"));
 		
 		$scope.myToken = $cookies.get("XSRF-TOKEN");
 		
 		var isEmailTaken;
 		var stopEmailCheck;
 		
-		$scope.onMySubmit = mySubmit;
-		
-		function mySubmit(user){
-			
+		$scope.register = function(user, token) {
+			$http.post("/backgammon-game-web/register", user, {
+				"headers":{"X-XSRF-TOKEN":token}
+			})
+			.success(function(data, status) {
+				if(data.registered == true){
+					console.log("Go to lobby %%%%%%%%%%%%%%%");
+					$location.path("/lobby/");	
+				} 
+				else {
+					console.log("false registered %%%%%%%%%%%%%%%");
+					$scope.register_error = "Failed to do registration."
+				}
+			})
+			.error(function (data, status) {
+              	register_error = "Failed to do registration.";                     
+			});
 		}
 		/******** shared with view ************/
 			
@@ -68,13 +82,13 @@
 		/***** user name *****/
 		
 		function checkUserNameAvailable(user){		
-			if(typeof user.user_name != "undefined" && user.user_name.length >=3)
+			if(typeof user.basicUser.userName != "undefined" && user.basicUser.userName.length >=3)
 			{
-				console.log(user.user_name);
+				console.log(user.basicUser.userName);
 				
 				$timeout(checkAvailable, 1000, 
 						false, 
-						{"userName":user.user_name}, 
+						{"userName":user.basicUser.userName}, 
 						"/backgammon-game-web/user_name");
 			}
 				
@@ -115,8 +129,8 @@
 		function checkValidPassword(user){
 			
 			$interval(function(){
-				if(typeof user.password != "undefined"){
-					var result = isValidPassword(user.password);
+				if(typeof user.basicUser.password != "undefined"){
+					var result = isValidPassword(user.basicUser.password);
 					if(result != "valid") {
 						angular.element("#invalidPassword").html(result);
 						angular.element("#invalidPassword").removeClass("hidden")
@@ -173,8 +187,8 @@
 			
 			console.log(user.confirm);
 			$interval(function(){
-				if(angular.isDefined(user.confirm) && angular.isDefined(user.password)){					
-					if(user.confirm != user.password){
+				if(angular.isDefined(user.confirm) && angular.isDefined(user.basicUser.password)){					
+					if(user.confirm != user.basicUser.password){
 						angular.element("#invalidConfirmPassword").html("Passwords does not match.");
 						angular.element("#invalidConfirmPassword").removeClass("hidden");						
 					}

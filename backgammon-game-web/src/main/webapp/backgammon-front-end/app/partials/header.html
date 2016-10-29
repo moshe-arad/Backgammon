@@ -1,37 +1,72 @@
+<div style="margin: 5px" class="alert alert-danger" ng-show="authenticated_error">
+    {{authenticated_error}}
+</div>
+
 <nav class="navbar navbar-inverse">
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-5">
 				<div class="navbar-header"><h1>Arad's Backgammon Game</h1></div>
 			</div>
+			
+			
+			
+
 			<div class="col-lg-7">
-			
-			
-						
-						<form id="loginForm" class="navbar-form navbar-right" method="POST" action="/backgammon-game-web/register">
-			
-							<div class="form-group">
-								<label for="userNameLogin">User Name:</label>
-								<br/>
-								<input type="text" class="form-control" name="userNameLogin" placeholder="User Name">
-							</div>
-			
-							<span>&nbsp;&nbsp;&nbsp;</span>
-			
-							<div class="form-group">
-								<label for="password">Password:</label>
-								<br/>
-								<input type="password" class="form-control" name="passwordLogin" placeholder="Password">
-							</div>
-			
-							<span>&nbsp;&nbsp;&nbsp;</span>
-			
-							<div class="form-group">
-								<br/>
-								<button type="submit" class="btn btn-primary">Log In</button>
-							</div>
-						</form>	
+				
+				<div class="navbar-right" ng-show="authentication">
+					<p class="lead">Welcome 
+						<p ng-model="user_name"></p>
+						&nbsp;|&nbsp; 
+						<a id="logoutLink" href="#">Logout</a>
+						<!--
+						<form id="logoutForm" method="POST" action='<c:url value="/logout"/>'>
+							<sec:csrfInput/>
+						</form>
+						-->
+					</p>										
+				</div>
+
+				<p>Test</p>				
+				<!-- 
+				<c:url value="/login" var="loginVar"/>
+					<form id="loginForm" class="navbar-form navbar-right" method="POST" action="${loginVar}">
+						<input class="XSRF-TOKEN" type="hidden" ng-model="myToken" name="_csrf"/>
+
+						<div class="form-group">
+							<label for="userNameLogin">User Name:</label>
+							<br/>
+							<input type="text" class="form-control" name="userNameLogin" placeholder="User Name">
+						</div>
+		
+						<span>&nbsp;&nbsp;&nbsp;</span>
+		
+						<div class="form-group">
+							<label for="password">Password:</label>
+							<br/>
+							<input type="password" class="form-control" name="passwordLogin" placeholder="Password">
+						</div>
+		
+						<span>&nbsp;&nbsp;&nbsp;</span>
+		
+						<div class="form-group">
+							<br/>
+							<button type="submit" class="btn btn-primary">Log In</button>
+						</div>
+		
+						<c:if test="${param.error != null}">
+							<p>Invalid Username or Password.</p>
+						</c:if>
+		
+						<c:if test='${param.logout.equals("true")}'>
+							<p>You have successfully logged out.</p>
+						</c:if>
+						<sec:csrfInput/>
+					</form>
+					-->	
 			</div>
+
+			<!-- -->
 		</div>
 	</div>
 </nav>

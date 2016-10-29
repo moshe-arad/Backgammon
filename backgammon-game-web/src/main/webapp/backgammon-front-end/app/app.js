@@ -7,5 +7,7 @@ backgammonApp.config(function ($routeProvider) {
 //		.when("/", {templateUrl: "/backgammon-game-web/ng/ng-partials/home_template.html"})
 //		.when("/register", {templateUrl: "/backgammon-game-web/register"});
 	.when("/", {controller: "HomeController", templateUrl: "/backgammon-game-web/ng/app/partials/home.html"})
-	.when("/lobby/", {templateUrl: "/backgammon-game-web/ng/ng-partials/lobby.html"});
+	.when("/lobby/", {templateUrl: "/backgammon-game-web/ng/app/partials/lobby.html"});
+
+	//.when("/header", {controller: "HeaderController", templateUrl: "/backgammon-game-web/ng/app/partials/header.html"})
 });

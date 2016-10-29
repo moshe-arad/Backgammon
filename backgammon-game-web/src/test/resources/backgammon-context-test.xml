@@ -6,6 +6,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
 
 	<context:annotation-config />
+	<context:component-scan base-package="org.moshe.arad" />
 	
 	<bean id="firstPlayer" class="org.moshe.arad.game.player.BackgammonPlayer">
 		<constructor-arg name="firstName" value="Moshe-test" />
